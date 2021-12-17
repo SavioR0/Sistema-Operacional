@@ -1,56 +1,41 @@
-# My third makefile
+CXX		:= -gcc
+CXXFLAGS:= -pedantic-errors -Wall -Wextra -Werror
+LDFLAGS	:= -lstdc++ -lm
+BUILD	:= ./build
+OBJ_DIR := $(BUILD)/objects
+APP_DIR	:= $(BUILD)/
+TARGET	:= app
+INCLUDE	:= -Iinclude/
+SRC		:=  $(wildcard src/*.c)
 
-# Name of the project
-PROJ_NAME=exec
+OBJECTS := $(SRC:%.c=$(OBJ_DIR)/%.o)
 
-# .c files
-C_SOURCE=$(wildcard ./src/*.c)
+all: build $(APP_DIR)/$(TARGET)
 
-# .h files
-H_SOURCE=$(wildcard ./src/*.h)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
+	
+$(APP_DIR)/$(TARGET): $(OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
+	
+.PHONY:  all build clean debug release run
 
-# Object files
-OBJ=$(subst .c,.o,$(subst src,objects,$(C_SOURCE)))
+build:
+	@mkdir -p $(APP_DIR)
+	@mkdir -p $(OBJ_DIR)
+	
+debug: CXXFLAGS += -DDEBUG -g
+debug: all
 
-# Compiler and linker
-CC=gcc
-
-# Flags for compiler
-CC_FLAGS=-c         \
-         -W         \
-         -Wall      \
-         -ansi      \
-         -pedantic
-
-# Command used at clean target
-RM = rm -rf
-
-#
-# Compilation and linking
-#
-all: objFolder $(PROJ_NAME)
-
-$(PROJ_NAME): $(OBJ)
-	@ echo 'Building binary using GCC linker: $@'
-	$(CC) $^ -o $@
-	@ echo 'Finished building binary: $@'
-	@ echo ' '
-
-./objects/%.o: ./src/%.c ./src/%.h
-	@ echo 'Building target using GCC compiler: $<'
-	$(CC) $< $(CC_FLAGS) -o $@
-	@ echo ' '
-
-./objects/main.o: ./src/main.c $(H_SOURCE)
-	@ echo 'Building target using GCC compiler: $<'
-	$(CC) $< $(CC_FLAGS) -o $@
-	@ echo ' '
-
-objFolder:
-	@ mkdir -p objects
+release: CXXFLAGS += -O3
+release: all
 
 clean:
-	@ $(RM) ./objects/*.o $(PROJ_NAME) *~
-	@ rmdir objects
-
-.PHONY: all clean
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(APP_DIR)/*
+	
+run:
+	./$(BUILD)/$(TARGET)
+	
