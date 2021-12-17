@@ -1,16 +1,10 @@
-#ifndef _SHELL_
-#define _SHELL_
+#include "../include/shell.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define SIZE 20
 
-typedef struct shell_appearance Shell;
-
-struct shell_appearance{
-    int   option;
-};
 
 Shell* initializeShell(){  //Função de inicialização 
     Shell* shell = (Shell*) malloc(sizeof(Shell));
@@ -20,7 +14,7 @@ Shell* initializeShell(){  //Função de inicialização
 }
 
 void selectShellOption(Shell* shell){
-    char str[SIZE];
+    char str[20];
     printf("\n>> ");
     scanf ( "%20[^\n]", str);
 
@@ -46,4 +40,3 @@ void helpCommand(){
     printf("-> kill -9\t -> Finaliza a execucao do sistema operacional, voltando o mesmo para o \n\t\t    estado inicial, em que os processos estariam ainda em fase de criacao inicial.\n");
 }
 
-#endif

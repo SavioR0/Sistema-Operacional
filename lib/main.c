@@ -1,4 +1,6 @@
-#include "models/shell_appearance.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "include/shell.h"
 
 int main(){
     // Declaração das variáveis
@@ -50,8 +52,7 @@ int main(){
             default:
             
                 printf("\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n");
-            
-            break;
+
         }
 
 
