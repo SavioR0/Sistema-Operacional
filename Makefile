@@ -6,7 +6,7 @@ OBJ_DIR := $(BUILD)/objects
 APP_DIR	:= $(BUILD)/
 TARGET	:= app
 INCLUDE	:= -Iinclude/
-SRC		:=  $(wildcard *.c)
+SRC		:=  $(wildcard src/*.c)
 
 OBJECTS := $(SRC:%.c=$(OBJ_DIR)/%.o)
 
