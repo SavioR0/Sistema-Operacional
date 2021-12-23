@@ -1,5 +1,5 @@
-#ifndef __SHELLhPP__
-#define __SHELLhPP__
+#ifndef __SHELL_HPP__
+#define __SHELL_HPP__
 
 #include <iostream>
 #include <string.h>

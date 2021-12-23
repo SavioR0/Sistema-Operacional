@@ -8,7 +8,13 @@ using namespace std;
 using json = nlohmann::json;
 
 int main(){
-    Shell shell;
+
+
+
+    return 0;
+}
+
+    /*Shell shell;
     json processos;
     ifstream("processo.json") >> processos;
     //cout<< processos["processos"]["numProcessos"].dump(4)<<endl;
@@ -60,6 +66,4 @@ int main(){
 
 
 
-    };
-    return 0;
-}
+    };*/
