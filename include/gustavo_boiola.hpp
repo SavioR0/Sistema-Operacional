@@ -1,10 +1,10 @@
-#ifndef __SAVIOBOIOLA__
-#define __SAVIOBOIOLA__
+#ifndef __GUSTAVOBOIOLA__
+#define __GUSTAVOBOIOLA__
 
 #include <iostream>
 using namespace std;
 
-class SavioGay{
+class GustavoGay{
     public:
         int teste;
         
