@@ -1,19 +1,4 @@
-#ifndef SHELL_h
-#define SHELL_h
-
-
-using namespace std;
-
-class Shell{
-private:
-    int option = 20;
-public:
-    Shell();
-    void setOption(int option);
-    int getOption();
-    void selectedShellOption();
-    void helpCommand();
-};
+#include "../include/shell.hpp"
 
 void Shell::setOption(int op){
     option = op;
@@ -23,20 +8,20 @@ int Shell::getOption(){
     return option;
 }
 
-Shell::Shell(){};
+Shell::Shell(){}
 
 void Shell::selectedShellOption(){
     string str;
-    cout<<"\n>>";
+    cout<<"\n $ ";
     getline( cin, str);// é capaz de ler o dado de entrada até que uma nova linha seja detectada
 
-    if     (str== "help"       ) option = 0;
-    else if(str== "meminfo"    ) option = 1;
-    else if(str== "cpuinfo"    ) option = 2;
-    else if(str== "queueschell") option = 3;
-    else if(str== "execute"    ) option = 4;
-    else if(str== "kill -9"    ) option = 5;
-    else if(str== "exit"       ) option = 6;
+    if     (str == "help"       ) option = 0;
+    else if(str == "meminfo"    ) option = 1;
+    else if(str == "cpuinfo"    ) option = 2;
+    else if(str == "queueschell") option = 3;
+    else if(str == "execute"    ) option = 4;
+    else if(str == "kill -9"    ) option = 5;
+    else if(str == "exit"       ) option = 6;
     
     else option = -1; //caso errado 
 
@@ -50,7 +35,3 @@ void Shell::helpCommand(){
     cout<<"-> execute\t -> Executa a fila de processos definida conforme configuracao previa. \n"<<endl;
     cout<<"-> kill -9\t -> Finaliza a execucao do sistema operacional, voltando o mesmo para o \n\t\t    estado inicial, em que os processos estariam ainda em fase de criacao inicial.\n"<<endl;
 }
-
-
-
-#endif
