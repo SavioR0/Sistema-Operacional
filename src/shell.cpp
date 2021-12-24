@@ -35,3 +35,7 @@ void Shell::helpCommand(){
     cout<<"-> execute\t -> Executa a fila de processos definida conforme configuracao previa. \n"<<endl;
     cout<<"-> kill -9\t -> Finaliza a execucao do sistema operacional, voltando o mesmo para o \n\t\t    estado inicial, em que os processos estariam ainda em fase de criacao inicial.\n"<<endl;
 }
+
+void Shell::memInfoCommand(){
+    
+}

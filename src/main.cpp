@@ -4,20 +4,24 @@
 #include "../include/shell.hpp"
 #include "../include/lib/json.hpp"
 #include "../include/hardware/cpu.hpp"
+#include "../include/hardware/memory.hpp"
 
 
 
 //using json = nlohmann::json;
 
 int main(){
+    system("clear");
     
-
+    /* Hash memoria(5);
+    memoria.printHash(); */
 
 
     return 0;
 }
 
     /*Shell shell;
+    system("clear");
     json processos;
     ifstream("processo.json") >> processos;
     //cout<< processos["processos"]["numProcessos"].dump(4)<<endl;

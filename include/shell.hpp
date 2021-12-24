@@ -15,6 +15,7 @@ class Shell{
         int getOption();
         void selectedShellOption();
         void helpCommand();
+        void memInfoCommand();
     };
 
 #endif
