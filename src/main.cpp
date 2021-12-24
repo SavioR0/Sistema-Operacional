@@ -2,12 +2,15 @@
 #include <fstream>
 #include <string.h>
 #include "../include/shell.hpp"
-#include "../include/json.hpp"
+#include "../include/lib/json.hpp"
+#include "../include/hardware/cpu.hpp"
 
-using namespace std;
-using json = nlohmann::json;
+
+
+//using json = nlohmann::json;
 
 int main(){
+    
 
 
 
