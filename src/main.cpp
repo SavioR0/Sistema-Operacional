@@ -3,18 +3,23 @@
 #include <string.h>
 #include "../include/shell.hpp"
 #include "../include/json.hpp"
+#include "../include/hardware/memory.hpp"
 
 using namespace std;
 using json = nlohmann::json;
 
 int main(){
-
+    system("clear");
+    
+    /* Hash memoria(5);
+    memoria.printHash(); */
 
 
     return 0;
 }
 
     /*Shell shell;
+    system("clear");
     json processos;
     ifstream("processo.json") >> processos;
     //cout<< processos["processos"]["numProcessos"].dump(4)<<endl;
