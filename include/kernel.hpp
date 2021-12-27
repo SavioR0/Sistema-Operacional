@@ -16,19 +16,24 @@ class Kernel{
     private:
         int cores;
         int blocksStorage;
+        int segments;
     public:
 
     Cpu*     cpu;
     Storage* storage;
+    Memory* memory;
+
 
     Kernel();
     void initialize();
     
     void setCore(int number);
     void setBlocksStorage(int number);
+    void setSegments(int number);
 
     int getCore();
     int getBlocksStorage();
+    int getSegments();
 
 };
 

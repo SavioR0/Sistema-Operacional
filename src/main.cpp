@@ -22,7 +22,7 @@ int main(){
             
             break;
             case 1: // meminfo 
-                
+                (*kernel).memory->print();
             
             break;
             case 2: //diskInfo

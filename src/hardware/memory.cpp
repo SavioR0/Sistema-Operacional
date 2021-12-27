@@ -1,29 +1,29 @@
 #include "../../include/hardware/memory.hpp"
 
 
-Hash::Hash(int segmentos){ //definindo o tamanho da tabela hash
-    seg = segmentos;
+Memory::Memory(int segmentos){ //definindo o tamanho da tabela hash
+    segments = segmentos;
     ram = new MemoryContent[segmentos];
     qtd = 0;
-    Hash::clearHash(segmentos);  
+    Memory::clearMemory(segmentos);  
 }
 
-void Hash::clearHash(int segmentos){
+void Memory::clearMemory(int segmentos){
     for(int i=0; i<segmentos; i++){
         ram[i].value = 0;
         ram[i].description = "";
     }
 }
 
-//int Hash::insereHash(MemoryContent mc){} 
-//int Hash::buscaHash(int mat,MemoryContent mc){} 
+//int Memory::insereMemory(MemoryContent mc){} 
+//int Memory::buscaMemory(int mat,MemoryContent mc){} 
 
-void Hash::printHash(){
-    cout<<"-Numero de Segmentos:"<<seg <<endl;
+void Memory::print(){
+    cout<<"-Numero de Segmentos:"<<segments <<endl;
     cout<<"\nSEGMENTO\tDESCRIÇÃO\tCONTEÚDO MEMORIA\tESTADO"<<endl;
-    for(int i = 0; i<seg; i++){
+    for(int i = 0; i<segments; i++){
         if(ram[i].value == 0 && ram[i].description=="")
-            cout<<"  ["<<i+1<<"]\t\t "<<"NULL"/* ram[i].description */<<"\t\t\t"<<ram[i].value<<"\t\t Livre"<<endl;
+            cout<<"  ["<<i+1<<"]\t\t "<<"NULL"<<"\t\t\t"<<ram[i].value<<"\t\t Livre"<<endl;
         else
             cout<<"  ["<<i+1<<"]\t\t "<<ram[i].description<<"\t\t\t"<<ram[i].value<<"\t\tEm uso"<<endl;
     }

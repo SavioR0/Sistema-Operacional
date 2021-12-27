@@ -11,7 +11,7 @@ Cpu::Cpu(int cores){
         this->process.push_back(*assist);
         free(assist);
     }
-    cout<<"Criados";
+    /* cout<<"Criados"; */
 }
 
 void Cpu::print(){

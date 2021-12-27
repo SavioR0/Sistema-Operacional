@@ -38,6 +38,7 @@ void Shell::helpCommand(){
     cout<<"-> queueschell\t -> Detalha quais processos estão sendo gerenciados pelo seu sistema, \n\t\t    quais estão em estado de pronto, bloqueado, execucao e/ou sendo criados e finalizados.\n"<<endl;
     cout<<"-> execute\t -> Executa a fila de processos definida conforme configuracao previa. \n"<<endl;
     cout<<"-> kill -9\t -> Finaliza a execucao do sistema operacional, voltando o mesmo para o \n\t\t    estado inicial, em que os processos estariam ainda em fase de criacao inicial.\n"<<endl;
+    cout<<"-> exit\t\t -> Finaliza a execução do  programa como um todo.\n"<<endl;
 }
 
 void Shell::memInfoCommand(){

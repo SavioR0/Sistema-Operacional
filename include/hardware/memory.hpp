@@ -1,5 +1,5 @@
-#ifndef __HASH_HPP__
-#define __HASH_HPP__
+#ifndef __MEMORY_HPP__
+#define __MEMORY_HPP__
 
 #include <iostream>
 #include <string.h>
@@ -12,17 +12,17 @@ struct MemoryContent{
 };
 
 
-class Hash{
+class Memory{
 private:
-    int seg;
+    int segments;
     int qtd;
     MemoryContent *ram;
 public:
-    Hash(int segmentos);
-    void printHash();
-    void clearHash(int segmentos);
-    //int insereHash(MemoryContent mc);
-    //int buscaHash(int mat, MemoryContent mc); 
+    Memory(int segmentos);
+    void print();
+    void clearMemory(int segmentos);
+    //int insereMemory(MemoryContent mc);
+    //int buscaMemory(int mat, MemoryContent mc); 
 };
 
 
