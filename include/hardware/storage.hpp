@@ -18,7 +18,7 @@ class Storage{
         int size;
         list<BlockData> blocks;
 
-        void initialize(int size);
+        Storage(int size);
         void print();
 };
 

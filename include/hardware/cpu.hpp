@@ -20,7 +20,7 @@ class Cpu{
         list<CpuProcess> process;
         int cores;
 
-        void initialize(int cores);
+        Cpu(int cores);
         void print();
 };
 

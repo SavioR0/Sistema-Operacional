@@ -1,6 +1,6 @@
 #include "../../include/hardware/storage.hpp"
 
-void Storage::initialize(int size){
+Storage::Storage(int size){
     this->size = size;
     BlockData assist;
     for(int i = 0; i < size; i++){

@@ -1,5 +1,4 @@
 #include "../../include/hardware/memory.hpp"
-#include "/home/savio/Sistema-Operacional/include/hardware/memory.hpp"
 
 
 Hash::Hash(int segmentos){ //definindo o tamanho da tabela hash

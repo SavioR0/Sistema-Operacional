@@ -8,7 +8,9 @@ int Shell::getOption(){
     return option;
 }
 
-Shell::Shell(){}
+Shell::Shell(){
+    this->setOption(30);
+}
 
 void Shell::selectedShellOption(){
     string str;

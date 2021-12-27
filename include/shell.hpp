@@ -12,7 +12,7 @@ class Shell{
     public:
         Shell();
         void setOption(int option);
-        int getOption();
+        int  getOption();
         void selectedShellOption();
         void helpCommand();
         void memInfoCommand();

@@ -1,6 +1,6 @@
 #include "../../include/hardware/cpu.hpp"
 
-void Cpu::initialize(int cores){
+Cpu::Cpu(int cores){
     this->cores = cores;
     CpuProcess* assist = NULL;
     for (int i = 0; i < cores; i++){
@@ -11,6 +11,7 @@ void Cpu::initialize(int cores){
         this->process.push_back(*assist);
         free(assist);
     }
+    cout<<"Criados";
 }
 
 void Cpu::print(){
