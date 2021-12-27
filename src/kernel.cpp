@@ -8,13 +8,13 @@ Kernel::Kernel(){}
 void Kernel::initialize(){
     json hardwareInfo;
     ifstream(FileName) >> hardwareInfo;
-    this->setCore          ( hardwareInfo["cores"]   );
-    this->setBlocksStorage ( hardwareInfo["storage"] );
-    this->setSegments      ( hardwareInfo["segments"]);
+    this->setCore          ( hardwareInfo["cores"]    );
+    this->setBlocksStorage ( hardwareInfo["storage"]  );
+    this->setSegments      ( hardwareInfo["segments"] );
     
-    this->cpu     = new Cpu( this->getCore() );
-    this->storage = new Storage( this->getBlocksStorage() );
-    this->memory  = new Memory(this->getSegments());
+    this->cpu     = new Cpu     ( this->getCore()          );
+    this->storage = new Storage ( this->getBlocksStorage() );
+    this->memory  = new Memory  ( this->getSegments()      );
 
 }
 

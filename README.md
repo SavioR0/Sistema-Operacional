@@ -31,3 +31,7 @@ Atividade da disciplica de Sistema operacionais. O objeivo desse trabalho é sim
     ~~~
     git clone https://github.com/SavioR0/Sistema-Operacional.git && cd Sistema-Operacional && make $$ make run
     ~~~
+- ### Informações do compilador
+    ~~~
+    g++ (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+    ~~~
