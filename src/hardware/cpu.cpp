@@ -16,7 +16,7 @@ Cpu::Cpu(int cores){
 
 void Cpu::print(){
     int count = 0;
-    for(CpuProcess item : this->process){
+    /* for(CpuProcess item : this->process){
         cout << "\n\n Core: " << count << endl;
         cout << "\tTimestamp: " << item.timesamp << endl;
         cout << "\tQuantum: " << item.quantum << endl;
@@ -27,5 +27,18 @@ void Cpu::print(){
 
         count++;
 
+    } */
+    cout<<"----------------------------------------------------------------------------"<<endl;
+    cout<<"  +    CORE\t|   TIMESTAMP\t|   QUANTUM\t|     DESCRIÇÃO   \t+"<<endl;
+    cout<<"----------------------------------------------------------------------------"<<endl;
+    for(CpuProcess item : this->process){
+
+        cout<<"  +\t"<<count<<"\t|\t"<<item.timesamp<<"\t|\t"<<item.quantum<<"\t|\t";
+        if(item.description ==NULL)
+            cout<<"\t\t+"<<endl;
+        else
+            cout<<"\t"<<*item.description<<"\t+"<<endl;
+        count++;
     }
+    cout<<"----------------------------------------------------------------------------"<<endl;
 }
