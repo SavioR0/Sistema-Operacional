@@ -37,4 +37,5 @@ void Memory::print(){
         else
             cout<<"  +   ["<<i+1<<"]\t|\t "<<ram[i].description<<"\t|\t"<<ram[i].value<<"\t|\tEm uso   \t+"<<endl;
     }
+    cout<<"---------------------------------------------------------------------------------"<<endl;
 }
