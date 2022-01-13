@@ -19,7 +19,7 @@ void Memory::clearMemory(int segmentos){
 //int Memory::buscaMemory(int mat,MemoryContent mc){} 
 
 void Memory::print(){
-    cout<<"-Numero de Segmentos:"<<segments <<endl;
+    /* cout<<"-Numero de Segmentos:"<<segments <<endl;
     cout<<"\nSEGMENTO\tDESCRIÇÃO\tCONTEÚDO MEMORIA\tESTADO"<<endl;
     for(int i = 0; i<segments; i++){
         if(ram[i].value == 0 && ram[i].description=="")
@@ -27,5 +27,14 @@ void Memory::print(){
         else
             cout<<"  ["<<i+1<<"]\t\t "<<ram[i].description<<"\t\t\t"<<ram[i].value<<"\t\tEm uso"<<endl;
     }
-    cout<<endl;
+    cout<<endl; */
+    cout<<"---------------------------------------------------------------------------------"<<endl;
+    cout<<"  +  SEGMENTO\t|   DESCRIÇÃO\t|   CONTEÚDO MEMORIA\t|        ESTADO      \t+"<<endl;
+    cout<<"---------------------------------------------------------------------------------"<<endl;
+    for(int i = 0; i<segments; i++){
+        if(ram[i].value == 0 && ram[i].description=="")
+            cout<<"  +   ["<<i+1<<"]\t| "<<"     NULL"<<"\t|\t   "<<ram[i].value<<"\t\t|\t Livre  \t+"<<endl;
+        else
+            cout<<"  +   ["<<i+1<<"]\t|\t "<<ram[i].description<<"\t|\t"<<ram[i].value<<"\t|\tEm uso   \t+"<<endl;
+    }
 }
