@@ -1,9 +1,0 @@
-{
-    "processos": {
-        "I/OBound": 0.5,
-        "cpuBound": 0.5,
-        "intervaloCriacao": 2,
-        "memoryBound": 0.5,
-        "numProcessos": 1
-    }
-}
