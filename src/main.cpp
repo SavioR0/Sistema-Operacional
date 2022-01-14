@@ -8,6 +8,9 @@
 
 int main(){
     system("clear");
+    Settler settler = Settler();
+
+    /*
     Kernel *kernel = new Kernel;
     Shell  *shell = new Shell();
 
@@ -59,9 +62,11 @@ int main(){
                 printf("\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n");
 
         }
-    }
+    } */
 
 
 
     return 0;
 }
+
+

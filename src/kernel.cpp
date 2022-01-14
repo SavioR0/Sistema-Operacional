@@ -15,7 +15,6 @@ void Kernel::initialize(){
     this->cpu     = new Cpu     ( this->getCore()          );
     this->storage = new Storage ( this->getBlocksStorage() );
     this->memory  = new Memory  ( this->getSegments()      );
-
 }
 
 
