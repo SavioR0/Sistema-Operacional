@@ -26,8 +26,7 @@ Settler::Settler(){
         processes.push(process);
         
     }
-    printQueue();
-    
+    printQueue();    
 }
 
 void Settler::printProcess(Process proc){
@@ -36,6 +35,8 @@ void Settler::printProcess(Process proc){
 }
 
 void Settler::printQueue(){
+    queue<Process> tempQueue;
+
     cout<<"--------------------------------------------------"<<endl;
     cout<<" +\t\t   QUEUE PROCESS\t\t+"<<endl;
     cout<<"--------------------------------------------------"<<endl;
@@ -43,7 +44,9 @@ void Settler::printQueue(){
     cout<<"--------------------------------------------------"<<endl;
     while(!processes.empty()){
         cout<<" +   "<<processes.front().id<<"\t|     "<<processes.front().estado<<"\t|\t"<<processes.front().initType<<"\t+"<<endl;
+        tempQueue.push(processes.front());
         processes.pop();
     }
     cout<<" --------------------------------------------------"<<endl;
+    processes = tempQueue;
 }
