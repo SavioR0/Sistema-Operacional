@@ -7,11 +7,14 @@
 
 
 int main(){
-    system("clear");
-    Settler settler = Settler();
-
-    /*
+    /* system("clear"); */
+   
     Kernel *kernel = new Kernel;
+    (*kernel).initialize();
+
+    (*kernel).settler->executeQueue();
+    (*kernel).settler->printQueue();
+     /*
     Shell  *shell = new Shell();
 
     (*kernel).initialize();

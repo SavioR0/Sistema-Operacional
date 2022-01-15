@@ -12,18 +12,26 @@ using namespace std;
 
 struct Process{
     int id;
-    string estado;
     int ciclos;
     int maxQuantum;
     string initType;
     int timestamp;
     int prioridade;
+    
+    string estado;
+    int startExecute;
+    int quantumCount;
+
 };
 
 class Settler{ 
+private:
+    int numProcesses;
 public:
     queue<Process> processes;
-    Settler();
+    Settler(int process);
+
+    void executeQueue();
     void printProcess(Process proc);
     void printQueue();
 };

@@ -18,12 +18,13 @@ class Kernel{
         int cores;
         int blocksStorage;
         int segments;
+        int numProcess;
     public:
 
     Cpu*     cpu;
     Storage* storage;
     Memory* memory;
-
+    Settler* settler;
 
     Kernel();
     void initialize();
@@ -31,10 +32,12 @@ class Kernel{
     void setCore(int number);
     void setBlocksStorage(int number);
     void setSegments(int number);
+    void setProcess(int number);
 
     int getCore();
     int getBlocksStorage();
     int getSegments();
+    int getProcess();
 
 };
 
