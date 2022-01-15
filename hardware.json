@@ -1,5 +1,5 @@
 {
-    "cores"    : 2,
+    "cores"    : 1,
     "storage"  : 5,
     "segments" : 5
 }

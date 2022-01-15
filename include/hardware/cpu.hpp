@@ -3,15 +3,23 @@
 
 #include <iostream>
 #include <list>
+#include <fstream>
+#include "../include/json.hpp"
 
+#define processFile "processos.json"
+
+using json = nlohmann::json;
 using namespace std;
 
 typedef struct CpuProcess CpuProcess;
 struct CpuProcess{
-    string* description;
-    int core;
-    int timesamp;
-    int quantum;
+    int     id;
+    int     cycles;
+    int     maxQuantum;
+    int     timesamp;
+    int     priority;
+    string  status;
+    string  type;
 };
 
 class Cpu{
@@ -22,6 +30,9 @@ class Cpu{
 
         Cpu(int cores);
         void print();
+        void setProcess();
+        void loadProcess();
+        void printProcess();
 };
 
 

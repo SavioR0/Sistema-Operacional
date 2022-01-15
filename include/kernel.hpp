@@ -23,7 +23,7 @@ class Kernel{
 
     Cpu*     cpu;
     Storage* storage;
-    Memory* memory;
+    Memory*  memory;
     Settler* settler;
 
     Kernel();
