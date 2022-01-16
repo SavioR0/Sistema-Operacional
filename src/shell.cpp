@@ -29,6 +29,8 @@ void Shell::selectedShellOption(){
     
     else option = -1; //caso errado 
 
+    if(option != -1) this->execute = true;
+    cout<<this->execute<<endl;
 }
 
 void Shell::helpCommand(){

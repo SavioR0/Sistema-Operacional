@@ -31,7 +31,7 @@ class Cpu{
         Cpu(int cores);
         void print();
         void setProcess();
-        void loadProcess();
+        void  loadProcess();
         void printProcess();
 };
 

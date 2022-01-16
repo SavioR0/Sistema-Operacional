@@ -1,9 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <pthread.h>
 
 #include "../include/kernel.hpp"
 #include "../include/shell.hpp"
+
+void * shellop(void* shell){
+    
+    Shell* aux = (Shell*) shell;
+    while( aux->getOption()!= -1){
+        aux->selectedShellOption(); 
+    }
+    pthread_exit(NULL);
+}
 
 
 int main(){
@@ -11,52 +21,40 @@ int main(){
 
     Kernel *kernel = new Kernel;
     Shell  *shell = new Shell();
+    pthread_t thread_shell;
 
-    (*kernel).initialize();
-    (*kernel).initialize();
+    kernel->initialize();
+    
 
+    if((pthread_create(&thread_shell, NULL,  shellop   , shell) != 0)){
+        printf("Deu bizil");
+        exit(EXIT_FAILURE);
+    }
 
-   /* (*kernel).settler->executeQueue();
-    (*kernel).settler->printQueue();*/
-     
+    cout<<"Vim pra ca" << endl;
 
+    while( shell->getOption()!= -1){
+  
 
-    while( (*shell).getOption()!= -1){
-        (*shell).selectedShellOption(); 
-
-        switch((*shell).getOption()){
-            case 0: (*shell).helpCommand();     break; // help
-            case 1: (*kernel).memory->print();  break; // meminfo
-            case 2: (*kernel).storage->print(); break; // meminfo
-            case 3: (*kernel).cpu->print();     break; // cpuinfo
-            case 4: // queueschell 
-                (*kernel).cpu->loadProcess();
-                
-                //cout<<"\n -Detalha quais processos estão sendo gerenciados pelo seu sistema, quais estão em estado de pronto, bloqueado, execução e/ou sendo criados e finalizados.\n";
-            
-            break;
-            case 5: // execute 
-                (*kernel).cpu->printProcess();
-                
-                //cout<<"\n -Executa a fila de processos definida conforme configuração prévia.\n";
-            
-            break;
-            case 6: // kill -9 
-                
-                cout<<"\n -Finaliza a execucao do sistema operacional, voltando o mesmo para o estado inicial, em que os processos estariam ainda em fase de criação inicial.\n";
-            
-            break;
-            case 7: // exit 
-            
-                cout<<"\n -Saindo...\n";
-            
-            break;
-            default:
-            
-                printf("\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n");
-
+        if(shell->execute == true){
+            shell->execute = false;
+            switch(shell->getOption()){
+                case 0: shell->helpCommand();       break; // help
+                case 1: kernel->memory->print();    break; // meminfo
+                case 2: kernel->storage->print();   break; // meminfo
+                case 3: kernel->cpu->print();       break; // cpuinfo
+                case 4: kernel->cpu->loadProcess(); break; // Load
+                case 5: kernel->cpu->printProcess();break; // queueschell
+                case 6:                             break; // execute
+                case 7:                             break; // kill -9
+                case 8: cout<<"\n -Saindo...\n";    break; // Exit            
+                default:
+                    cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl;    
+            }
         }
     } 
+    cout<<"Finalizei" << endl;
+
 
 
 

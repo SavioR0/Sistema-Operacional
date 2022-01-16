@@ -10,6 +10,8 @@ class Shell{
     private:
         int option = 20;
     public:
+        bool execute = false;
+
         Shell();
         void setOption(int option);
         int  getOption();
