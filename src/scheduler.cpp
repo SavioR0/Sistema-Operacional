@@ -1,5 +1,9 @@
 #include "../include/scheduler.hpp"
 
+Scheduler::Scheduler(Kernel* kernel){
+    this->kernelref = kernel;
+}
+
 Scheduler::Scheduler(){}
 
 void Scheduler::read_processes(){
@@ -37,7 +41,7 @@ void executingProcessCPU(){}
 void executingProcessMemory(){}
 void executingProcessStorage(){}
 
-/*void Scheduler::executeProcesses(){
+void Scheduler::executeProcesses(){
     if(this->processes.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return;
@@ -49,19 +53,19 @@ void executingProcessStorage(){}
     do{
         addPC();
         if(quantum == 0)
-            quantum = randomQuantum(this->processes.front().maxQuantum);
+            quantum = randomQuantum(this->processes.front().getMaxQuantum());
 
-        if(*((&processes.front())->type) == "cpu-bound"){
-            *((&processes.front())->type) = "Em execucao";
+        if(processes.front().getType() == "cpu-bound"){
+             processes.front().getType()= "Em execucao";
             //TODO: adicionar na CPU
 
-        }else if(*((&processes.front())->type)  == "memory-bound"){
-            *((&processes.front())->type)= "Bloqueado";
+        }else if(processes.front().getType())  == "memory-bound"){
+            processes.front().getType())= "Bloqueado";
             //TODO: adicionar na Memoria
 
 
-        }else if(*((&processes.front())->type)  == "io-bound"){
-            *((&processes.front())->type) = "Bloqueado";
+        }else if(processes.front().getType())  == "io-bound"){
+            processes.front().getType()= "Bloqueado";
 
 
         }
@@ -74,7 +78,7 @@ void executingProcessStorage(){}
 
     }while( finalized.size() != size_list_process );
 
-}*/
+}
 
 
 

@@ -14,7 +14,7 @@ int main(){
 
     Kernel*    kernel    = new Kernel;
     Shell*     shell     = new Shell;
-    Scheduler* scheduler = new Scheduler;
+    Scheduler* scheduler = new Scheduler(kernel);
 
     /* pthread_t thread_execute_process; */
 

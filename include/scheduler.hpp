@@ -6,6 +6,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "process.hpp"
+#include "kernel.hpp"
 
 #define processFile "processos.json"
 
@@ -21,7 +22,9 @@ class Scheduler{
         list<Process> finalized;
         int pc = 0;
     public:
+        Kernel* kernelref;
         Scheduler();
+        Scheduler(Kernel* kernel);
         void addPC();
         int getPC();
         void read_processes();
