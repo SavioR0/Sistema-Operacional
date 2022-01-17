@@ -5,6 +5,8 @@
 #include <list>
 #include <fstream>
 #include "../include/json.hpp"
+#include "storage.hpp"
+#include "memory.hpp"
 
 #define processFile "processos.json"
 
@@ -24,14 +26,16 @@ struct CpuProcess{
 
 class Cpu{
     private:
+        Memory*  memoryRef;
+        Storage* storageRef;
     public:
         list<CpuProcess> process;
         int cores;
 
-        Cpu(int cores);
+        Cpu(int cores, Memory*  memoryRef, Storage* storageRef);
         void print();
         void setProcess();
-        void  loadProcess();
+        void loadProcess();
         void printProcess();
 };
 

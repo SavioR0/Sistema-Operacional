@@ -24,7 +24,6 @@ class Kernel{
     Cpu*     cpu;
     Storage* storage;
     Memory*  memory;
-    Settler* settler;
 
     Kernel();
     void initialize();

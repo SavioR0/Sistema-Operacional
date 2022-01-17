@@ -2,8 +2,10 @@
 
 
 
-Cpu::Cpu(int cores){
-    this->cores = cores;
+Cpu::Cpu(int cores, Memory*  memoryRef, Storage* storageRef){
+    this->cores      = cores;
+    this->memoryRef  = memoryRef;
+    this->storageRef = storageRef;
 }
 
 void Cpu::loadProcess(){
@@ -32,14 +34,16 @@ void Cpu::loadProcess(){
 }
 
 void Cpu::print(){
-    cout<< this->process.size() << endl;
+
+    
+    /*cout<< this->process.size() << endl;
     for(CpuProcess item : this->process){
         cout << "\nID: "         << item.id;
         cout << "\nCiclos: "     << item.cycles;
         cout << "\nMaxQuantum: " << item.maxQuantum;
         cout << "\nTimeStamp: "  << item.timesamp;
 
-    }
+    }*/
 
     /*int count = 0;
     cout<<"----------------------------------------------------------------------------"<<endl;

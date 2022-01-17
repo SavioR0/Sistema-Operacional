@@ -10,14 +10,11 @@ void Kernel::initialize(){
     ifstream(FileName) >> hardwareInfo;
     this->setCore          ( hardwareInfo["cores"]    );
     this->setBlocksStorage ( hardwareInfo["storage"]  );
-    this->setSegments      ( hardwareInfo["segments"] );
-    //TODO: Fazer com que seja possivel ler o numero de processos no arquivo ao invés de passar diretamente
-    //this->setProcess       (15);
-    
-    this->cpu     = new Cpu     ( this->getCore()          );
-    this->storage = new Storage ( this->getBlocksStorage() );
-    this->memory  = new Memory  ( this->getSegments()      );
-    //this->settler = new Settler ( this->getProcess()         );
+    this->setSegments      ( hardwareInfo["segments"] );    
+    this->storage = new Storage ( this->getBlocksStorage()                    );
+    this->memory  = new Memory  ( this->getSegments()                         );
+    this->cpu     = new Cpu     ( this->getCore(), this->memory, this->storage);
+
 }
 
 
