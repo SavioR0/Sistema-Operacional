@@ -7,7 +7,7 @@
 #include "../include/shell.hpp"
 #include "../include/scheduler.hpp"
 
-void*  execute(void* kernel);
+void*  execute(void* scheduler);
 
 int main(){
     system("clear");
@@ -33,8 +33,8 @@ int main(){
                 case 4: scheduler->read_processes();    break; // Load
                 case 5: scheduler->report();            break; // queueschell
                 case 6:    
-                    /* if((pthread_create(&thread_execute_process, NULL, execute, kernel) != 0)){
-                        printf("Deu bizil");
+                    /* if((pthread_create(&thread_execute_process, NULL, execute, scheduler) != 0)){
+                        printf("Erro ao criar a thread.");
                         exit(EXIT_FAILURE);
                     }  */
                 break; // execute

@@ -25,9 +25,16 @@ class Scheduler{
         Kernel* kernelref;
         Scheduler();
         Scheduler(Kernel* kernel);
+
         void addPC();
         int getPC();
+
         void read_processes();
+
+        void executingProcessCPU();
+        void executingProcessMemory();
+        void executingProcessStorage();
         void executeProcesses();
+
         void report();
 };

@@ -1,4 +1,5 @@
 #include "../include/scheduler.hpp"
+#include "../include/hardware/memory.hpp"
 
 Scheduler::Scheduler(Kernel* kernel){
     this->kernelref = kernel;
@@ -31,15 +32,39 @@ void Scheduler::read_processes(){
 int  Scheduler::getPC(){ return this->pc; }
 void Scheduler::addPC(){ this->pc++;      }
 
-int randomQuantum(int max_quantum){
+int randomNumber(int max){
     srand(time(NULL));
-    return rand()%max_quantum + 1;
+    return rand()%max + 1;
 }
 
 
-void executingProcessCPU(){}
-void executingProcessMemory(){}
-void executingProcessStorage(){}
+void Scheduler::executingProcessCPU(){
+    cout<<"Executando processo na CPU"<<endl;
+    processes.front().getType()= "Em execucao";
+    //TODO: adicionar na CPU
+    processes.front().getType()= "Pronto"; 
+
+}
+void Scheduler::executingProcessMemory(){
+    cout<<"Executando processo na memoria"<<endl;
+    processes.front().getType()= "Bloqueado";
+    //Adiiconar o numero aleatorio sorteado a cada um dos processos adicionados na lista 
+    randomNumber(4);
+    block.push_back(processes.front());
+
+    //ADICIONANDO NA MEMORIA
+    MemoryContent mc;
+    mc.value = processes.front().getId();
+    mc.description = processes.front().getType();
+
+    kernelref->memory->insertMemory(mc);
+}
+void Scheduler::executingProcessStorage(){
+    cout<<"Executando processo no disco"<<endl;
+    processes.front().getType()= "Bloqueado";
+    //TODO: adicionar na Memoria
+
+}
 
 void Scheduler::executeProcesses(){
     if(this->processes.empty()){
@@ -53,22 +78,19 @@ void Scheduler::executeProcesses(){
     do{
         addPC();
         if(quantum == 0)
-            quantum = randomQuantum(this->processes.front().getMaxQuantum());
+            quantum = randomNumber(this->processes.front().getMaxQuantum());
 
-        if(processes.front().getType() == "cpu-bound"){
-             processes.front().getType()= "Em execucao";
-            //TODO: adicionar na CPU
+        //SE FOR CPU-BOUND
+        if(processes.front().getType() == "cpu-bound")
+            executingProcessCPU();
+        //SE FOR MEMORY-BOUND
+        else if(processes.front().getType()  == "memory-bound")
+            executingProcessMemory();
+        //SE FOR IO-BOUND
+        else if(processes.front().getType()  == "io-bound")
+            executingProcessStorage();
 
-        }else if(processes.front().getType())  == "memory-bound"){
-            processes.front().getType())= "Bloqueado";
-            //TODO: adicionar na Memoria
-
-
-        }else if(processes.front().getType())  == "io-bound"){
-            processes.front().getType()= "Bloqueado";
-
-
-        }
+        
 
         quantum--;
         if(quantum == 0){
@@ -76,7 +98,7 @@ void Scheduler::executeProcesses(){
         }
         usleep(1000000);
 
-    }while( finalized.size() != size_list_process );
+    }while( (int)finalized.size() != size_list_process );
 
 }
 
