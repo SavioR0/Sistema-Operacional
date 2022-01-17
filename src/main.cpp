@@ -6,14 +6,14 @@
 #include "../include/kernel.hpp"
 #include "../include/shell.hpp"
 
-void*  loadAndExecute(void* kernel);
+void*  execute(void* kernel);
 
 int main(){
     system("clear");
 
     Kernel *kernel = new Kernel;
-    Shell  *shell = new Shell();
-//  pthread_t thread_execute_process;
+    Shell  *shell  = new Shell();
+    pthread_t thread_execute_process;
 
     kernel->initialize();
     
@@ -29,7 +29,12 @@ int main(){
                 case 3: kernel->cpu->print();           break; // cpuinfo
                 case 4: kernel->cpu->loadProcess();     break; // Load
                 case 5: kernel->cpu->printProcess();    break; // queueschell
-                case 6:                                 break; // execute
+                case 6:    
+                    if((pthread_create(&thread_execute_process, NULL, execute, kernel) != 0)){
+                        printf("Deu bizil");
+                        exit(EXIT_FAILURE);
+                    } 
+                break; // execute
                 case 7:                                 break; // kill -9
                 case 8: cout<<"\n -Saindo...\n";        break; // Exit            
                 default:
@@ -43,13 +48,10 @@ int main(){
     return 0;
 }
 
-void*  loadAndExecute(void* kernel){
+void*  execute(void* kernel){
     Kernel* assist = (Kernel*) kernel;
-    assist->cpu->loadProcess();
+    assist->cpu->executeListProcess();
     pthread_exit(NULL);
 }
 
-  /*if((pthread_create(&thread_execute_process, NULL, loadAndExecute, kernel) != 0)){
-                        printf("Deu bizil");
-                        exit(EXIT_FAILURE);
-                    } */
+  

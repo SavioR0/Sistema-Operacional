@@ -21,9 +21,9 @@ public:
     Memory(int segmentos);
     void print();
     void clearMemory(int segmentos);
-    int hashingFunction(int key, int size);
-    int insertMemory(MemoryContent mc);
-    int searchMemory(int mat, MemoryContent* mc); 
+    int  hashingFunction(int key, int size);
+    int  insertMemory(MemoryContent mc);
+    int  searchMemory(int mat, MemoryContent* mc); 
 };
 
 

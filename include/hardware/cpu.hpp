@@ -4,6 +4,8 @@
 #include <iostream>
 #include <list>
 #include <fstream>
+#include <time.h>
+#include <unistd.h>
 #include "../include/json.hpp"
 #include "storage.hpp"
 #include "memory.hpp"
@@ -28,15 +30,20 @@ class Cpu{
     private:
         Memory*  memoryRef;
         Storage* storageRef;
+        int pc = 0;
     public:
         list<CpuProcess> process;
         int cores;
 
         Cpu(int cores, Memory*  memoryRef, Storage* storageRef);
+        int  getPC();
+        void addPC();
         void print();
         void setProcess();
         void loadProcess();
+        void executeListProcess();
         void printProcess();
+        void executeProcess();
 };
 
 

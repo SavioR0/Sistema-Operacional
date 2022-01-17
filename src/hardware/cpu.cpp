@@ -8,6 +8,9 @@ Cpu::Cpu(int cores, Memory*  memoryRef, Storage* storageRef){
     this->storageRef = storageRef;
 }
 
+int  Cpu::getPC(){ return this->pc; }
+void Cpu::addPC(){ this->pc++;      }
+
 void Cpu::loadProcess(){
     json processJson;
     ifstream(processFile) >> processJson;
@@ -30,6 +33,54 @@ void Cpu::loadProcess(){
     cout << "\n\n\tProcessos carregados com sucesso e prontos para execucao." <<endl;
     cout << "\t Para mais informacoes digite o comando: queueschell" <<endl;
 
+
+}
+
+int randomQuantum(int max_quantum){
+    srand(time(NULL));
+    return rand()%max_quantum + 1;
+}
+
+void Cpu::executeListProcess(){
+    if(this->process.empty()){
+        cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
+        return;
+    }
+    list<CpuProcess> finalized;
+    int size_list_process = this->process.size();
+    int quantum = 0;
+
+    do{
+        addPC();
+        if(quantum == 0)
+            quantum = randomQuantum(this->process.front().maxQuantum);
+
+        if(process.front().type == "cpu-bound"){
+            process.front().status = "Em execucao";
+
+
+        }else if(process.front().type == "memory-bound"){
+            process.front().status = "Bloqueado";
+            
+
+
+        }else if(process.front().type == "io-bound"){
+            process.front().status = "Bloqueado";
+
+
+        }
+
+        quantum--;
+        if(quantum == 0){
+
+        }
+        usleep(1000000);
+
+    }while( finalized.size() != size_list_process );
+
+}
+
+void Cpu::executeProcess(){
 
 }
 
