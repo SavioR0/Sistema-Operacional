@@ -6,7 +6,6 @@
 #include "hardware/cpu.hpp"
 #include "hardware/storage.hpp"
 #include "hardware/memory.hpp"
-#include "settler.hpp"
 
 #define FileName "hardware.json"
 

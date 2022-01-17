@@ -13,7 +13,7 @@ void Kernel::initialize(){
     this->setSegments      ( hardwareInfo["segments"] );    
     this->storage = new Storage ( this->getBlocksStorage()                    );
     this->memory  = new Memory  ( this->getSegments()                         );
-    this->cpu     = new Cpu     ( this->getCore(), this->memory, this->storage);
+    this->cpu     = new Cpu     ( this->getCore());
 
 }
 

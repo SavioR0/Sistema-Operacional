@@ -2,16 +2,14 @@
 
 
 
-Cpu::Cpu(int cores, Memory*  memoryRef, Storage* storageRef){
-    this->cores      = cores;
-    this->memoryRef  = memoryRef;
-    this->storageRef = storageRef;
+Cpu::Cpu(int cores){
+    this->cores = cores;
 }
 
-int  Cpu::getPC(){ return this->pc; }
-void Cpu::addPC(){ this->pc++;      }
+//int  Cpu::getPC(){ return this->pc; }
+//void Cpu::addPC(){ this->pc++;      }
 
-void Cpu::loadProcess(){
+/*void Cpu::loadProcess(){
     json processJson;
     ifstream(processFile) >> processJson;
     CpuProcess* assist = NULL;
@@ -39,9 +37,9 @@ void Cpu::loadProcess(){
 int randomQuantum(int max_quantum){
     srand(time(NULL));
     return rand()%max_quantum + 1;
-}
+}*/
 
-void Cpu::executeListProcess(){
+/* void Cpu::executeListProcess(){
     if(this->process.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return;
@@ -82,12 +80,12 @@ void Cpu::executeListProcess(){
 
 void Cpu::executeProcess(){
 
-}
+} 
 
 void Cpu::print(){
 
     
-    /*cout<< this->process.size() << endl;
+    cout<< this->process.size() << endl;
     for(CpuProcess item : this->process){
         cout << "\nID: "         << item.id;
         cout << "\nCiclos: "     << item.cycles;
@@ -110,9 +108,9 @@ void Cpu::print(){
         count++;
     }
     cout<<"----------------------------------------------------------------------------"<<endl;
-*/}
+}*/
 
-void Cpu::printProcess(){
+/*void Cpu::printProcess(){
     cout<<"--------------------------------------------------"<<endl;
     cout<<" +\t\t      LIST PROCESS\t\t+"<<endl;
     cout<<"--------------------------------------------------"<<endl;
@@ -126,4 +124,4 @@ void Cpu::printProcess(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<" --------------------------------------------------"<<endl;
-}
+}*/
