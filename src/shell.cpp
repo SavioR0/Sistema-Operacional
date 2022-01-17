@@ -17,20 +17,19 @@ void Shell::selectedShellOption(){
     cout<<"\n $ ";
     getline( cin, str);// é capaz de ler o dado de entrada até que uma nova linha seja detectada
 
-    if     (str == "help"       ) option = 0;
-    else if(str == "meminfo"    ) option = 1;
-    else if(str == "diskinfo"   ) option = 2;
-    else if(str == "cpuinfo"    ) option = 3;
-    else if(str == "load"       ) option = 4;
-    else if(str == "queueschell") option = 5;
-    else if(str == "execute"    ) option = 6;
-    else if(str == "kill -9"    ) option = 7;
-    else if(str == "exit"       ) option = -1;
+    if     (str == "help"       || str == "0" ) option = 0;
+    else if(str == "meminfo"    || str == "1" ) option = 1;
+    else if(str == "diskinfo"   || str == "2" ) option = 2;
+    else if(str == "cpuinfo"    || str == "3" ) option = 3;
+    else if(str == "load"       || str == "4" ) option = 4;
+    else if(str == "queueschell"|| str == "5" ) option = 5;
+    else if(str == "execute"    || str == "6" ) option = 6;
+    else if(str == "kill -9"    || str == "7" ) option = 7;
+    else if(str == "exit"                     ) option = -1;
     
     else option = -1; //caso errado 
 
-    if(option != -1) this->execute = true;
-    cout<<this->execute<<endl;
+
 }
 
 void Shell::helpCommand(){

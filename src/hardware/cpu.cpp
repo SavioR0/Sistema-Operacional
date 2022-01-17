@@ -1,6 +1,4 @@
 #include "../../include/hardware/cpu.hpp"
-#include <chrono>
-#include <unistd.h>
 
 
 
@@ -14,7 +12,6 @@ void Cpu::loadProcess(){
     CpuProcess* assist = NULL;
 
     for (int i = 0; i < (int) processJson["Itens"].size(); i++){
-        usleep(2050000);
         assist =  new CpuProcess;
 
         assist->id         = (int)    processJson["Itens"][i]["id"];
