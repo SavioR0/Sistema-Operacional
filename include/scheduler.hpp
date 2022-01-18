@@ -29,9 +29,12 @@ class Scheduler{
         Scheduler(Kernel* kernel);
 
         void addPC();
-        int getPC();
+        int  getPC();
 
         void read_processes();
+        void check_block_list();
+        bool check_finished();
+        void update_timestamp(int value);
 
         void executingProcessCPU();
         void executingProcessMemory();

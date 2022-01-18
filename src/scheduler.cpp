@@ -15,7 +15,7 @@ void Scheduler::read_processes(){
         
         assist = new Process(
             (int)    processJson["Itens"][i]["id"],
-            (int)    processJson["Itens"][i]["ciclos"],
+            (float)  processJson["Itens"][i]["ciclos"],
             (int)    processJson["Itens"][i]["max_quantum"],
             (int)    processJson["Itens"][i]["timestamp"],
             (int)    processJson["Itens"][i]["prioridade"],
@@ -31,6 +31,17 @@ void Scheduler::read_processes(){
 int  Scheduler::getPC(){ return this->pc; }
 void Scheduler::addPC(){ this->pc++;      }
 
+void Scheduler::update_timestamp(int value){
+    Process assist;
+    for(int i = 0; i < (int) this->processes.size(); i++){
+        this->processes.front().setTimestamp(value);
+        assist = this->processes.front();
+        this->processes.pop_front();
+        this->processes.push_back(assist);
+    }
+}
+
+
 int randomNumber(int max){
     srand(0);
     return rand()%max + 1;
@@ -40,23 +51,15 @@ int randomNumber(int max){
 void Scheduler::executingProcessCPU(){
     processes.front().setStatus("Em Execucao");
     this->kernelref->cpu->setProcess( &this->processes.front() );
-    //TODO: adicionar na CPU
-
 }
 
 void Scheduler::executingProcessMemory(){
     processes.front().setStatus("Bloqueado");
-
-
-    MemoryContent memory_content; //ADICIONANDO NA MEMORIA
-    memory_content.value       = this->processes.front().getId();
-    memory_content.description = this->processes.front().getType();
-    memory_content.currentTime = 0;
-
-     
-    memory_content.time = randomNumber(4); //Adicionar o numero aleatorio sorteado a cada um dos processos adicionados na lista
-
-    this->kernelref->memory->insertMemory(memory_content);
+    this->kernelref->memory->insertMemory(
+        this->processes.front().getId(),
+        this->processes.front().getType(),
+        randomNumber(4)
+    );
 }
 
 void Scheduler::executingProcessStorage(){
@@ -76,6 +79,26 @@ void Scheduler::executingProcessStorage(){
 
 }
 
+
+bool Scheduler::check_finished(){
+    if(this->processes.front().getcyles() <= 0) return true;
+    else                                        return false;
+}
+
+void Scheduler::check_block_list(){
+    if(block.front().getType() == "memory-bound"){
+        for( int i=0; i < (int)this->block.size(); i++){
+            //this->kernelref->memory->get_position_ram
+        }
+    }else{
+
+    }
+
+
+    if(this->kernelref->memory->getRam())
+     if(this->block.front().getId() == this->kenelref->memory)
+}
+
 void Scheduler::executeProcesses(){
     Process assist;
     if(this->processes.empty()){
@@ -88,24 +111,34 @@ void Scheduler::executeProcesses(){
 
     do{
         addPC();
-        if(quantum == 0)
+        if(quantum == 0){
             quantum = randomNumber(this->processes.front().getMaxQuantum());
+            this->processes.front().sub_quantum(quantum);
+        }
 
         
         if(processes.front().getStatus() == "Pronto"){
-            //SE FOR CPU-BOUND
-            if(processes.front().getType() == "cpu-bound")
-                executingProcessCPU();
-            //SE FOR MEMORY-BOUND
-            else if(processes.front().getType()  == "memory-bound")
-                executingProcessMemory();
-            //SE FOR IO-BOUND
-            else if(processes.front().getType()  == "io-bound")
-                executingProcessStorage();
+
+            if     (processes.front().getType() == "cpu-bound")    executingProcessCPU(); 
+            else if(processes.front().getType() == "memory-bound") executingProcessMemory();
+            else if(processes.front().getType() == "io-bound")     executingProcessStorage();
         }
         
         this->kernelref->memory->addTimeMemory();
+        this->update_timestamp(getPC());
+
         quantum--;
+
+        this->check_block_list();
+
+
+        if(check_finished()){
+            this->finalized.push_back(this->processes.front());
+            this->processes.pop_front();
+            quantum = 0;
+        }
+        
+        
         if(quantum == 0){
             if( this->processes.front().getStatus() != "bloqueado"){
                 this->processes.front().setStatus("Pronto"); 

@@ -9,7 +9,7 @@ using namespace std;
 class Process{
     private:
         int      id;
-        int      cycles;
+        float    cycles;
         int      maxQuantum;
         int      timestamp;
         int      priority;
@@ -19,10 +19,10 @@ class Process{
         
         
         Process();
-        Process( int id, int cycles, int maxQuantum, int timesamp, int priority, string type);
+        Process( int id, float cycles, int maxQuantum, int timesamp, int priority, string type);
         
         void setId    (int value);
-        void setCycles(int value);
+        void setCycles(float value);
         void setMaxQuantum(int value);
         void setTimestamp(int value);
         void setPriority(int value);
@@ -31,9 +31,11 @@ class Process{
         void setType(string value);
         void setTypeAddress(string* value );
 
+        void sub_quantum(int current_quantum);
+
 
         int getId();
-        int getcyles();
+        float getcyles();
         int getMaxQuantum();
         int getTimestamp();
         int getPriority();

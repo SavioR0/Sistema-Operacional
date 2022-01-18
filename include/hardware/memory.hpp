@@ -6,27 +6,32 @@
 #include <vector>
 using namespace std;
 
+typedef struct MemoryContent MemoryContent; 
 struct MemoryContent{
-    int value;
-    string description;
-    int time;
-    int currentTime;
+    int    value;             // ID do processo
+    string description;       // Tipo do processo
+    int    time;              // Tempo máximo de castigo
+    int    currentTime;       // Tempo que ele está na memoria
+    bool   alocated = false;  // variável que define se está alocado ou não     
 };
 
 
 class Memory{
 private:
-    int segments;
-    int qtd;
-    MemoryContent *ram;
+    int            segments;
+    int            allocated_amount; 
+    MemoryContent* ram;
 public:
-    Memory(int segmentos);
+    Memory(int segments);
     void print();
-    void clearMemory();
+    void resetMemory();
     void addTimeMemory();
     int  hashingFunction(int key, int size);
-    int  insertMemory(MemoryContent mc);
+    void insertMemory(int value, string description, int time);
+    int  addHash(MemoryContent memory_content);
     int  searchMemory(int mat, MemoryContent* mc); 
+    int  get_position_ram(int id);
+    int  get_segments();
 };
 
 

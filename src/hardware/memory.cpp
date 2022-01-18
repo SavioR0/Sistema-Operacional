@@ -1,45 +1,51 @@
 #include "../../include/hardware/memory.hpp"
 
 
-Memory::Memory(int segmentos){ //definindo o tamanho da tabela hash
-    segments = segmentos;
-    ram = new MemoryContent[segmentos];
-    qtd = 0;
-    Memory::clearMemory();  
+Memory::Memory(int segments){ 
+    this->segments         = segments;
+    this->ram              = new MemoryContent[segments];
+    this->allocated_amount = 0;
 }
 
-void Memory::clearMemory(){
-    for(int i=0; i<this->segments; i++){
-        ram[i].value = -1;
-        ram[i].description = "";
-        ram[i].currentTime = 0;
-    }
+
+
+void Memory::resetMemory(){
+    for(int i=0; i<this->segments; i++) this->ram[i].alocated = false;
 }
 
 void Memory::addTimeMemory(){
-    for(int i = 0 ; i < this->segments; i++){
-        if(ram[i].value != -1)
-            ram[i].currentTime++;
-    }
+    for(int i = 0 ; i < this->segments; i++)
+        if(this->ram[i].alocated == true)
+            this->ram[i].currentTime++;
 }
 
 int Memory::hashingFunction(int key, int size){
     return (key & 0x7FFFFFFF) % size;
 }
 
-int Memory::insertMemory(MemoryContent mc){
-    if(qtd == segments)
-        return 0;
-    int key = mc.value;
-    int position = hashingFunction(key, segments);
-    struct MemoryContent* newmc;
-    newmc = (struct MemoryContent*)malloc(sizeof(struct MemoryContent));
-    if(newmc == NULL)
-        return 0;
-    *newmc = mc;
-    ram[position] = *newmc;
-    qtd++;
-    /* cout<<"\t-Inserçao na memoria concluída com sucesso!"<<endl; */
+void Memory::insertMemory(int value, string description, int time){
+    MemoryContent assist;
+    assist.value       = value;
+    assist.description = description;
+    assist.time        = time;
+    assist.currentTime = 0;
+    assist.alocated    = true;
+    this->addHash(assist);
+}
+
+int Memory::addHash(MemoryContent memory_content){
+    if(allocated_amount == segments) return 0;
+
+    
+    int key      = memory_content.value;
+    int position = hashingFunction(key, this->segments);
+
+    MemoryContent* assist;
+    assist = new MemoryContent;
+    *assist = memory_content;
+
+    ram[position] = *assist;
+    allocated_amount++;
     return 1;
 }
 
@@ -51,17 +57,31 @@ int Memory::searchMemory(int id,MemoryContent* mc){
     return 1;
 } 
 
-void Memory::print(){
-    cout<<"---------------------------------------------------------------------------------"<<endl;
-    cout<<"  |\t\t\t\tINFORMACOES DA MEMORIA\t\t\t\t|"<<endl;
-    cout<<"---------------------------------------------------------------------------------"<<endl;
-    cout<<"  |  Segmento\t|   Descricao\t|\t   Key\t\t|        Estado      \t|\tTempo\t|"<<endl;
-    cout<<"---------------------------------------------------------------------------------"<<endl;
-    for(int i = 0; i<segments; i++){
-        if(ram[i].value == -1 && ram[i].description=="")
-            cout<<"  |   ["<<i+1<<"]\t| "<<"     NULL"<<"\t|\t    -\t\t|\t Livre  \t|"<<endl;
-        else
-            cout<<"  |   ["<<i+1<<"]\t|  "<<ram[i].description<<"\t|\t    "<<ram[i].value<<"\t\t|\t Em uso   \t|" << ram[i].time << " " << ram[i].currentTime <<endl;
+int Memory::get_segments(){
+    return this->segments;
+} 
+
+int Memory::get_position_ram(int id){
+    for(int i = 0; i < this->get_segments(); i++){
+        if(this->ram[i].value == id) return i;
     }
-    cout<<"---------------------------------------------------------------------------------"<<endl;
+    return -1;
+}
+
+
+
+void Memory::print(){
+    cout<<"  -----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"  |\t\t\t\t\t\tINFORMACOES DA MEMORIA\t\t\t\t\t\t\t|"<<endl;
+    cout<<"  -----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"  |  Segmento\t|   Descricao\t|\t   Key\t\t|        Estado      \t|   Tempo\t|   Tempo maximo\t|"<<endl;
+    cout<<"  -----------------------------------------------------------------------------------------------------------------------"<<endl;
+    for(int i = 0; i<segments; i++){
+        if(ram[i].alocated == false)
+            cout<<"  |   ["<<i+1<<"]\t| "<<"     NULL"<<"\t|\t    -\t\t|\t Livre  \t|\t-\t|\t    -\t\t|"<<endl;
+        else
+            cout<<"  |   ["<<i+1<<"]\t|  "<<ram[i].description<<"\t|\t    "<<ram[i].value<<"\t\t|\t Em uso   \t|\t" << ram[i].currentTime << "\t|\t    " << ram[i].time <<"\t\t|"<<endl;
+    }
+    cout<<"  -----------------------------------------------------------------------------------------------------------------------"<<endl;
+    
 }
