@@ -53,5 +53,3 @@ void Process::sub_quantum(int currentQuantum){
     float decrease = (float) currentQuantum / (float) this->maxQuantum;
     this->cycles -= decrease;
 }
-
-void Process::add_timestamp(){ this->timestamp++; }

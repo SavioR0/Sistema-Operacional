@@ -13,7 +13,6 @@ Process  Cpu::getProcessPrevious(){return *(this->process_previous);}
 
 
 void Cpu::print(){
-    system("clear");
     cout<<"   --------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"   |\t\t\t\t\tINFORMACOES DE PROCESSAMENTO\t\t\t\t\t\t|"<< endl;
     cout<<"   --------------------------------------------------------------------------------------------------------------"<<endl;

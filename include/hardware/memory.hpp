@@ -31,8 +31,8 @@ public:
     void insertMemory(int value, string description, int time);
     int  addHash(MemoryContent memory_content);
     int  searchMemory(int value, MemoryContent* mc); 
-    int  removeMemory(int value); 
-    int  check_time(int** ids);
+    int removeMemory(int value); 
+    /* int  get_position_ram(int id); */
     int  get_segments();
 };
 
