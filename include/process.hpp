@@ -32,6 +32,7 @@ class Process{
         void setTypeAddress(string* value );
 
         void sub_quantum(int current_quantum);
+        void add_timestamp();
 
 
         int getId();

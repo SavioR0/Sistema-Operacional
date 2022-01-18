@@ -48,6 +48,26 @@ int Memory::addHash(MemoryContent memory_content){
     return 1;
 }
 
+int Memory::check_time(int** ids){
+    int size = 0;
+    *ids = (int*) malloc(sizeof(int));
+    for(int i = 0; i < this->segments; i++){
+        if(this->ram[i].alocated == true)
+            if(this->ram[i].currentTime >= this->ram[i].time){
+                if(size == 0){
+                    *ids[0] = ram[i].value;
+                    size++;
+                }else{
+                   *ids = (int*) realloc(*ids, size * sizeof(int));
+                   *ids[ size ] =  ram[i].value;
+                   size++;
+                }
+                ram[i].alocated = false;
+            }
+    }
+    return size;
+}
+
 int Memory::searchMemory(int id,MemoryContent* mc){
     int pos = hashingFunction(id-1, segments);
     if(ram[pos].alocated == false)
