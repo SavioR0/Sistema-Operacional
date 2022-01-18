@@ -8,6 +8,7 @@ using namespace std;
 
 typedef struct MemoryContent MemoryContent; 
 struct MemoryContent{
+    int    idContant;
     int    value;             // ID do processo
     string description;       // Tipo do processo
     int    time;              // Tempo máximo de castigo
@@ -29,8 +30,9 @@ public:
     int  hashingFunction(int key, int size);
     void insertMemory(int value, string description, int time);
     int  addHash(MemoryContent memory_content);
-    int  searchMemory(int mat, MemoryContent* mc); 
-    int  get_position_ram(int id);
+    int  searchMemory(int value, MemoryContent* mc); 
+    int removeMemory(int value); 
+    /* int  get_position_ram(int id); */
     int  get_segments();
 };
 

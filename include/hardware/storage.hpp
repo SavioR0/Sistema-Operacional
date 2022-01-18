@@ -9,9 +9,11 @@ using namespace std;
 typedef struct BlockData BlockData;
 struct BlockData{
     int key;
-    string* type;
+    string type;
 
     int time;
+    int currentTime;
+    bool   alocated = false;
 };
 
 class Storage{
@@ -23,6 +25,9 @@ class Storage{
 
         Storage(int size);
         int insertStorage(BlockData bd);
+        int searchStorage(int id,BlockData* bd);
+        int removeStorage(int id);
+        void addTimeStorage();
         void print();
 };
 

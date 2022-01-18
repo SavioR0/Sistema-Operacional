@@ -8,7 +8,6 @@ Memory::Memory(int segments){
 }
 
 
-
 void Memory::resetMemory(){
     for(int i=0; i<this->segments; i++) this->ram[i].alocated = false;
 }
@@ -51,9 +50,18 @@ int Memory::addHash(MemoryContent memory_content){
 
 int Memory::searchMemory(int id,MemoryContent* mc){
     int pos = hashingFunction(id-1, segments);
-    if(ram[pos].value == -1)
+    if(ram[pos].alocated == false)
         return 0;
     *mc = ram[pos]; 
+    return 1;
+} 
+
+int Memory::removeMemory(int id){
+    int pos = hashingFunction(id-1, segments);
+    if(ram[pos].alocated == false)
+        return 0;
+    ram[pos].alocated=false; 
+    ram[pos].currentTime=0;
     return 1;
 } 
 
@@ -61,12 +69,12 @@ int Memory::get_segments(){
     return this->segments;
 } 
 
-int Memory::get_position_ram(int id){
+/* int Memory::get_position_ram(int id){
     for(int i = 0; i < this->get_segments(); i++){
         if(this->ram[i].value == id) return i;
     }
     return -1;
-}
+} */
 
 
 

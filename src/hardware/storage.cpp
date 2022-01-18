@@ -4,8 +4,11 @@ Storage::Storage(int size){
     this->size = size;
     BlockData assist;
     for(int i = 0; i < size; i++){
-        assist.key = i;
-        assist.type = NULL;
+        assist.key = 0;
+        assist.type = "";
+        assist.currentTime=0;
+        assist.time = 0;
+        assist.alocated = false;
         this->blocks.push_back(assist);
     }
 }
@@ -13,47 +16,69 @@ Storage::Storage(int size){
 int Storage::insertStorage(BlockData bd){
     if(qtd == size)
         return 0;
-    struct BlockData* newbd;
-    newbd = (struct BlockData*)malloc(sizeof(struct BlockData));
-    if(newbd == NULL)
-        return 0;
-    *newbd = bd;
-    blocks.push_back(*newbd);
-    qtd++;
-    //cout<<"\t-Inserçao na memoria concluída com sucesso!"<<endl; 
-    return 1;
+    for( int i = 0 ; i< this->size; i++){
+        if(blocks.front().alocated == false){
+            blocks.pop_front();
+            blocks.push_front(bd);
+            return 1;
+        }
+        blocks.push_back(blocks.front());
+        blocks.pop_front();
+    }
+    
+    return 0;
 }
 
 
-/* int Memory::insertMemory(MemoryContent mc){
-    if(qtd == segments)
-        return 0;
-    cout<<""<<endl;
-    int key = mc.value;
-    int position = hashingFunction(key, segments);
-    struct MemoryContent* newmc;
-    newmc = (struct MemoryContent*)malloc(sizeof(struct MemoryContent));
-    if(newmc == NULL)
-        return 0;
-    *newmc = mc;
-    ram[position] = *newmc;
-    qtd++;
-    //cout<<"\t-Inserçao na memoria concluída com sucesso!"<<endl; 
-    return 1;
-} */
+int Storage::searchStorage(int id, BlockData* bd){
+    for(int i = 0; i < this->size; i++){
+       if(id == blocks.front().key){
+           *bd = blocks.front();
+           return 1;
+       }
+       blocks.push_back(blocks.front());
+       blocks.pop_front();
+    }
+    return 0;
+}
 
+int Storage::removeStorage(int id ){
+    BlockData bd;
+    for(int i = 0; i < this->size; i++){
+       if(id == blocks.front().key){
+            if(blocks.front().alocated == false)
+                return 0;
+            blocks.front().alocated=false; 
+            blocks.front().currentTime = 0;
+
+       }else{
+            blocks.push_back(blocks.front());
+            blocks.pop_front();
+       }
+    }
+    return 1;
+}
+
+void Storage::addTimeStorage(){
+    for(int i = 0 ; i < this->size; i++){
+        if(this->blocks.front().alocated == true)
+            this->blocks.front().currentTime++;
+        blocks.push_back(blocks.front());
+        blocks.pop_front();
+    }
+}
 void Storage::print(){
     
-    cout<<"-----------------------------------------------------------"<<endl;
-    cout<<"  +    BLOCO\t|     VALOR\t|\t STATUS\t\t+"<<endl;
-    cout<<"-----------------------------------------------------------"<<endl;
+    cout<<"  ---------------------------------------------------------------------------------------"<<endl;
+    cout<<"  |    ID\t|     Valor\t|\t Status\t\t|   Tempo\t|   Tempo maximo\t|"<<endl;
+    cout<<"  ---------------------------------------------------------------------------------------"<<endl;
     for( BlockData item : this->blocks ){
-        cout << "  +\t" << item.key << "\t|";
-        if(item.type == NULL) 
-            cout << "     NULL" << "\t|\t" << "Disponivel\t+" << endl;
+        cout << "  |\t" << item.key << "\t|";
+        if(item.alocated==false) 
+            cout << "     NULL" << "\t|\t" << "Disponivel\t|\t-\t|\t-\t|" << endl;
         else
-            cout << "\t"<<*item.type << "\t|\t" << "Ocupado\t+" << endl;
+            cout << "  "<<item.type << "\t|\t" << "Ocupado\t\t|\t"<<item.currentTime<<"\t|\t"<<item.time<<"\t|" << endl;
     } 
-    cout<<"-----------------------------------------------------------\n"<<endl;
+    cout<<"  ---------------------------------------------------------------------------------------"<<endl;
 
 }
