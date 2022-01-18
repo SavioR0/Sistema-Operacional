@@ -1,5 +1,8 @@
-#include <iostream>
+#ifndef __PROCESS_HPP__
+#define __PROCESS_HPP__
 
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -41,3 +44,5 @@ class Process{
         string* getTypeAdress();
 
 };
+
+#endif

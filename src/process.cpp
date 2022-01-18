@@ -1,5 +1,6 @@
 #include "../include/process.hpp"
 
+Process::Process(){}
 
 Process::Process( int id, int cycles, int maxQuantum, int timestamp, int priority,  string type){
     string* status = new string;
@@ -21,10 +22,20 @@ void Process::setCycles             (int value)     { this->cycles      = value;
 void Process::setMaxQuantum         (int value)     { this->maxQuantum  = value; }
 void Process::setTimestamp          (int value)     { this->timestamp   = value; }
 void Process::setPriority           (int value)     { this->priority    = value; }
-void Process::setStatus             (string value)  { this->status      = &value;}
 void Process::setStatusAddres       (string* value) { this->status      = value; }
-void Process::setType               (string value)  { this->type        = &value;}
 void Process::setTypeAddress        (string* value) { this->type        = value; }
+void Process::setStatus(string value){ 
+    string* assist = new string;
+    *assist = value;
+    this->status = assist;
+}
+void Process::setType(string value){ 
+    string* assist = new string;
+    *assist = value;
+    this->type = assist;
+}
+
+
 
 int Process::getId                  (){return this->id;         }
 int Process::getcyles               (){return this->cycles;     }

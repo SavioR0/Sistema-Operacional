@@ -5,13 +5,21 @@ Memory::Memory(int segmentos){ //definindo o tamanho da tabela hash
     segments = segmentos;
     ram = new MemoryContent[segmentos];
     qtd = 0;
-    Memory::clearMemory(segmentos);  
+    Memory::clearMemory();  
 }
 
-void Memory::clearMemory(int segmentos){
-    for(int i=0; i<segmentos; i++){
+void Memory::clearMemory(){
+    for(int i=0; i<this->segments; i++){
         ram[i].value = -1;
         ram[i].description = "";
+        ram[i].currentTime = 0;
+    }
+}
+
+void Memory::addTimeMemory(){
+    for(int i = 0 ; i < this->segments; i++){
+        if(ram[i].value != -1)
+            ram[i].currentTime++;
     }
 }
 
@@ -22,7 +30,6 @@ int Memory::hashingFunction(int key, int size){
 int Memory::insertMemory(MemoryContent mc){
     if(qtd == segments)
         return 0;
-    cout<<""<<endl;
     int key = mc.value;
     int position = hashingFunction(key, segments);
     struct MemoryContent* newmc;
@@ -45,23 +52,16 @@ int Memory::searchMemory(int id,MemoryContent* mc){
 } 
 
 void Memory::print(){
-    /* cout<<"-Numero de Segmentos:"<<segments <<endl;
-    cout<<"\nSEGMENTO\tDESCRIÇÃO\tCONTEÚDO MEMORIA\tESTADO"<<endl;
-    for(int i = 0; i<segments; i++){
-        if(ram[i].value == 0 && ram[i].description=="")
-            cout<<"  ["<<i+1<<"]\t\t "<<"NULL"<<"\t\t\t"<<ram[i].value<<"\t\t Livre"<<endl;
-        else
-            cout<<"  ["<<i+1<<"]\t\t "<<ram[i].description<<"\t\t\t"<<ram[i].value<<"\t\tEm uso"<<endl;
-    }
-    cout<<endl; */
     cout<<"---------------------------------------------------------------------------------"<<endl;
-    cout<<"  +  SEGMENTO\t|   DESCRIÇÃO\t|   CONTEÚDO MEMORIA\t|        ESTADO      \t+"<<endl;
+    cout<<"  |\t\t\t\tINFORMACOES DA MEMORIA\t\t\t\t|"<<endl;
+    cout<<"---------------------------------------------------------------------------------"<<endl;
+    cout<<"  |  Segmento\t|   Descricao\t|\t   Key\t\t|        Estado      \t|\tTempo\t|"<<endl;
     cout<<"---------------------------------------------------------------------------------"<<endl;
     for(int i = 0; i<segments; i++){
         if(ram[i].value == -1 && ram[i].description=="")
-            cout<<"  +   ["<<i+1<<"]\t| "<<"     NULL"<<"\t|\t    -\t\t|\t Livre  \t+"<<endl;
+            cout<<"  |   ["<<i+1<<"]\t| "<<"     NULL"<<"\t|\t    -\t\t|\t Livre  \t|"<<endl;
         else
-            cout<<"  +   ["<<i+1<<"]\t|  "<<ram[i].description<<"\t|\t    "<<ram[i].value<<"\t\t|\t  Em uso   \t+"<<endl;
+            cout<<"  |   ["<<i+1<<"]\t|  "<<ram[i].description<<"\t|\t    "<<ram[i].value<<"\t\t|\t Em uso   \t|" << ram[i].time << " " << ram[i].currentTime <<endl;
     }
     cout<<"---------------------------------------------------------------------------------"<<endl;
 }

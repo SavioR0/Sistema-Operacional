@@ -1,5 +1,4 @@
 #include "../include/scheduler.hpp"
-#include "../include/hardware/memory.hpp"
 
 Scheduler::Scheduler(Kernel* kernel){
     this->kernelref = kernel;
@@ -13,7 +12,7 @@ void Scheduler::read_processes(){
     Process* assist = NULL;
     
     for (int i = 0; i < (int) processJson["Itens"].size(); i++){
-       
+        
         assist = new Process(
             (int)    processJson["Itens"][i]["id"],
             (int)    processJson["Itens"][i]["ciclos"],
@@ -33,40 +32,52 @@ int  Scheduler::getPC(){ return this->pc; }
 void Scheduler::addPC(){ this->pc++;      }
 
 int randomNumber(int max){
-    srand(time(NULL));
+    srand(0);
     return rand()%max + 1;
 }
 
 
 void Scheduler::executingProcessCPU(){
-    cout<<"Executando processo na CPU"<<endl;
-    processes.front().getType()= "Em execucao";
+    processes.front().setStatus("Em Execucao");
+    this->kernelref->cpu->setProcess( &this->processes.front() );
     //TODO: adicionar na CPU
-    processes.front().getType()= "Pronto"; 
 
 }
+
 void Scheduler::executingProcessMemory(){
-    cout<<"Executando processo na memoria"<<endl;
-    processes.front().getType()= "Bloqueado";
-    //Adiiconar o numero aleatorio sorteado a cada um dos processos adicionados na lista 
-    randomNumber(4);
-    block.push_back(processes.front());
+    processes.front().setStatus("Bloqueado");
 
-    //ADICIONANDO NA MEMORIA
-    MemoryContent mc;
-    mc.value = processes.front().getId();
-    mc.description = processes.front().getType();
 
-    kernelref->memory->insertMemory(mc);
+    MemoryContent memory_content; //ADICIONANDO NA MEMORIA
+    memory_content.value       = this->processes.front().getId();
+    memory_content.description = this->processes.front().getType();
+    memory_content.currentTime = 0;
+
+     
+    memory_content.time = randomNumber(4); //Adicionar o numero aleatorio sorteado a cada um dos processos adicionados na lista
+
+    this->kernelref->memory->insertMemory(memory_content);
 }
+
 void Scheduler::executingProcessStorage(){
-    cout<<"Executando processo no disco"<<endl;
-    processes.front().getType()= "Bloqueado";
-    //TODO: adicionar na Memoria
+    processes.front().setStatus("Bloqueado");
+
+    block.push_back(processes.front());
+    this->processes.pop_front();
+
+    //ADICIONANDO NO STORAGE
+    BlockData bd;
+    bd.key = this->processes.front().getId();
+    bd.type = this->processes.front().getTypeAdress();
+    //Adicionar o numero aleatorio sorteado a cada um dos processos adicionados na lista 
+    bd.time = randomNumber(4);
+
+    kernelref->storage->insertStorage(bd);
 
 }
 
 void Scheduler::executeProcesses(){
+    Process assist;
     if(this->processes.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return;
@@ -80,22 +91,34 @@ void Scheduler::executeProcesses(){
         if(quantum == 0)
             quantum = randomNumber(this->processes.front().getMaxQuantum());
 
-        //SE FOR CPU-BOUND
-        if(processes.front().getType() == "cpu-bound")
-            executingProcessCPU();
-        //SE FOR MEMORY-BOUND
-        else if(processes.front().getType()  == "memory-bound")
-            executingProcessMemory();
-        //SE FOR IO-BOUND
-        else if(processes.front().getType()  == "io-bound")
-            executingProcessStorage();
-
         
-
+        if(processes.front().getStatus() == "Pronto"){
+            //SE FOR CPU-BOUND
+            if(processes.front().getType() == "cpu-bound")
+                executingProcessCPU();
+            //SE FOR MEMORY-BOUND
+            else if(processes.front().getType()  == "memory-bound")
+                executingProcessMemory();
+            //SE FOR IO-BOUND
+            else if(processes.front().getType()  == "io-bound")
+                executingProcessStorage();
+        }
+        
+        this->kernelref->memory->addTimeMemory();
         quantum--;
         if(quantum == 0){
-
+            if( this->processes.front().getStatus() != "bloqueado"){
+                this->processes.front().setStatus("Pronto"); 
+                assist = this->processes.front();
+                this->processes.pop_front();
+                this->processes.push_back(assist);
+            }else if(this->processes.front().getStatus() == "bloqueado"){
+                this->block.push_back( this->processes.front() );
+                this->processes.pop_front();
+            }
         }
+        
+        
         usleep(1000000);
 
     }while( (int)finalized.size() != size_list_process );

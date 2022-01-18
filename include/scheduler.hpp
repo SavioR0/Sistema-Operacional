@@ -1,3 +1,6 @@
+#ifndef __Scheduler_HPP__
+#define __Scheduler_HPP__
+
 #include <iostream>
 #include <list>
 #include <fstream>
@@ -13,7 +16,6 @@
 using json = nlohmann::json;
 using namespace std;
 
-typedef struct Process Process;
 
 class Scheduler{
     private:
@@ -38,3 +40,5 @@ class Scheduler{
 
         void report();
 };
+
+#endif

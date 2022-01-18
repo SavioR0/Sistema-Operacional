@@ -9,6 +9,8 @@ using namespace std;
 struct MemoryContent{
     int value;
     string description;
+    int time;
+    int currentTime;
 };
 
 
@@ -20,7 +22,8 @@ private:
 public:
     Memory(int segmentos);
     void print();
-    void clearMemory(int segmentos);
+    void clearMemory();
+    void addTimeMemory();
     int  hashingFunction(int key, int size);
     int  insertMemory(MemoryContent mc);
     int  searchMemory(int mat, MemoryContent* mc); 
