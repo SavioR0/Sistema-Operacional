@@ -1,27 +1,73 @@
 #include "../../include/hardware/storage.hpp"
 
+//Contrutor
 Storage::Storage(int size){
-    this->size = size;
-    BlockData assist;
+    this->size_blocks = size;
     for(int i = 0; i < size; i++){
-        assist.key = 0;
-        assist.type = "";
-        assist.currentTime=0;
-        assist.time = 0;
-        assist.alocated = false;
-        this->blocks.push_back(assist);
+        BlockData* assist = new BlockData;
+        /* assist->key = 0;
+        assist->type = "";
+        assist->time = 0; */
+        assist->currentTime=0;
+        assist->alocated = false;
+        this->blocks.push_back(*assist);
+        free(assist);
     }
 }
 
+// Funções auxiliares
+int Storage::check_time(int** ids){
+    int size = 0;
+    *ids = (int*) malloc(sizeof(int));
+    for(int i = 0; i < this->size_blocks; i++){
+        if(this->blocks.front().alocated == true)
+            if(this->blocks.front().currentTime >= this->blocks.front().time){
+                if(size == 0){
+                    *ids[0] = this->blocks.front().key;
+                    size++;
+                }else{
+                   *ids = (int*) realloc(*ids, (size + 1) * sizeof(int));
+                   (*ids)[size] =  this->blocks.front().key;
+                   size++;
+                }
+            }
+        this->blocks.push_back( this->blocks.front());
+        this->blocks.pop_front();
+    }
+    return size;
+}
+void Storage::addTimeStorage(){
+    for(int i = 0 ; i < this->size_blocks; i++){
+        if(this->blocks.front().alocated == true)
+            this->blocks.front().currentTime++;
+        blocks.push_back(blocks.front());
+        blocks.pop_front();
+    }
+}
+
+//Funções de gerenciamento
+void Storage::insertBlockData(int key, string type, int random_number){
+    if(allocated_blocks == size_blocks){
+        cout<<"Erro [012] -> Não foi possível adicionar pois não há espaço suficiente" << endl;
+        return;
+    }
+    BlockData* assist = new BlockData;
+    assist->key         = key;
+    assist->type        = type;
+    assist->time        = random_number;
+    assist->currentTime = 0;
+    assist->alocated    = true;
+    this->insertStorage(assist);
+    free(assist);
+}
+
+
 int Storage::insertStorage(BlockData* bd){
-    if(allocated_blocks == size)
-        return 0;
-    for( int i = 0 ; i< this->size; i++){
+
+    for( int i = 0 ; i< this->size_blocks; i++){
         if(blocks.front().alocated == false){
             blocks.pop_front();
             blocks.push_front(*bd);
-            blocks.front().alocated= true;
-            blocks.front().currentTime= 0;
             allocated_blocks++;
             return 1;
         }
@@ -33,34 +79,17 @@ int Storage::insertStorage(BlockData* bd){
 }
 
 
-int Storage::check_time(int** ids){
-    int sizee = 0;
-    *ids = (int*) malloc(sizeof(int));
-    for(int i = 0; i < this->size; i++){
-        if(this->blocks.front().alocated == true)
-            if(this->blocks.front().currentTime >= this->blocks.front().time){
-                if(sizee == 0){
-                    *ids[0] = this->blocks.front().key;
-                    sizee++;
-                }else{
-                   *ids = (int*) realloc(*ids, (sizee + 1) * sizeof(int));
-                   (*ids)[sizee] =  this->blocks.front().key;
-                   sizee++;
-                }
-            }
-    }
-    return sizee;
-}
+
 
 int Storage::removeStorage(int id ){
     BlockData bd;
-    for(int i = 0; i < this->size; i++){
+    for(int i = 0; i < this->size_blocks; i++){
        if(id == blocks.front().key){
             if(blocks.front().alocated == false)
                 return 0;
             blocks.front().alocated=false; 
             blocks.front().currentTime = 0;
-            allocated_blocks--;
+            this->allocated_blocks--;
        }else{
             blocks.push_back(blocks.front());
             blocks.pop_front();
@@ -69,14 +98,7 @@ int Storage::removeStorage(int id ){
     return 1;
 }
 
-void Storage::addTimeStorage(){
-    for(int i = 0 ; i < this->size; i++){
-        if(this->blocks.front().alocated == true)
-            this->blocks.front().currentTime++;
-        blocks.push_back(blocks.front());
-        blocks.pop_front();
-    }
-}
+
 void Storage::print(){
     cout<<"  ---------------------------------------------------------------------------------------"<<endl;
     cout<<"  |\t\t\t\t      STORAGE\t\t\t\t\t\t|"<<endl;

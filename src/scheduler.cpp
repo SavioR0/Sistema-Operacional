@@ -52,7 +52,6 @@ void Scheduler::check_block_list(){
             if(!block.empty()){
                 if(ids[i] == this->block.front().getId()){
                         if(this->block.front().getcyles() <= 0){
-                            //cout<<"Finalizei um cabra: " << this->block.front().getId() <<endl; 
                             this->block.front().setStatus_finished();
                             this->finalized.push_back( this->block.front() );
                             this->block.pop_front();    
@@ -83,7 +82,6 @@ void Scheduler::check_block_list(){
             if(!block.empty()){
                 if(ids1[i] == this->block.front().getId()){
                         if(this->block.front().getcyles() <= 0){
-                            //cout<<"Finalizei um cabra: " << this->block.front().getId() <<endl; 
                             this->block.front().setStatus_finished();
                             this->finalized.push_back( this->block.front() );
                             this->block.pop_front();    
@@ -159,13 +157,13 @@ void Scheduler::executeProcesses(){
             await = true;
             if     (current_process->getType() == "cpu-bound"   ) executingProcessCPU    (current_process); 
             else if(current_process->getType() == "memory-bound") executingProcessMemory (&current_process);
-            else if(current_process->getType() == "io-bound"    ) executingProcessStorage();
+            else if(current_process->getType() == "io-bound"    ) executingProcessStorage(&current_process);
         }
-        
         this->kernelref->memory->addTimeMemory();
         this->kernelref->storage->addTimeStorage();
 
         this->update_timestamp(&current_process);
+        
         this->check_block_list();
 
         if(current_process != NULL)
@@ -191,8 +189,8 @@ void Scheduler::executeProcesses(){
             else                        current_process = &this->processes.front();
         
         }
-        /* this->report(); */
-        usleep(10000);
+        this->report(); 
+        usleep(50000);
         
 
     }while( (int) this->finalized.size()  < size_list_process);
@@ -219,41 +217,19 @@ void Scheduler::executingProcessMemory(Process** current_process){
 
 }
 
-void initBlockData(BlockData* blockData, Process* processes){
-    (*blockData).key = (*processes).getId();
-    (*blockData).type = (*processes).getType();
-    (*blockData).alocated = true;
-    (*blockData).currentTime = 0;
-    (*blockData).time = randomNumber(4);
-}
+void Scheduler::executingProcessStorage(Process** current_process){
+    (*current_process)->setStatus_block();
+    this->kernelref->storage->insertBlockData(
+        (*current_process)->getId(),
+        (*current_process)->getType(),
+        randomNumber(4)
+        
+    );
+    this->block.push_back( *(*current_process) );
 
-void Scheduler::executingProcessStorage(){
-    processes.front().setStatus_block();
-
-    //ADICIONA NA FILA DE BLOQUEADOS
-    this->block.push_back(processes.front());
-
-    //ADICIONA NO STORAGE
-    BlockData blockData;
-    initBlockData(&blockData, &processes.front());
-
-    kernelref->storage->insertStorage(&blockData);
+    *current_process = NULL;
     this->processes.pop_front();
-    /* processes.front().setStatus("Bloqueado");
-
-    block.push_back(processes.front());
-    
-    //ADICIONANDO NO STORAGE
-    BlockData bd;
-
-    bd.key = this->processes.front().getId();
-    bd.type = this->processes.front().getType();
-    bd.alocated = true;
-    bd.currentTime = 0;
-    //Adicionar o numero aleatorio sorteado a cada um dos processos adicionados na lista 
-    bd.time = randomNumber(4);
-    kernelref->storage->insertStorage(bd);
-    this->processes.pop_front(); */
+    if(!this->processes.empty()) *current_process = &this->processes.front();
 }
 
 

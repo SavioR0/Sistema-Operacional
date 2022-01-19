@@ -11,7 +11,7 @@
 #include "process.hpp"
 #include "kernel.hpp"
 
-#define processFile    "processo_storage.json"
+#define processFile    "processos.json"
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
 #define status_running "Em execucao"
@@ -43,7 +43,7 @@ class Scheduler{
         void executeProcesses();
         void executingProcessCPU(Process* current_process);
         void executingProcessMemory(Process** current_process);
-        void executingProcessStorage();
+        void executingProcessStorage(Process** current_process);
 
         void report();
 };

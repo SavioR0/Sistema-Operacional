@@ -32,7 +32,7 @@ debug: all
 release: CXXFLAGS += -O3
 release: all
 
-clean:
+clear:
 	-@rm -rvf $(OBJ_DIR)/*
 	-@rm -rvf $(APP_DIR)/*
 	
