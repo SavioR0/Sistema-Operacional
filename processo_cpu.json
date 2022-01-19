@@ -1,0 +1,60 @@
+{ "Itens":
+    [
+        {
+            "id": 1,
+            "ciclos": 10,
+            "max_quantum": 2,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 4
+        },
+        {
+            "id": 2,
+            "ciclos": 4,
+            "max_quantum": 1,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 2
+        },
+        {
+            "id": 9,
+            "ciclos": 10,
+            "max_quantum": 2,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 4
+        },
+        {
+            "id": 10,
+            "ciclos": 14,
+            "max_quantum": 2,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 3
+        },
+        {
+            "id": 11,
+            "ciclos": 18,
+            "max_quantum": 1,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 1
+        },
+        {
+            "id": 13,
+            "ciclos": 19,
+            "max_quantum": 4,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 3
+        },
+        {
+            "id": 15,
+            "ciclos": 3,
+            "max_quantum": 1,
+            "init_type": "cpu-bound",
+            "timestamp": 0,
+            "prioridade": 2
+        }
+    ]
+}    

@@ -24,10 +24,11 @@ class Storage{
         list<BlockData> blocks;
 
         Storage(int size);
-        int insertStorage(BlockData bd);
-        int searchStorage(int id,BlockData* bd);
+        int insertStorage(BlockData* bd);
         int removeStorage(int id);
+        int check_time(int** ids);
         void addTimeStorage();
+        void insertBlockData(int key, string type, int randomNumber);
         void print();
 };
 

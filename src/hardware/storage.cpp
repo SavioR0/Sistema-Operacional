@@ -13,13 +13,14 @@ Storage::Storage(int size){
     }
 }
 
-int Storage::insertStorage(BlockData bd){
+int Storage::insertStorage(BlockData* bd){
     if(qtd == size)
         return 0;
     for( int i = 0 ; i< this->size; i++){
         if(blocks.front().alocated == false){
             blocks.pop_front();
-            blocks.push_front(bd);
+            blocks.push_front(*bd);
+            qtd++;
             return 1;
         }
         blocks.push_back(blocks.front());
@@ -30,16 +31,23 @@ int Storage::insertStorage(BlockData bd){
 }
 
 
-int Storage::searchStorage(int id, BlockData* bd){
+int Storage::check_time(int** ids){
+    int sizee = 0;
+    *ids = (int*) malloc(sizeof(int));
     for(int i = 0; i < this->size; i++){
-       if(id == blocks.front().key){
-           *bd = blocks.front();
-           return 1;
-       }
-       blocks.push_back(blocks.front());
-       blocks.pop_front();
+        if(this->blocks.front().alocated == true)
+            if(this->blocks.front().currentTime >= this->blocks.front().time){
+                if(sizee == 0){
+                    *ids[0] = this->blocks.front().key;
+                    sizee++;
+                }else{
+                   *ids = (int*) realloc(*ids, (sizee + 1) * sizeof(int));
+                   (*ids)[sizee] =  this->blocks.front().key;
+                   sizee++;
+                }
+            }
     }
-    return 0;
+    return sizee;
 }
 
 int Storage::removeStorage(int id ){
@@ -68,16 +76,18 @@ void Storage::addTimeStorage(){
     }
 }
 void Storage::print(){
-    
+    cout<<"  ---------------------------------------------------------------------------------------"<<endl;
+    cout<<"  |\t\t\t\t      STORAGE\t\t\t\t\t\t|"<<endl;
+    cout<<"  ---------------------------------------------------------------------------------------"<<endl;
     cout<<"  ---------------------------------------------------------------------------------------"<<endl;
     cout<<"  |    ID\t|     Valor\t|\t Status\t\t|   Tempo\t|   Tempo maximo\t|"<<endl;
     cout<<"  ---------------------------------------------------------------------------------------"<<endl;
     for( BlockData item : this->blocks ){
-        cout << "  |\t" << item.key << "\t|";
+        
         if(item.alocated==false) 
-            cout << "     NULL" << "\t|\t" << "Disponivel\t|\t-\t|\t-\t|" << endl;
+            cout << "  |\t" << 0 << "\t|" << "     NULL" << "\t|\t" << "Disponivel\t|\t-\t|\t-\t|" << endl;
         else
-            cout << "  "<<item.type << "\t|\t" << "Ocupado\t\t|\t"<<item.currentTime<<"\t|\t"<<item.time<<"\t|" << endl;
+            cout << "  |\t" << item.key << "\t|" << "  "<<item.type << "\t|\t" << "Ocupado\t\t|\t"<<item.currentTime<<"\t|\t"<<item.time<<"\t|" << endl;
     } 
     cout<<"  ---------------------------------------------------------------------------------------"<<endl;
 

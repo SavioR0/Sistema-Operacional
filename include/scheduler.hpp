@@ -11,7 +11,10 @@
 #include "process.hpp"
 #include "kernel.hpp"
 
-#define processFile "processos.json"
+#define processFile    "processo_memory_cpu.json"
+#define status_ready   "Pronto"
+#define status_blocked "Bloqueado"
+#define status_running "Em execucao"
 
 using json = nlohmann::json;
 using namespace std;
@@ -32,14 +35,15 @@ class Scheduler{
         int  getPC();
 
         void read_processes();
+
         void check_block_list();
         bool check_finished();
-        void update_timestamp(int value);
+        void update_timestamp(Process** current_process);
 
-        void executingProcessCPU();
-        void executingProcessMemory();
-        void executingProcessStorage();
         void executeProcesses();
+        void executingProcessCPU(Process* current_process);
+        void executingProcessMemory(Process** current_process);
+        void executingProcessStorage();
 
         void report();
 };

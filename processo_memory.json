@@ -1,0 +1,36 @@
+{ "Itens":
+    [
+        {
+            "id": 4,
+            "ciclos": 13,
+            "max_quantum": 3,
+            "init_type": "memory-bound",
+            "timestamp": 0,
+            "prioridade": 1
+        },
+        {
+            "id": 5,
+            "ciclos": 22,
+            "max_quantum": 3,
+            "init_type": "memory-bound",
+            "timestamp": 0,
+            "prioridade": 2
+        },
+        {
+            "id": 6,
+            "ciclos": 2,
+            "max_quantum": 1,
+            "init_type": "memory-bound",
+            "timestamp": 0,
+            "prioridade": 2
+        },
+        {
+            "id": 12,
+            "ciclos": 11,
+            "max_quantum": 3,
+            "init_type": "memory-bound",
+            "timestamp": 0,
+            "prioridade": 2
+        }
+    ]
+}    

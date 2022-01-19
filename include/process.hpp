@@ -4,6 +4,12 @@
 #include <iostream>
 #include <string>
 
+#define status_ready    "Pronto"
+#define status_await    "Em Execucao"
+#define status_block    "Bloqueado"
+#define status_finished "Finalizado"
+
+
 using namespace std;
 
 class Process{
@@ -27,11 +33,18 @@ class Process{
         void setTimestamp(int value);
         void setPriority(int value);
         void setStatus(string value);
+        void setStatus_ready();
+        void setStatus_await();
+        void setStatus_block();
+        void setStatus_finished();
+
+
         void setStatusAddres(string* value );
         void setType(string value);
         void setTypeAddress(string* value );
 
         void sub_quantum(int current_quantum);
+        void add_timestamp();
 
 
         int getId();

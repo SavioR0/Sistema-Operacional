@@ -1,11 +1,20 @@
 #include "../include/scheduler.hpp"
 
-Scheduler::Scheduler(Kernel* kernel){
-    this->kernelref = kernel;
-}
-
+//Construtores
+Scheduler::Scheduler(Kernel* kernel){ this->kernelref = kernel;}
 Scheduler::Scheduler(){}
 
+//Gerencia do PC (program counter)
+int  Scheduler::getPC(){ return this->pc; }
+void Scheduler::addPC(){ this->pc++;      }
+
+//Funções auxiliares
+int randomNumber(int max){
+    srand(time(NULL));
+    return rand()%max + 1;
+}
+
+//Leitura do arquivo de Processos
 void Scheduler::read_processes(){
     json processJson;
     ifstream(processFile) >> processJson;
@@ -28,42 +37,208 @@ void Scheduler::read_processes(){
     
 }
 
-int  Scheduler::getPC(){ return this->pc; }
-void Scheduler::addPC(){ this->pc++;      }
 
-void Scheduler::update_timestamp(int value){
-    Process assist;
-    for(int i = 0; i < (int) this->processes.size(); i++){
-        this->processes.front().setTimestamp(value);
-        assist = this->processes.front();
-        this->processes.pop_front();
-        this->processes.push_back(assist);
+//Funções de gerenciamento
+void Scheduler::check_block_list(){
+    if(this->block.empty()) return;
+
+
+    int* ids;
+    int size_ids;
+    size_ids = this->kernelref->memory->check_time(&ids);
+    if(size_ids > 0 )
+    for(int i = 0; i < size_ids; i++){ 
+        for(int j = 0; j < (int)this->block.size(); j++){
+            if(!block.empty()){
+                if(ids[i] == this->block.front().getId()){
+                        if(this->block.front().getcyles() <= 0){
+                            //cout<<"Finalizei um cabra: " << this->block.front().getId() <<endl; 
+                            this->block.front().setStatus_finished();
+                            this->finalized.push_back( this->block.front() );
+                            this->block.pop_front();    
+                        }else{
+                            this->block.front().setStatus_ready();
+                            this->processes.push_back( this->block.front() );
+                            this->block.pop_front();
+                        }
+
+                    }else{
+                        Process* assist = new Process;
+                        *assist = this->block.front();
+                        this->block.push_back(*assist);
+                        this->block.pop_front();
+                        free(assist);
+                    }
+            }
+            
+        }
+        this->kernelref->memory->removeMemory(ids[i]);
     }
+    free(ids);      
+    int* ids1;
+    size_ids = this->kernelref->storage->check_time(&ids1);
+    for(int i = 0; i < size_ids; i++){ 
+        for(int j = 0; j < (int)this->block.size(); j++){
+            if(!block.empty()){
+                if(ids1[i] == this->block.front().getId()){
+                        if(this->block.front().getcyles() <= 0){
+                            //cout<<"Finalizei um cabra: " << this->block.front().getId() <<endl; 
+                            this->block.front().setStatus_finished();
+                            this->finalized.push_back( this->block.front() );
+                            this->block.pop_front();    
+                        }else{
+                            this->block.front().setStatus_ready();
+                            this->processes.push_back( this->block.front() );
+                            this->block.pop_front();
+                        }
+
+                    }else{
+                        Process* assist = new Process;
+                        *assist = this->block.front();
+                        this->block.push_back(*assist);
+                        this->block.pop_front();
+                        free(assist);
+                    }
+            }
+            
+        }
+        this->kernelref->storage->removeStorage(ids1[i]);
+    }
+    free(ids1);
+}
+
+bool Scheduler::check_finished(){
+    if(this->processes.front().getcyles() <= 0) return true;
+    else                                        return false;
+}
+
+void Scheduler::update_timestamp(Process** current_process){
+
+    if(!this->processes.empty()) 
+    for(int i = 0; i < (int) this->processes.size(); i++){
+        this->processes.front().add_timestamp();
+        this->processes.push_back(  this->processes.front()  );
+        this->processes.pop_front();
+    }
+
+    if(!this->block.empty())
+    for(int i = 0; i < (int) this->block.size(); i++){
+        this->block.front().add_timestamp();
+        this->block.push_back(  this->block.front()  );
+        this->block.pop_front();
+    }
+
+    if(!this->processes.empty())(*current_process) = &this->processes.front();
+    else (*current_process) = NULL;
 }
 
 
-int randomNumber(int max){
-    srand(time(NULL));
-    return rand()%max + 1;
+//Funções de execução
+void Scheduler::executeProcesses(){
+    if(this->processes.empty()){
+        cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
+        return;
+    }
+
+    Process* current_process = &(this->processes.front());
+    int size_list_process    = (int) this->processes.size();
+    int quantum              = 0;
+    bool await = false;
+
+    do{
+
+        addPC();
+         
+        if(quantum <= 0 && current_process != NULL ){
+            quantum = randomNumber( current_process->getMaxQuantum());
+            current_process->sub_quantum(quantum);
+        }
+         
+        if(current_process != NULL && current_process->getStatus() == status_ready && await == false){
+            await = true;
+            if     (current_process->getType() == "cpu-bound"   ) executingProcessCPU    (current_process); 
+            else if(current_process->getType() == "memory-bound") executingProcessMemory (&current_process);
+            else if(current_process->getType() == "io-bound"    ) executingProcessStorage();
+        }
+        
+        this->kernelref->memory->addTimeMemory();
+        //this->kernelref->storage->addTimeStorage();
+
+        this->update_timestamp(&current_process);
+        this->check_block_list();
+
+        if(current_process != NULL)
+        if(check_finished()){
+            current_process->setStatus_finished();
+            this->finalized.push_back(*current_process);
+            current_process = NULL;
+            this->processes.pop_front();
+            quantum = 1;
+        }
+        
+        quantum--;
+        if(quantum == 0){  
+            await = false;
+            if(current_process != NULL)
+            if( current_process->getStatus() == status_await ){
+                current_process->setStatus_ready(); 
+                this->processes.push_back(*current_process);                
+                this->processes.pop_front();
+                
+            }
+            if(this->processes.empty()) current_process = NULL;
+            else                        current_process = &this->processes.front();
+        
+        }
+        /* this->report(); */
+        usleep(500000);
+        
+
+    }while( (int) this->finalized.size()  < size_list_process);
+
 }
 
-
-void Scheduler::executingProcessCPU(){
-    processes.front().setStatus("Em Execucao");
-    this->kernelref->cpu->setProcess( &this->processes.front() );
+void Scheduler::executingProcessCPU(Process* current_process){
+    current_process->setStatus_await();
+    this->kernelref->cpu->setProcess( current_process );
 }
 
-void Scheduler::executingProcessMemory(){
-    processes.front().setStatus("Bloqueado");
+void Scheduler::executingProcessMemory(Process** current_process){
+    (*current_process)->setStatus_block();
     this->kernelref->memory->insertMemory(
-        this->processes.front().getId(),
-        this->processes.front().getType(),
+        (*current_process)->getId(),
+        (*current_process)->getType(),
         randomNumber(4)
     );
+    this->block.push_back( *(*current_process) );
+
+    *current_process = NULL;
+    this->processes.pop_front();
+    if(!this->processes.empty()) *current_process = &this->processes.front();
+
+}
+
+void initBlockData(BlockData* blockData, Process* processes){
+    (*blockData).key = (*processes).getId();
+    (*blockData).type = (*processes).getType();
+    (*blockData).alocated = true;
+    (*blockData).currentTime = 0;
+    (*blockData).time = randomNumber(4);
 }
 
 void Scheduler::executingProcessStorage(){
-    processes.front().setStatus("Bloqueado");
+    processes.front().setStatus_block();
+
+    //ADICIONA NA FILA DE BLOQUEADOS
+    this->block.push_back(processes.front());
+
+    //ADICIONA NO STORAGE
+    BlockData blockData;
+    initBlockData(&blockData, &processes.front());
+
+    kernelref->storage->insertStorage(&blockData);
+    this->processes.pop_front();
+    /* processes.front().setStatus("Bloqueado");
 
     block.push_back(processes.front());
     
@@ -77,142 +252,34 @@ void Scheduler::executingProcessStorage(){
     //Adicionar o numero aleatorio sorteado a cada um dos processos adicionados na lista 
     bd.time = randomNumber(4);
     kernelref->storage->insertStorage(bd);
-    this->processes.pop_front();
+    this->processes.pop_front(); */
 }
 
 
-bool Scheduler::check_finished(){
-    if(this->processes.front().getcyles() <= 0) return true;
-    else                                        return false;
-}
-
-void Scheduler::check_block_list(){
-    if(block.empty())
-        return;
-    if(block.front().getType() == "memory-bound"){
-        MemoryContent memory_content;
-        for( int i=0; i < (int)this->block.size(); i++){
-            this->kernelref->memory->searchMemory(this->block.front().getId(), &memory_content);
-            if(memory_content.time == memory_content.currentTime){
-                this->kernelref->memory->removeMemory(this->block.front().getId());
-                block.front().setStatus("Pronto");
-                processes.push_back(block.front());
-                block.pop_front();
-            }else{
-                block.push_back(block.front());
-                block.pop_front();
-            }
-        }
-    }else{
-        BlockData block_data;
-        for( int i=0; i < (int)this->block.size(); i++){
-            this->kernelref->storage->searchStorage(block.front().getId(),&block_data);
-            if(block_data.time == block_data.currentTime){
-                this->kernelref->storage->removeStorage(this->block.front().getId());
-               /*  cout<<"io-bound removido"<<endl; */
-                block.front().setStatus("Pronto");
-                processes.push_back(block.front());
-                block.pop_front(); 
-                
-            }else{
-                block.push_back(block.front());
-                block.pop_front();
-            }
-        } 
-    }
-
-
-    //if(this->kernelref->memory->getRam())
-    // if(this->block.front().getId() == this->kenelref->memory)
-}
-
-
-void Scheduler::executeProcesses(){
-    Process assist;
-    if(this->processes.empty()){
-        cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
-        return;
-    }
-
-    int size_list_process = this->processes.size();
-    int quantum = 0;
-
-    do{
-        addPC();
-        
-        if(processes.size()!=0){
-            if(quantum == 0 ){
-                quantum = randomNumber(this->processes.front().getMaxQuantum());
-                this->processes.front().sub_quantum(quantum);
-            }
-
-            
-            if(processes.front().getStatus() == "Pronto"){
-
-                if     (processes.front().getType() == "cpu-bound")    executingProcessCPU(); 
-                else if(processes.front().getType() == "memory-bound") executingProcessMemory();
-                else if(processes.front().getType() == "io-bound")     executingProcessStorage();
-            }
-            quantum--;
-        }
-        this->kernelref->memory->addTimeMemory();
-        this->kernelref->storage->addTimeStorage();
-        this->update_timestamp(getPC());
-
-        
-
-        this->check_block_list();
-
-
-        if(check_finished()){
-            this->finalized.push_back(this->processes.front());
-            this->processes.pop_front();
-            cout<<"\tFINALIZADOS: "<<(int)finalized.size()<<endl;
-            quantum = 0;
-        }
-        
-        
-        if(quantum == 0 && processes.size()!=0){
-            
-            if( this->processes.front().getStatus() != "bloqueado"){
-                this->processes.front().setStatus("Pronto"); 
-                assist = this->processes.front();
-                
-                this->processes.pop_front();
-                this->processes.push_back(assist);
-                
-            }else if(this->processes.front().getStatus() == "bloqueado"){
-                this->block.push_back( this->processes.front() );
-                this->processes.pop_front();
-            }
-        
-        }
-        usleep(1000000);
-
-    }while( (int)finalized.size() != size_list_process);
-
-}
-
-
-
-
-
-
-
-
+//Funções de relatórios
 void Scheduler::report(){
-    cout<<"--------------------------------------------------"<<endl;
-    cout<<" +\t\t      LIST PROCESS\t\t+"<<endl;
-    cout<<"--------------------------------------------------"<<endl;
-    if(!this->processes.empty()){
-        cout<<" +  ID\t|     Estado\t|\t   Tipo\t\t+"<<endl;
-        cout<<"--------------------------------------------------"<<endl;
+    system("clear");
+    cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"   |\t\t\t\t\t    LISTA DE PROCESSOS    \t\t\t\t\t|"<<endl;
+    cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
+    if(!this->processes.empty() || !this->block.empty() || !this->finalized.empty()){
+        cout<<"   |\tID\t|\tEstado\t\t|\t  Tipo     \t|\tTimestamp\t|\tCiclos\t|"<<endl;
+        cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
         for(Process item : this->processes){
-            cout<<" +   "<< item.getId() <<"\t|  "<< item.getStatus() <<"\t|\t"<< item.getType() <<"\t+"<<endl;
+            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << item.getcyles() << "\t|" << endl;
+        }
+        for(Process item : this->block){
+            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << item.getcyles() << "\t|" << endl;
+        }
+        for(Process item : this->finalized){
+            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << "--" << "\t|" << endl;
         }
     }else {
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
-    cout<<" --------------------------------------------------"<<endl;
+    cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
 }
+
+
+
 

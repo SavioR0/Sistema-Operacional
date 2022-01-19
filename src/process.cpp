@@ -5,7 +5,7 @@ Process::Process(){}
 Process::Process( int id, float cycles, int maxQuantum, int timestamp, int priority,  string type){
     string* status = new string;
     string* type_ptr = new string;
-    *status   = "Pronto";
+    *status   = status_ready;
     *type_ptr = type;
 
     this->id =  id;
@@ -24,7 +24,32 @@ void Process::setTimestamp          (int value)     { this->timestamp   = value;
 void Process::setPriority           (int value)     { this->priority    = value; }
 void Process::setStatusAddres       (string* value) { this->status      = value; }
 void Process::setTypeAddress        (string* value) { this->type        = value; }
-void Process::setStatus(string value){ 
+void Process::setStatus_await(){
+    free(this->status);
+    string* assist = new string;
+    *assist = status_await;
+    this->status = assist;
+}
+void Process::setStatus_ready(){
+    free(this->status);
+    string* assist = new string;
+    *assist = status_ready;
+    this->status = assist;
+}
+void Process::setStatus_finished(){
+    free(this->status);
+    string* assist = new string;
+    *assist = status_finished;
+    this->status = assist;
+}
+void Process::setStatus_block(){
+    free(this->status);
+    string* assist = new string;
+    *assist = status_block;
+    this->status = assist;
+}
+void Process::setStatus(string value){
+    free(this->status);
     string* assist = new string;
     *assist = value;
     this->status = assist;
@@ -53,3 +78,5 @@ void Process::sub_quantum(int currentQuantum){
     float decrease = (float) currentQuantum / (float) this->maxQuantum;
     this->cycles -= decrease;
 }
+
+void Process::add_timestamp(){ this->timestamp++; }
