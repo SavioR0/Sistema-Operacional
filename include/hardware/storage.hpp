@@ -20,7 +20,7 @@ class Storage{
     private:
     public:
         int size;
-        int qtd;
+        int allocated_blocks;
         list<BlockData> blocks;
 
         Storage(int size);

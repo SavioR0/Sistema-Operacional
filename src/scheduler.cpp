@@ -74,6 +74,7 @@ void Scheduler::check_block_list(){
         }
         this->kernelref->memory->removeMemory(ids[i]);
     }
+
     free(ids);      
     int* ids1;
     size_ids = this->kernelref->storage->check_time(&ids1);
@@ -162,7 +163,7 @@ void Scheduler::executeProcesses(){
         }
         
         this->kernelref->memory->addTimeMemory();
-        //this->kernelref->storage->addTimeStorage();
+        this->kernelref->storage->addTimeStorage();
 
         this->update_timestamp(&current_process);
         this->check_block_list();
@@ -191,7 +192,7 @@ void Scheduler::executeProcesses(){
         
         }
         /* this->report(); */
-        usleep(500000);
+        usleep(10000);
         
 
     }while( (int) this->finalized.size()  < size_list_process);

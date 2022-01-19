@@ -11,7 +11,7 @@
 #include "process.hpp"
 #include "kernel.hpp"
 
-#define processFile    "processo_memory_cpu.json"
+#define processFile    "processo_storage.json"
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
 #define status_running "Em execucao"

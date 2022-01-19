@@ -14,13 +14,15 @@ Storage::Storage(int size){
 }
 
 int Storage::insertStorage(BlockData* bd){
-    if(qtd == size)
+    if(allocated_blocks == size)
         return 0;
     for( int i = 0 ; i< this->size; i++){
         if(blocks.front().alocated == false){
             blocks.pop_front();
             blocks.push_front(*bd);
-            qtd++;
+            blocks.front().alocated= true;
+            blocks.front().currentTime= 0;
+            allocated_blocks++;
             return 1;
         }
         blocks.push_back(blocks.front());
@@ -58,7 +60,7 @@ int Storage::removeStorage(int id ){
                 return 0;
             blocks.front().alocated=false; 
             blocks.front().currentTime = 0;
-
+            allocated_blocks--;
        }else{
             blocks.push_back(blocks.front());
             blocks.pop_front();
