@@ -1,18 +1,18 @@
 #include "../include/shell.hpp"
 
-void Shell::setOption(int op){
+void Shell::set_option(int op){
     option = op;
 }
 
-int Shell::getOption(){
+int Shell::get_option(){
     return option;
 }
 
 Shell::Shell(){
-    this->setOption(30);
+    this->set_option(30);
 }
 
-void Shell::selectedShellOption(){
+void Shell::selected_shell_option(){
     string str;
     cout<<"\n $ ";
     getline( cin, str);// é capaz de ler o dado de entrada até que uma nova linha seja detectada
@@ -31,7 +31,7 @@ void Shell::selectedShellOption(){
 
 }
 
-void Shell::helpCommand(){
+void Shell::help_command(){
     
     cout << "\x1b[1;92m \n\thelp\t\t \x1b[0m\x1b[3m Demonstra quais comandos podem ser executados pelo shell desenvolvido;\n \x1b[0m" << endl;
     cout << "\x1b[1;92m \n\tmeminfo\t\t \x1b[0m\x1b[3m Detalha quantas unidades de memoria so sistema possui, quantas estão \n\t\t\t livres e quantas estao alocadas e para quais processos.\n \x1b[0m" << endl;
@@ -44,6 +44,6 @@ void Shell::helpCommand(){
     cout << "\x1b[1;92m \n\texit\t\t \x1b[0m\x1b[3m Finaliza a execução do  programa como um todo.\n \x1b[0m" << endl;
 }
 
-void Shell::memInfoCommand(){
+void Shell::mem_info_command(){
     
 }

@@ -12,7 +12,7 @@ struct BlockData{
     string type;
 
     int  time;
-    int  currentTime;
+    int  current_time;
     bool alocated = false;
 };
 
@@ -27,11 +27,11 @@ class Storage{
         Storage(int size);
 
         int check_time(int** ids);
-        void addTimeStorage();
+        void add_time_storage();
 
-        void insertBlockData(int key, string type, int random_number);
-        int  insertStorage(BlockData* block_data);
-        int  removeStorage(int id);
+        void insert_block_data(int key, string type, int random_number);
+        int  insert_storage(BlockData* block_data);
+        int  remove_storage(int id);
         
         void print();
 };

@@ -12,11 +12,11 @@ class Shell{
     public:
 
         Shell();
-        void setOption(int option);
-        int  getOption();
-        void selectedShellOption();
-        void helpCommand();
-        void memInfoCommand();
+        void set_option(int option);
+        int  get_option();
+        void selected_shell_option();
+        void help_command();
+        void mem_info_command();
     };
 
 

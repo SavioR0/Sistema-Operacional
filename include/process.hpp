@@ -16,7 +16,7 @@ class Process{
     private:
         int      id;
         float    cycles;
-        int      maxQuantum;
+        int      max_quantum;
         int      timestamp;
         int      priority;
         string*  status;
@@ -25,38 +25,38 @@ class Process{
         
         
         Process();
-        Process( int id, float cycles, int maxQuantum, int timesamp, int priority, string type);
+        Process( int id, float cycles, int max_quantum, int timesamp, int priority, string type);
         
-        void setId    (int value);
-        void setCycles(float value);
-        void setMaxQuantum(int value);
-        void setTimestamp(int value);
-        void setPriority(int value);
-        void setStatus(string value);
-        void setStatus_ready();
-        void setStatus_await();
-        void setStatus_block();
-        void setStatus_finished();
+        void set_id    (int value);
+        void set_cycles(float value);
+        void set_max_quantum(int value);
+        void set_timestamp(int value);
+        void set_priority(int value);
+        void set_status(string value);
+        void set_status_ready();
+        void set_status_await();
+        void set_status_block();
+        void set_status_finished();
 
 
-        void setStatusAddres(string* value );
-        void setType(string value);
-        void setTypeAddress(string* value );
+        void set_status_addres(string* value );
+        void set_type(string value);
+        void set_type_address(string* value );
 
         void sub_quantum(int current_quantum);
         void add_timestamp();
 
 
-        int getId();
-        float getcyles();
-        int getMaxQuantum();
-        int getTimestamp();
-        int getPriority();
+        int get_id();
+        float get_cyles();
+        int get_max_quantum();
+        int get_timestamp();
+        int get_priority();
         
-        string getStatus();
-        string* getStatusAdress();
-        string getType();
-        string* getTypeAdress();
+        string get_status();
+        string* get_status_adress();
+        string get_type();
+        string* get_type_adress();
 
 };
 

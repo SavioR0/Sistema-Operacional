@@ -16,9 +16,9 @@ class Cpu{
         Cpu(int cores);
 
         void    print();
-        void    setProcess(Process* cpu_process);
-        Process getProcessPrevious();
-        Process getProcess();
+        void    set_process(Process* cpu_process);
+        Process get_process_previous();
+        Process get_process();
 };
 
 

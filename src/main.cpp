@@ -23,11 +23,11 @@ int main(){
     
 
 
-    while( shell->getOption()!= -1){
-        shell->selectedShellOption(); 
+    while( shell->get_option()!= -1){
+        shell->selected_shell_option(); 
         
-            switch(shell->getOption()){
-                case 0: shell->helpCommand();           break; // help
+            switch(shell->get_option()){
+                case 0: shell->help_command();           break; // help
                 case 1: kernel->memory->print();        break; // meminfo
                 case 2: kernel->storage->print();       break; // meminfo
                 case 3: kernel->cpu->print();           break; // cpuinfo
@@ -54,7 +54,7 @@ int main(){
 
 void*  execute(void* scheduler){
     Scheduler* assist = (Scheduler*) scheduler;
-    assist->executeProcesses();
+    assist->execute_processes();
     pthread_exit(NULL);
 }
 

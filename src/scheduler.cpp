@@ -1,20 +1,20 @@
 #include "../include/scheduler.hpp"
 
 //Construtores
-Scheduler::Scheduler(Kernel* kernel){ this->kernelref = kernel;}
+Scheduler::Scheduler(Kernel* kernel){ this->kernel_ref = kernel;}
 Scheduler::Scheduler(){}
 
 //Gerencia do PC (program counter)
-int  Scheduler::getPC(){ return this->pc; }
-void Scheduler::addPC(){ this->pc++;      }
+int  Scheduler::get_pc(){ return this->pc; }
+void Scheduler::add_pc(){ this->pc++;      }
 
 //Funções auxiliares
-int randomNumber(int max){
+int random_number(int max){
     srand(time(NULL));
     return rand()%max + 1;
 }
-Memory*   Scheduler::get_memory_ref() {return this->kernelref->memory;  } 
-Storage*  Scheduler::get_storage_ref(){return this->kernelref->storage; }
+Memory*   Scheduler::get_memory_ref() {return this->kernel_ref->memory;  } 
+Storage*  Scheduler::get_storage_ref(){return this->kernel_ref->storage; }
 
 //Leitura do arquivo de Processos
 void Scheduler::read_processes(){
@@ -55,13 +55,13 @@ void Scheduler::check_block_list(){
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
             if(!block.empty()){
-                if(ids[i] == this->block.front().getId()){
-                        if(this->block.front().getcyles() <= 0){
-                            this->block.front().setStatus_finished();
+                if(ids[i] == this->block.front().get_id()){
+                        if(this->block.front().get_cyles() <= 0){
+                            this->block.front().set_status_finished();
                             this->finalized.push_back( this->block.front() );
                             this->block.pop_front();    
                         }else{
-                            this->block.front().setStatus_ready();
+                            this->block.front().set_status_ready();
                             this->processes.push_back( this->block.front() );
                             this->block.pop_front();
                         }
@@ -76,7 +76,7 @@ void Scheduler::check_block_list(){
             }
             
         }
-        this->get_memory_ref()->removeMemory(ids[i]);
+        this->get_memory_ref()->remove_memory(ids[i]);
     }
 
     free(ids);      
@@ -85,13 +85,13 @@ void Scheduler::check_block_list(){
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
             if(!block.empty()){
-                if(ids1[i] == this->block.front().getId()){
-                        if(this->block.front().getcyles() <= 0){
-                            this->block.front().setStatus_finished();
+                if(ids1[i] == this->block.front().get_id()){
+                        if(this->block.front().get_cyles() <= 0){
+                            this->block.front().set_status_finished();
                             this->finalized.push_back( this->block.front() );
                             this->block.pop_front();    
                         }else{
-                            this->block.front().setStatus_ready();
+                            this->block.front().set_status_ready();
                             this->processes.push_back( this->block.front() );
                             this->block.pop_front();
                         }
@@ -106,13 +106,13 @@ void Scheduler::check_block_list(){
             }
             
         }
-        this->get_storage_ref()->removeStorage(ids1[i]);
+        this->get_storage_ref()->remove_storage(ids1[i]);
     }
     free(ids1);
 }
 
 bool Scheduler::check_finished(){
-    if(this->processes.front().getcyles() <= 0) return true;
+    if(this->processes.front().get_cyles() <= 0) return true;
     else                                        return false;
 }
 
@@ -138,7 +138,7 @@ void Scheduler::update_timestamp(Process** current_process){
 
 
 //Funções de execução
-void Scheduler::executeProcesses(){
+void Scheduler::execute_processes(){
     if(this->processes.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return;
@@ -151,21 +151,21 @@ void Scheduler::executeProcesses(){
 
     do{
 
-        addPC();
+        add_pc();
          
         if(quantum <= 0 && current_process != NULL ){
-            quantum = randomNumber( current_process->getMaxQuantum());
+            quantum = random_number( current_process->get_max_quantum());
             current_process->sub_quantum(quantum);
         }
          
-        if(current_process != NULL && current_process->getStatus() == status_ready && await == false){
+        if(current_process != NULL && current_process->get_status() == status_ready && await == false){
             await = true;
-            if     (current_process->getType() == "cpu-bound"   ) executingProcessCPU    (current_process); 
-            else if(current_process->getType() == "memory-bound") executingProcessMemory (&current_process);
-            else if(current_process->getType() == "io-bound"    ) executingProcessStorage(&current_process);
+            if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process); 
+            else if(current_process->get_type() == "memory-bound") executing_process_memory (&current_process);
+            else if(current_process->get_type() == "io-bound"    ) executing_process_storage(&current_process);
         }
-        this->get_memory_ref()->addTimeMemory();
-        this->get_storage_ref()->addTimeStorage();
+        this->get_memory_ref()->add_time_memory();
+        this->get_storage_ref()->add_time_storage();
 
         this->update_timestamp(&current_process);
         
@@ -173,7 +173,7 @@ void Scheduler::executeProcesses(){
 
         if(current_process != NULL)
         if(check_finished()){
-            current_process->setStatus_finished();
+            current_process->set_status_finished();
             this->finalized.push_back(*current_process);
             current_process = NULL;
             this->processes.pop_front();
@@ -184,8 +184,8 @@ void Scheduler::executeProcesses(){
         if(quantum == 0){  
             await = false;
             if(current_process != NULL)
-            if( current_process->getStatus() == status_await ){
-                current_process->setStatus_ready(); 
+            if( current_process->get_status() == status_await ){
+                current_process->set_status_ready(); 
                 this->processes.push_back(*current_process);                
                 this->processes.pop_front();
                 
@@ -201,17 +201,17 @@ void Scheduler::executeProcesses(){
 
 }
 
-void Scheduler::executingProcessCPU(Process* current_process){
-    current_process->setStatus_await();
-    this->kernelref->cpu->setProcess( current_process );
+void Scheduler::executing_process_cpu(Process* current_process){
+    current_process->set_status_await();
+    this->kernel_ref->cpu->set_process( current_process );
 }
 
-void Scheduler::executingProcessMemory(Process** current_process){
-    (*current_process)->setStatus_block();
-    this->get_memory_ref()->insertMemory(
-        (*current_process)->getId(),
-        (*current_process)->getType(),
-        randomNumber(4)
+void Scheduler::executing_process_memory(Process** current_process){
+    (*current_process)->set_status_block();
+    this->get_memory_ref()->insert_memory(
+        (*current_process)->get_id(),
+        (*current_process)->get_type(),
+        random_number(4)
     );
     this->block.push_back( *(*current_process) );
 
@@ -221,12 +221,12 @@ void Scheduler::executingProcessMemory(Process** current_process){
 
 }
 
-void Scheduler::executingProcessStorage(Process** current_process){
-    (*current_process)->setStatus_block();
-    this->get_storage_ref()->insertBlockData(
-        (*current_process)->getId(),
-        (*current_process)->getType(),
-        randomNumber(4)
+void Scheduler::executing_process_storage(Process** current_process){
+    (*current_process)->set_status_block();
+    this->get_storage_ref()->insert_block_data(
+        (*current_process)->get_id(),
+        (*current_process)->get_type(),
+        random_number(4)
         
     );
     this->block.push_back( *(*current_process) );
@@ -247,13 +247,13 @@ void Scheduler::report(){
         cout<<"   |\tID\t|\tEstado\t\t|\t  Tipo     \t|\tTimestamp\t|\tCiclos\t|"<<endl;
         cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
         for(Process item : this->processes){
-            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << item.getcyles() << "\t|" << endl;
+            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t|" << endl;
         }
         for(Process item : this->block){
-            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << item.getcyles() << "\t|" << endl;
+            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t|" << endl;
         }
         for(Process item : this->finalized){
-            cout<<"   |\t" << item.getId() << "\t|\t" << item.getStatus() << "    \t|\t"<< item.getType() <<"\t|\t    " << item.getTimestamp() << "    \t|\t" << "--" << "\t|" << endl;
+            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << "--" << "\t|" << endl;
         }
     }else {
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
