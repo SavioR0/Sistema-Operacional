@@ -27,7 +27,6 @@ void Shell::selectedShellOption(){
     else if(str == "kill -9"    || str == "7" ) option = 7;
     else if(str == "exit"                     ) option = -1;
     
-    else option = -1; //caso errado 
 
 
 }

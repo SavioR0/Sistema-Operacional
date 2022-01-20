@@ -11,7 +11,9 @@
 #include "process.hpp"
 #include "kernel.hpp"
 
-#define processFile    "processos.json"
+#define process_file    "processos.json"
+#define quantum_time   250000               // 0.25 segundos (1s = 1.000.000)
+
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
 #define status_running "Em execucao"
@@ -31,6 +33,7 @@ class Scheduler{
         Scheduler();
         Scheduler(Kernel* kernel);
 
+        void fifo();
         void addPC();
         int  getPC();
 

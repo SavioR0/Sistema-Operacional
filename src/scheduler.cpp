@@ -16,27 +16,30 @@ int randomNumber(int max){
 
 //Leitura do arquivo de Processos
 void Scheduler::read_processes(){
-    json processJson;
-    ifstream(processFile) >> processJson;
+    json process_json;
+    ifstream(process_file) >> process_json;
     Process* assist = NULL;
     
-    for (int i = 0; i < (int) processJson["Itens"].size(); i++){
+    for (int i = 0; i < (int) process_json["Itens"].size(); i++){
         
         assist = new Process(
-            (int)    processJson["Itens"][i]["id"],
-            (float)  processJson["Itens"][i]["ciclos"],
-            (int)    processJson["Itens"][i]["max_quantum"],
-            (int)    processJson["Itens"][i]["timestamp"],
-            (int)    processJson["Itens"][i]["prioridade"],
-            (string) processJson["Itens"][i]["init_type"]
+            (int)    process_json["Itens"][i]["id"],
+            (float)  process_json["Itens"][i]["ciclos"],
+            (int)    process_json["Itens"][i]["max_quantum"],
+            (int)    process_json["Itens"][i]["timestamp"],
+            (int)    process_json["Itens"][i]["prioridade"],
+            (string) process_json["Itens"][i]["init_type"]
         );
 
         this->processes.push_back(*assist);
         free(assist);
+        fifo();
     }
     
 }
-
+ 
+//Politicas
+void Scheduler::fifo(){}
 
 //Funções de gerenciamento
 void Scheduler::check_block_list(){
@@ -189,10 +192,9 @@ void Scheduler::executeProcesses(){
             else                        current_process = &this->processes.front();
         
         }
-        this->report(); 
-        usleep(50000);
+        /* this->report();  */
+        usleep(quantum_time);
         
-
     }while( (int) this->finalized.size()  < size_list_process);
 
 }

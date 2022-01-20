@@ -1,11 +1,15 @@
 # Sistema-Operacional
 
-Atividade da disciplica de Sistema operacionais. O objeivo desse trabalho é simular um sistema operacional em C.
+## Introdução
+
+Atividade da disciplica de Sistema operacionais. O objetivo desse trabalho é simular um sistema operacional em C++. Nesse sentido foram simulados os hadwares - memória, CPU e disco.
+
+Os processos "executados" pelo sistema Operacional são lidos de um arquivo json contendo todas as informações para a execução dos processos. Para a simulação foi necessário criar um escalonador de processos responsável por gerenciar toda a fila de processos. 
 
 - Gustavo Rodrigues Barcelos
 - Sávio Rodrigues
 
-## Instalação, compilação e ececução
+## Instalação, compilação e execução
 
 - ### Instalação
     Para instalar o reposiório use o comando: (Necessário git)
@@ -27,6 +31,8 @@ Atividade da disciplica de Sistema operacionais. O objeivo desse trabalho é sim
     ~~~
     make run
     ~~~
+
+    Inicialmente o quantum - tempo respeitado pelo escalonador para a execução dos processos- é setado com um valor fixo de 250 000 microsegundos, ou seja, 0,25 segundos. Caso seja necessario alteração para melhor visualização dos resultados, faça a modificação no arquivo "/include/hardware/scheduler.hpp" na linha 15.
 - ### Comando para executar todos os passos acima:
     ~~~
     git clone https://github.com/SavioR0/Sistema-Operacional.git && cd Sistema-Operacional && make $$ make run
