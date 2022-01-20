@@ -29,13 +29,13 @@ class Scheduler{
         list<Process> finalized;
         int pc = 0;
     public:
-        Kernel* kernelref;
+        Kernel* kernel_ref;
         Scheduler();
         Scheduler(Kernel* kernel);
 
         void fifo();
-        void addPC();
-        int  getPC();
+        void add_pc();
+        int  get_pc();
 
         void read_processes();
 
@@ -43,10 +43,10 @@ class Scheduler{
         bool check_finished();
         void update_timestamp(Process** current_process);
 
-        void executeProcesses();
-        void executingProcessCPU(Process* current_process);
-        void executingProcessMemory(Process** current_process);
-        void executingProcessStorage(Process** current_process);
+        void execute_processes();
+        void executing_process_cpu(Process* current_process);
+        void executing_process_memory(Process** current_process);
+        void executing_process_storage(Process** current_process);
 
         void report();
 };

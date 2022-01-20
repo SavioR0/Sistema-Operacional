@@ -6,24 +6,24 @@ using json = nlohmann::json;
 Kernel::Kernel(){}
 
 void Kernel::initialize(){
-    json hardwareInfo;
-    ifstream(FileName) >> hardwareInfo;
-    this->setCore          ( hardwareInfo["cores"]    );
-    this->setBlocksStorage ( hardwareInfo["storage"]  );
-    this->setSegments      ( hardwareInfo["segments"] );    
-    this->storage = new Storage ( this->getBlocksStorage()                    );
-    this->memory  = new Memory  ( this->getSegments()                         );
-    this->cpu     = new Cpu     ( this->getCore());
+    json hardware_info;
+    ifstream(FileName) >> hardware_info;
+    this->set_core          ( hardware_info["cores"]    );
+    this->set_blocks_storage ( hardware_info["storage"]  );
+    this->set_segments      ( hardware_info["segments"] );    
+    this->storage = new Storage ( this->get_blocks_storage()                    );
+    this->memory  = new Memory  ( this->get_segments()                         );
+    this->cpu     = new Cpu     ( this->get_core());
 
 }
 
 
-void Kernel::setCore          (int number){this->cores         = number;}
-void Kernel::setBlocksStorage (int number){this->blocksStorage = number;}
-void Kernel::setSegments      (int number){this->segments      = number;}
-void Kernel::setProcess       (int number){this->numProcess    = number;}
+void Kernel::set_core           (int number){this->cores         = number;}
+void Kernel::set_blocks_storage (int number){this->blocks_storage = number;}
+void Kernel::set_segments       (int number){this->segments      = number;}
+void Kernel::set_process        (int number){this->num_process    = number;}
 
-int  Kernel::getCore          (){return this->cores;}
-int  Kernel::getBlocksStorage (){return this->blocksStorage;}
-int  Kernel::getSegments      (){return this->segments;}
-int  Kernel::getProcess      (){return this->numProcess;}
+int  Kernel::get_core           (){return this->cores;}
+int  Kernel::get_blocks_storage (){return this->blocks_storage;}
+int  Kernel::get_segments       (){return this->segments;}
+int  Kernel::get_process        (){return this->num_process;}

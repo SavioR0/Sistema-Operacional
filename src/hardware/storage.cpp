@@ -8,7 +8,7 @@ Storage::Storage(int size){
         /* assist->key = 0;
         assist->type = "";
         assist->time = 0; */
-        assist->currentTime=0;
+        assist->current_time=0;
         assist->alocated = false;
         this->blocks.push_back(*assist);
         free(assist);
@@ -21,7 +21,7 @@ int Storage::check_time(int** ids){
     *ids = (int*) malloc(sizeof(int));
     for(int i = 0; i < this->size_blocks; i++){
         if(this->blocks.front().alocated == true)
-            if(this->blocks.front().currentTime >= this->blocks.front().time){
+            if(this->blocks.front().current_time >= this->blocks.front().time){
                 if(size == 0){
                     *ids[0] = this->blocks.front().key;
                     size++;
@@ -36,17 +36,17 @@ int Storage::check_time(int** ids){
     }
     return size;
 }
-void Storage::addTimeStorage(){
+void Storage::add_time_storage(){
     for(int i = 0 ; i < this->size_blocks; i++){
         if(this->blocks.front().alocated == true)
-            this->blocks.front().currentTime++;
+            this->blocks.front().current_time++;
         blocks.push_back(blocks.front());
         blocks.pop_front();
     }
 }
 
 //Funções de gerenciamento
-void Storage::insertBlockData(int key, string type, int random_number){
+void Storage::insert_block_data(int key, string type, int random_number){
     if(allocated_blocks == size_blocks){
         cout<<"Erro [012] -> Não foi possível adicionar pois não há espaço suficiente" << endl;
         return;
@@ -55,14 +55,14 @@ void Storage::insertBlockData(int key, string type, int random_number){
     assist->key         = key;
     assist->type        = type;
     assist->time        = random_number;
-    assist->currentTime = 0;
+    assist->current_time = 0;
     assist->alocated    = true;
-    this->insertStorage(assist);
+    this->insert_storage(assist);
     free(assist);
 }
 
 
-int Storage::insertStorage(BlockData* bd){
+int Storage::insert_storage(BlockData* bd){
 
     for( int i = 0 ; i< this->size_blocks; i++){
         if(blocks.front().alocated == false){
@@ -81,14 +81,14 @@ int Storage::insertStorage(BlockData* bd){
 
 
 
-int Storage::removeStorage(int id ){
+int Storage::remove_storage(int id ){
     BlockData bd;
     for(int i = 0; i < this->size_blocks; i++){
        if(id == blocks.front().key){
             if(blocks.front().alocated == false)
                 return 0;
             blocks.front().alocated=false; 
-            blocks.front().currentTime = 0;
+            blocks.front().current_time = 0;
             this->allocated_blocks--;
        }else{
             blocks.push_back(blocks.front());
@@ -111,7 +111,7 @@ void Storage::print(){
         if(item.alocated==false) 
             cout << "  |\t" << 0 << "\t|" << "     NULL" << "\t|\t" << "Disponivel\t|\t-\t|\t-\t|" << endl;
         else
-            cout << "  |\t" << item.key << "\t|" << "  "<<item.type << "\t|\t" << "Ocupado\t\t|\t"<<item.currentTime<<"\t|\t"<<item.time<<"\t|" << endl;
+            cout << "  |\t" << item.key << "\t|" << "  "<<item.type << "\t|\t" << "Ocupado\t\t|\t"<<item.current_time<<"\t|\t"<<item.time<<"\t|" << endl;
     } 
     cout<<"  ---------------------------------------------------------------------------------------"<<endl;
 

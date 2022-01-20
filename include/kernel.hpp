@@ -15,9 +15,9 @@ using namespace std;
 class Kernel{
     private:
         int cores;
-        int blocksStorage;
+        int blocks_storage;
         int segments;
-        int numProcess;
+        int num_process;
     public:
 
     Cpu*     cpu;
@@ -27,15 +27,15 @@ class Kernel{
     Kernel();
     void initialize();
     
-    void setCore(int number);
-    void setBlocksStorage(int number);
-    void setSegments(int number);
-    void setProcess(int number);
+    void set_core(int number);
+    void set_blocks_storage(int number);
+    void set_segments(int number);
+    void set_process(int number);
 
-    int getCore();
-    int getBlocksStorage();
-    int getSegments();
-    int getProcess();
+    int get_core();
+    int get_blocks_storage();
+    int get_segments();
+    int get_process();
 
 };
 

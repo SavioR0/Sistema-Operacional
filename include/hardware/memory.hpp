@@ -8,10 +8,10 @@ using namespace std;
 
 typedef struct MemoryContent MemoryContent; 
 struct MemoryContent{
-    int    idContant;
+    int    id_constant;
     int    value;             // ID do processo
     int    time;              // Tempo máximo de castigo
-    int    currentTime;       // Tempo que ele está na memoria
+    int    current_time;       // Tempo que ele está na memoria
     bool   alocated = false;  // variável que define se está alocado ou não 
     string description;       // Tipo do processo
 };
@@ -25,15 +25,15 @@ private:
 public:
     Memory(int segments);
 
-    void addTimeMemory();
-    void resetMemory();
+    void add_time_memory();
+    void reset_memory();
     int  check_time(int** ids);
-    int  hashingFunction(int key, int size);
+    int  hashing_function(int key, int size);
 
-    int  insertMemory(int value, string description, int time);
-    int  addHash(MemoryContent memory_content);
-    int  searchMemory(int value, MemoryContent* mc); 
-    int  removeMemory(int value); 
+    int  insert_memory(int value, string description, int time);
+    int  add_hash(MemoryContent memory_content);
+    int  search_memory(int value, MemoryContent* mc); 
+    int  remove_memory(int value); 
 
 
     int  get_segments();
