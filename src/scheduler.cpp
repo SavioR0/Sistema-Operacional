@@ -13,6 +13,8 @@ int randomNumber(int max){
     srand(time(NULL));
     return rand()%max + 1;
 }
+Memory*   Scheduler::get_memory_ref() {return this->kernelref->memory;  } 
+Storage*  Scheduler::get_storage_ref(){return this->kernelref->storage; }
 
 //Leitura do arquivo de Processos
 void Scheduler::read_processes(){
@@ -48,7 +50,7 @@ void Scheduler::check_block_list(){
 
     int* ids;
     int size_ids;
-    size_ids = this->kernelref->memory->check_time(&ids);
+    size_ids = this->get_memory_ref()->check_time(&ids);
     if(size_ids > 0 )
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
@@ -74,12 +76,12 @@ void Scheduler::check_block_list(){
             }
             
         }
-        this->kernelref->memory->removeMemory(ids[i]);
+        this->get_memory_ref()->removeMemory(ids[i]);
     }
 
     free(ids);      
     int* ids1;
-    size_ids = this->kernelref->storage->check_time(&ids1);
+    size_ids = this->get_storage_ref()->check_time(&ids1);
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
             if(!block.empty()){
@@ -104,7 +106,7 @@ void Scheduler::check_block_list(){
             }
             
         }
-        this->kernelref->storage->removeStorage(ids1[i]);
+        this->get_storage_ref()->removeStorage(ids1[i]);
     }
     free(ids1);
 }
@@ -162,8 +164,8 @@ void Scheduler::executeProcesses(){
             else if(current_process->getType() == "memory-bound") executingProcessMemory (&current_process);
             else if(current_process->getType() == "io-bound"    ) executingProcessStorage(&current_process);
         }
-        this->kernelref->memory->addTimeMemory();
-        this->kernelref->storage->addTimeStorage();
+        this->get_memory_ref()->addTimeMemory();
+        this->get_storage_ref()->addTimeStorage();
 
         this->update_timestamp(&current_process);
         
@@ -206,7 +208,7 @@ void Scheduler::executingProcessCPU(Process* current_process){
 
 void Scheduler::executingProcessMemory(Process** current_process){
     (*current_process)->setStatus_block();
-    this->kernelref->memory->insertMemory(
+    this->get_memory_ref()->insertMemory(
         (*current_process)->getId(),
         (*current_process)->getType(),
         randomNumber(4)
@@ -221,7 +223,7 @@ void Scheduler::executingProcessMemory(Process** current_process){
 
 void Scheduler::executingProcessStorage(Process** current_process){
     (*current_process)->setStatus_block();
-    this->kernelref->storage->insertBlockData(
+    this->get_storage_ref()->insertBlockData(
         (*current_process)->getId(),
         (*current_process)->getType(),
         randomNumber(4)

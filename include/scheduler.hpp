@@ -27,15 +27,19 @@ class Scheduler{
         list<Process> processes;
         list<Process> block;
         list<Process> finalized;
-        int pc = 0;
-    public:
         Kernel* kernelref;
+        int pc = 0;
+
+    public:
         Scheduler();
         Scheduler(Kernel* kernel);
 
         void fifo();
         void addPC();
         int  getPC();
+
+        Memory*  get_memory_ref();
+        Storage* get_storage_ref();
 
         void read_processes();
 
