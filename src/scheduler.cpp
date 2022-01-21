@@ -37,7 +37,10 @@ void Scheduler::read_processes(){
         free(assist);
         fifo();
     }
-    
+    cout<<"\n\n\t Todos os processos foram carregados e estão prontos para serem executados."<<endl;
+    cout<<"\t Para ver a lista de processos digite o comando: queueschell."<<endl;
+    cout<<"\t Para executar a lista de processos digite o comando: execute."<<endl;
+
 }
  
 //Politicas
@@ -194,8 +197,7 @@ void Scheduler::execute_processes(){
             else                        current_process = &this->processes.front();
         
         }
-        /* this->report();  */
-        usleep(quantum_time);
+        usleep(1000000);
         
     }while( (int) this->finalized.size()  < size_list_process);
 

@@ -12,23 +12,32 @@ Shell::Shell(){
     this->set_option(30);
 }
 
+bool Shell::get_execute_status()   { return this->execute; }
+void Shell::set_execute_status(bool value){ this->execute = value;}
+
 void Shell::selected_shell_option(){
     string str;
     cout<<"\n $ ";
-    getline( cin, str);// é capaz de ler o dado de entrada até que uma nova linha seja detectada
+    getline( cin, str);
 
-    if     (str == "help"       || str == "0" ) option = 0;
-    else if(str == "meminfo"    || str == "1" ) option = 1;
-    else if(str == "diskinfo"   || str == "2" ) option = 2;
-    else if(str == "cpuinfo"    || str == "3" ) option = 3;
-    else if(str == "load"       || str == "4" ) option = 4;
-    else if(str == "queueschell"|| str == "5" ) option = 5;
-    else if(str == "execute"    || str == "6" ) option = 6;
-    else if(str == "kill -9"    || str == "7" ) option = 7;
-    else if(str == "exit"                     ) option = -1;
+    if     (str == "help"       || str == "0" ) option = 0;  
+    else if(str == "meminfo"    || str == "1" ) option = 1; 
+    else if(str == "diskinfo"   || str == "2" ) option = 2; 
+    else if(str == "cpuinfo"    || str == "3" ) option = 3; 
+    else if(str == "load"       || str == "4" ) option = 4; 
+    else if(str == "queueschell"|| str == "5" ) option = 5; 
+    else if(str == "execute"    || str == "6" ) option = 6;  
+    else if(str == "kill -9"    || str == "7" ) option = 7;  
+    else if(str == "exit"                     ) option = -2;
     
+    this->execute = true;    
+    if(str == "x") this->execute = false;
 
 
+}
+
+void Shell::message_exit(){
+    cout<<"\n\n\t Precione 'x' para voltar ao shell." << endl;
 }
 
 void Shell::help_command(){
