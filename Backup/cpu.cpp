@@ -1,4 +1,4 @@
-int  Cpu::getPC(){ return this->pc; }
+/* int  Cpu::getPC(){ return this->pc; }
 void Cpu::addPC(){ this->pc++;      }
 
 void Cpu::loadProcess(){
@@ -116,4 +116,4 @@ void Cpu::printProcess(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<" --------------------------------------------------"<<endl;
-}
+} */

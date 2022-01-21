@@ -10,7 +10,7 @@ void Scheduler::add_pc(){ this->pc++;      }
 
 //Funções auxiliares
 int random_number(int max){
-    srand(time(NULL));
+    //srand(time(NULL));
     return rand()%max + 1;
 }
 Memory*   Scheduler::get_memory_ref() {return this->kernel_ref->memory;  } 
@@ -35,7 +35,6 @@ void Scheduler::read_processes(){
 
         this->processes.push_back(*assist);
         free(assist);
-        fifo();
     }
     cout<<"\n\n\t Todos os processos foram carregados e estão prontos para serem executados."<<endl;
     cout<<"\t Para ver a lista de processos digite o comando: queueschell."<<endl;
@@ -44,7 +43,9 @@ void Scheduler::read_processes(){
 }
  
 //Politicas
-void Scheduler::fifo(){}
+void Scheduler::fifo(){
+    //cout<<"Chamando politica FIFO"<<endl;
+}
 
 //Funções de gerenciamento
 void Scheduler::check_block_list(){
@@ -149,9 +150,10 @@ void Scheduler::execute_processes(){
 
     Process* current_process = &(this->processes.front());
     int size_list_process    = (int) this->processes.size();
+    int last_process         = (int) this->processes.back().get_id();
     int quantum              = 0;
-    bool await = false;
-
+    bool await               = false;
+    fifo();
     do{
 
         add_pc();
@@ -180,24 +182,29 @@ void Scheduler::execute_processes(){
             this->finalized.push_back(*current_process);
             current_process = NULL;
             this->processes.pop_front();
+            if(last_process == this->finalized.back().get_id())
+                last_process = this->processes.front().get_id();
+            
             quantum = 1;
         }
         
         quantum--;
-        if(quantum == 0){  
-            await = false;
+        if(quantum == 0){
             if(current_process != NULL)
-            if( current_process->get_status() == status_await ){
-                current_process->set_status_ready(); 
-                this->processes.push_back(*current_process);                
-                this->processes.pop_front();
-                
-            }
+                if( current_process->get_status() == status_await ){
+                    current_process->set_status_ready(); 
+                    this->processes.push_back(*current_process);                
+                    this->processes.pop_front();
+                    if(last_process == current_process->get_id()){
+                        fifo();
+                        last_process = (*current_process).get_id();
+                    }
+                }
             if(this->processes.empty()) current_process = NULL;
             else                        current_process = &this->processes.front();
         
         }
-        usleep(1000000);
+        usleep(quantum_time/5);
         
     }while( (int) this->finalized.size()  < size_list_process);
 

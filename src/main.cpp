@@ -51,8 +51,8 @@ int main(){
                                                                                         break; // execute
                 case 7:                          shell->set_execute_status(false);      break; // kill -9
                 case 8: cout<<"\n -Saindo...\n"; shell->set_execute_status(false);      break; // Exit            
-                default:
-                    cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl;    
+/*                 default:
+                    cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl;  */   
             }
             usleep(300000);
         }
