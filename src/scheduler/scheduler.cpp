@@ -10,7 +10,7 @@ void Scheduler::add_pc(){ this->pc++;      }
 
 //Funções auxiliares
 int random_number(int max){
-    //srand(time(NULL));
+    srand(2);
     return rand()%max + 1;
 }
 Memory*   Scheduler::get_memory_ref() {return this->kernel_ref->memory;  } 
