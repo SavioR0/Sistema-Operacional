@@ -3,9 +3,12 @@
 
 #include <iostream>
 #include <fstream>
-#include "hardware/cpu.hpp"
-#include "hardware/storage.hpp"
-#include "hardware/memory.hpp"
+
+#include "../hardware/cpu/cpu.hpp"
+#include "../hardware/memory/memory.hpp"
+#include "../hardware/storage/storage.hpp"
+#include "../../lib/json.hpp"
+
 
 #define FileName "hardware.json"
 

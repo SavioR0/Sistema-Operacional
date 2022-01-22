@@ -1,4 +1,4 @@
-#include "../../include/hardware/storage.hpp"
+#include "storage.hpp"
 
 //Contrutor
 Storage::Storage(int size){

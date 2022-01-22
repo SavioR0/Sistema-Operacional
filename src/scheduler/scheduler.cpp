@@ -1,4 +1,4 @@
-#include "../../include/scheduler.hpp"
+#include "scheduler.hpp"
 
 //Construtores
 Scheduler::Scheduler(Kernel* kernel){ this->kernel_ref = kernel;}

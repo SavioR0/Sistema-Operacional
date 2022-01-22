@@ -3,9 +3,9 @@
 #include <string.h>
 #include <pthread.h>
 
-#include "../include/kernel.hpp"
-#include "../include/shell.hpp"
-#include "../include/scheduler.hpp"
+#include "kernel/kernel.hpp"
+#include "shell/shell.hpp"
+#include "scheduler/scheduler.hpp"
 
 
 void*  execute(void* scheduler);

@@ -1,4 +1,4 @@
-#include "../../include/hardware/cpu.hpp"
+#include "cpu.hpp"
 
 Cpu::Cpu(){}
 Cpu::Cpu(int cores){

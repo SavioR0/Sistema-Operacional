@@ -2,7 +2,7 @@
 #define __CPU_HPP__
 
 #include <iostream>
-#include "../process.hpp" 
+#include "../../process/process.hpp" 
 
 using namespace std; 
 

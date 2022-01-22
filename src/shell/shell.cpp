@@ -1,4 +1,4 @@
-#include "../include/shell.hpp"
+#include "shell.hpp"
 
 void Shell::set_option(int op){
     option = op;

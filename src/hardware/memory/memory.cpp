@@ -1,4 +1,4 @@
-#include "../../include/hardware/memory.hpp"
+#include "memory.hpp"
 
 
 Memory::Memory(int segments){ 

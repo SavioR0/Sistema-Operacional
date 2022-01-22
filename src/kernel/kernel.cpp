@@ -1,5 +1,4 @@
-#include "../include/kernel.hpp"
-#include "../include/json.hpp"
+#include "kernel.hpp"
 
 using json = nlohmann::json;
 
