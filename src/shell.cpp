@@ -37,7 +37,7 @@ void Shell::selected_shell_option(){
 }
 
 void Shell::message_exit(){
-    cout<<"\n\n\t Precione 'x' para voltar ao shell." << endl;
+    cout<<"\n\n\t Precione 'x + Enter' para voltar ao shell." << endl;
 }
 
 void Shell::help_command(){
