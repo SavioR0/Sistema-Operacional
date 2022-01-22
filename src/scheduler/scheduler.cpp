@@ -1,4 +1,4 @@
-#include "../include/scheduler.hpp"
+#include "../../include/scheduler.hpp"
 
 //Construtores
 Scheduler::Scheduler(Kernel* kernel){ this->kernel_ref = kernel;}
@@ -42,10 +42,6 @@ void Scheduler::read_processes(){
 
 }
  
-//Politicas
-void Scheduler::fifo(){
-    //cout<<"Chamando politica FIFO"<<endl;
-}
 
 //Funções de gerenciamento
 void Scheduler::check_block_list(){
@@ -208,7 +204,7 @@ void Scheduler::execute_processes(){
             else                        current_process = &this->processes.front();
         
         }
-        usleep(quantum_time/5);
+        usleep(quantum_time);
         
     }while( (int) this->finalized.size()  < size_list_process);
 
