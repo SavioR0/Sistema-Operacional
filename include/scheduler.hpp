@@ -12,7 +12,7 @@
 #include "kernel.hpp"
 
 #define process_file    "processos.json"
-#define quantum_time   250000               // 0.25 segundos (1s = 1.000.000)
+#define quantum_time    250000            // 0.25 segundos (1s = 1.000.000)
 
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
@@ -46,6 +46,7 @@ class Scheduler{
         Storage* get_storage_ref();
 
         void read_processes();
+        void restart_system();
 
         void check_block_list();
         bool check_finished();

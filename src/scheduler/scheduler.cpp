@@ -41,7 +41,34 @@ void Scheduler::read_processes(){
     cout<<"\t Para executar a lista de processos digite o comando: execute."<<endl;
 
 }
- 
+
+void restart_processes_list(list<Process>* processes, int size){
+    if((*processes).empty()) return;
+    for(int i=0; i < size; i++)(*processes).pop_front();
+}
+
+void restart_block_list(list<Process>* block, int size){
+    if((*block).empty()) return;
+    for(int i=0; i < size; i++)(*block).pop_front();
+}
+
+void restart_finalized_list(list<Process>* finalized, int size){
+    if((*finalized).empty()) return;
+    for(int i=0; i < size; i++)(*finalized).pop_front();
+}
+
+void Scheduler::restart_system(){
+    if(this->processes.size()==15 &&
+        this->block.size()==0 && this->finalized.size()==0){
+            cout<<"\t\t\tSistema já foi reiniciado!"<<endl;
+            return;
+        }
+    restart_processes_list(&this->processes, this->processes.size());
+    restart_block_list(&this->block, this->block.size());
+    restart_finalized_list(&this->finalized,this->finalized.size() );
+    cout<<"\t\t\tPROCESSOS REINICIADOS!"<<endl;
+    read_processes();
+}
 
 //Funções de gerenciamento
 void Scheduler::check_block_list(){
