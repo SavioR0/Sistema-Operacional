@@ -70,13 +70,13 @@ void Scheduler::check_block_list(){
                             this->block.pop_front();
                         }
 
-                    }else{
+                }else{
                         Process* assist = new Process;
                         *assist = this->block.front();
                         this->block.push_back(*assist);
                         this->block.pop_front();
                         free(assist);
-                    }
+                }
             }
             
         }
@@ -140,7 +140,6 @@ void Scheduler::update_timestamp(Process** current_process){
     else (*current_process) = NULL;
 }
 
-
 //Funções de execução
 void Scheduler::execute_processes(){
     if(this->processes.empty()){
@@ -149,10 +148,12 @@ void Scheduler::execute_processes(){
     }
 
     Process* current_process = &(this->processes.front());
+    Process aux;
     int size_list_process    = (int) this->processes.size();
     int last_process         = (int) this->processes.back().get_id();
     int quantum              = 0;
     bool await               = false;
+
     fifo();
     do{
 
@@ -165,16 +166,17 @@ void Scheduler::execute_processes(){
          
         if(current_process != NULL && current_process->get_status() == status_ready && await == false){
             await = true;
-            if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process); 
-            else if(current_process->get_type() == "memory-bound") executing_process_memory (&current_process);
-            else if(current_process->get_type() == "io-bound"    ) executing_process_storage(&current_process);
+            if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process);
+            else if(current_process->get_type() == "memory-bound") executing_process_memory (&current_process, &last_process);
+            else if(current_process->get_type() == "io-bound"    ) executing_process_storage(&current_process, &last_process);
+            
         }
         this->get_memory_ref()->add_time_memory();
         this->get_storage_ref()->add_time_storage();
 
         this->update_timestamp(&current_process);
-        
         this->check_block_list();
+
 
         if(current_process != NULL)
         if(check_finished()){
@@ -182,20 +184,22 @@ void Scheduler::execute_processes(){
             this->finalized.push_back(*current_process);
             current_process = NULL;
             this->processes.pop_front();
-            if(last_process == this->finalized.back().get_id())
-                last_process = this->processes.front().get_id();
-            
+            if(last_process == this->finalized.back().get_id() && processes.size()!=0){
+                last_process = this->processes.back().get_id();
+                if((int)processes.size()>2) fifo();
+            }
             quantum = 1;
         }
         
         quantum--;
         if(quantum == 0){
+            await = false;
             if(current_process != NULL)
                 if( current_process->get_status() == status_await ){
                     current_process->set_status_ready(); 
                     this->processes.push_back(*current_process);                
                     this->processes.pop_front();
-                    if(last_process == current_process->get_id()){
+                    if(last_process == current_process->get_id() && (int)processes.size() > 2){
                         fifo();
                         last_process = (*current_process).get_id();
                     }
@@ -215,7 +219,7 @@ void Scheduler::executing_process_cpu(Process* current_process){
     this->kernel_ref->cpu->set_process( current_process );
 }
 
-void Scheduler::executing_process_memory(Process** current_process){
+void Scheduler::executing_process_memory(Process** current_process, int* last_process){
     (*current_process)->set_status_block();
     this->get_memory_ref()->insert_memory(
         (*current_process)->get_id(),
@@ -226,11 +230,16 @@ void Scheduler::executing_process_memory(Process** current_process){
 
     *current_process = NULL;
     this->processes.pop_front();
-    if(!this->processes.empty()) *current_process = &this->processes.front();
+    if(!this->processes.empty()) {
+        *current_process = &this->processes.front(); 
+        
+        if(this->block.back().get_id()== (*last_process))
+            *last_process = (*current_process)->get_id();
+    }
 
 }
 
-void Scheduler::executing_process_storage(Process** current_process){
+void Scheduler::executing_process_storage(Process** current_process, int* last_process){
     (*current_process)->set_status_block();
     this->get_storage_ref()->insert_block_data(
         (*current_process)->get_id(),
@@ -242,7 +251,11 @@ void Scheduler::executing_process_storage(Process** current_process){
 
     *current_process = NULL;
     this->processes.pop_front();
-    if(!this->processes.empty()) *current_process = &this->processes.front();
+    if(!this->processes.empty()) {
+        *current_process = &this->processes.front(); 
+        if(this->block.back().get_id()== (*last_process))
+            *last_process = (*current_process)->get_id();
+    }
 }
 
 

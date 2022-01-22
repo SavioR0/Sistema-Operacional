@@ -34,7 +34,11 @@ class Scheduler{
         Scheduler();
         Scheduler(Kernel* kernel);
 
+        //politicas
         void fifo();
+        void lru();
+        void mfp();
+
         void add_pc();
         int  get_pc();
 
@@ -49,8 +53,8 @@ class Scheduler{
 
         void execute_processes();
         void executing_process_cpu(Process* current_process);
-        void executing_process_memory(Process** current_process);
-        void executing_process_storage(Process** current_process);
+        void executing_process_memory(Process** current_process, int* last_process);
+        void executing_process_storage(Process** current_process, int* last_process);
 
         void report();
 };
