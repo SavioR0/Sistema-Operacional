@@ -36,21 +36,20 @@ int main(){
     while(shell->get_option()!= -2){
         if(shell->get_execute_status() == true){
             switch(shell->get_option()){
-                case 0: shell->help_command(); shell->set_execute_status(false);        break; // help
-                case 1: kernel->memory->print(); shell->message_exit();                 break; // meminfo
-                case 2: kernel->storage->print(); shell->message_exit();                                       break; // meminfo
-                case 3: kernel->cpu->print();   shell->message_exit();                                           break; // cpuinfo
-                case 4: scheduler->read_processes(); shell->set_execute_status(false);  break; // Load
-                case 5: scheduler->report(); shell->message_exit();                                            break; // queueschell
+                case 0: shell->help_command(); shell->set_execute_status(false);            break; // help
+                case 1: kernel->memory->print(); shell->message_exit();                     break; // meminfo
+                case 2: kernel->storage->print(); shell->message_exit();                    break; // meminfo
+                case 3: kernel->cpu->print();   shell->message_exit();                      break; // cpuinfo
+                case 4: scheduler->read_processes(); shell->set_execute_status(false);      break; // Load
+                case 5: scheduler->report(); shell->message_exit();                         break; // queueschell
                 case 6:    
                     if((pthread_create(&thread_execute_process, NULL, execute, scheduler) != 0)){
                         printf("Erro ao criar a thread.");
                         exit(EXIT_FAILURE);
                     }  
-                    shell->set_execute_status(false);
-                                                                                        break; // execute
-                case 7:                          shell->set_execute_status(false);      break; // kill -9
-                case 8: cout<<"\n -Saindo...\n"; shell->set_execute_status(false);      break; // Exit            
+                    shell->set_execute_status(false);                                       break; // execute
+                case 7: scheduler->restart_system();shell->set_execute_status(false);       break; // kill -9
+                case 8: cout<<"\n -Saindo...\n"; shell->set_execute_status(false);          break; // Exit            
 /*                 default:
                     cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl;  */   
             }
