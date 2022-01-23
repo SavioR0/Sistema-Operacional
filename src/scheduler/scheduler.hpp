@@ -12,7 +12,7 @@
 #include "../../lib/json.hpp"
 
 #define process_file    "processos.json"
-#define quantum_time    25000            // 0.25 segundos (1s = 1.000.000)
+//#define quantum_time    25000            // 0.25 segundos (1s = 1.000.000)
 
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
@@ -29,10 +29,11 @@ class Scheduler{
         list<Process> finalized;
         Kernel* kernel_ref;
         int pc = 0;
+        float quantum_time;
 
     public:
         Scheduler();
-        Scheduler(Kernel* kernel);
+        Scheduler(Kernel* kernel, float quantum_time);
 
         //politicas
         void fifo();

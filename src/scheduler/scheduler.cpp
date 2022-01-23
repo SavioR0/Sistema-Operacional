@@ -1,7 +1,7 @@
 #include "scheduler.hpp"
 
 //Construtores
-Scheduler::Scheduler(Kernel* kernel){ this->kernel_ref = kernel;}
+Scheduler::Scheduler(Kernel* kernel, float quantum_time){ this->kernel_ref = kernel; this->quantum_time = quantum_time;}
 Scheduler::Scheduler(){}
 
 //Gerencia do PC (program counter)
@@ -231,7 +231,7 @@ void Scheduler::execute_processes(){
             else                        current_process = &this->processes.front();
         
         }
-        usleep(quantum_time);
+        usleep( (quantum_time * 1000000) );
         
     }while( (int) this->finalized.size()  < size_list_process);
 
