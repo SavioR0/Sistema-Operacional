@@ -11,6 +11,8 @@
 #include "../kernel/kernel.hpp"
 #include "../../lib/json.hpp"
 #include "policies/fifo/fifo.hpp"
+#include "policies/lru/lru.hpp"
+#include "policies/mfp/mfp.hpp"
 
 #define process_file    "processos.json"
 
@@ -30,6 +32,8 @@ class Scheduler{
         int pc = 0;
         float quantum_time;
         FIFO* fifo_policie = NULL;
+        //LRU* lru_policie = NULL;
+        //MFP* mfp_policie = NULL;
 
         list<Process> read_processes();
     

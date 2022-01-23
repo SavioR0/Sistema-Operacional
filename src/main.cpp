@@ -73,7 +73,9 @@ int main(){
                     shell->set_execute_status(false);      
                 break;             
                 
-                default: cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl; 
+                default: 
+                    cout<<"\n -[ERRO 00] -> O comando informado nao existe.\nTente o comando 'help' para obter ajuda. \n"<< endl;
+                    shell->set_execute_status(false); 
             }
             usleep( ( (quantum_time/2) * 1000000) );
         }

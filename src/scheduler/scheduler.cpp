@@ -49,6 +49,22 @@ void Scheduler::load(){
             this->kernel_ref->memory, 
             this->kernel_ref->storage, 
             this->quantum_time);
+
+    /* if(this->policie == "lru_policies" )
+        this->lru_policie = new LRU( 
+            this->read_processes(), 
+            this->kernel_ref->cpu, 
+            this->kernel_ref->memory, 
+            this->kernel_ref->storage, 
+            this->quantum_time); */
+
+    /* if(this->policie == "mfp_policies" )
+        this->mfp_policie = new MFP( 
+            this->read_processes(), 
+            this->kernel_ref->cpu, 
+            this->kernel_ref->memory, 
+            this->kernel_ref->storage, 
+            this->quantum_time); */
     
 }
 
