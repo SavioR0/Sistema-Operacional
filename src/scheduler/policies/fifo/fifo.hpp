@@ -21,19 +21,21 @@ class FIFO{
         Storage*      storage_ref;
         float quantum_time;
     
+        void check_block_list();
+        void check_finished(Process* current_process, int* quantum);
+        void check_process_in_pogress(Process* current_process);
+        void update_timestamp(Process** current_process);
+
+        void executing_process_cpu    (Process* current_process);
+        void executing_process_memory (Process* current_process);
+        void executing_process_storage(Process* current_process);
+
     public:
         FIFO();
         FIFO(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* storage_ref, float quantum_time);
 
-        void check_block_list();
-        bool check_finished();
-        void update_timestamp(Process** current_process);
-
-        void execute_processes();
-        void executing_process_cpu(Process* current_process);
-        void executing_process_memory(Process** current_process, int* last_process);
-        void executing_process_storage(Process** current_process, int* last_process);
-
+        int  execute_processes(); 
+        void restart();      
         void report();
 };
 

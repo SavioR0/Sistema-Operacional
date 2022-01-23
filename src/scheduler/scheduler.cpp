@@ -42,18 +42,27 @@ list<Process> Scheduler::read_processes(){
 }
 
 void Scheduler::load(){
-    //cout<<"Entrei";
-    if(this->policie == "fifo_policies" ){ 
-        fifo_policie = FIFO( read_processes(), kernel_ref->cpu, kernel_ref->memory, kernel_ref->storage, this->quantum_time );
-    }
+    if(this->policie == "fifo_policies" )
+        this->fifo_policie = new FIFO( 
+            this->read_processes(), 
+            this->kernel_ref->cpu, 
+            this->kernel_ref->memory, 
+            this->kernel_ref->storage, 
+            this->quantum_time);
+    
+}
+
+void Scheduler::restart(){
+    if(this->policie == "fifo_policies" )
+        this->fifo_policie->restart();
 
 }
 
 void Scheduler::execute(){
     if(this->policie == "fifo_policies" ) 
-        fifo_policie.execute_processes();
+        this->pc = this->fifo_policie->execute_processes();
 }
 void Scheduler::report(){
     if(this->policie == "fifo_policies" ) 
-        fifo_policie.report();
+        this->fifo_policie->report();
 }

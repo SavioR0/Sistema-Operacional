@@ -44,8 +44,8 @@ Os processos "executados" pelo sistema Operacional são lidos de um arquivo json
 
 ## Estrutura de pastas
 <br/>
-<div style="text-align:center">
+<p align="center">
 
 ![definaçãopasta](https://user-images.githubusercontent.com/62517334/150654451-4aa15ef2-1bc1-4763-a4af-ed369939343b.svg)
 
-</div>
+</p>

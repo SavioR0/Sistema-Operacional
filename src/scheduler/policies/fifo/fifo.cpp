@@ -10,12 +10,20 @@ FIFO::FIFO(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage
     this->quantum_time = quantum_time;
 }
 
+// Funções auxiliares
 int random_number(int max){
     srand(2);
     return rand()%max + 1;
 }
 
+
 //Funções de gerenciamento
+void FIFO::restart(){
+    this->processes.clear();
+    this->block.clear();
+    this->finalized.clear();
+    cout<<"\n\n\tProcessos reiniciados\n"<<endl;
+}
 
 void FIFO::check_block_list(){
     if(this->block.empty()) return;
@@ -83,9 +91,27 @@ void FIFO::check_block_list(){
     free(ids1);
 }
 
-bool FIFO::check_finished(){
-    if(this->processes.front().get_cyles() <= 0) return true;
-    else                                         return false;
+void FIFO::check_finished(Process* current_process, int* quantum){
+    if(current_process == NULL) return;
+    
+    if(current_process->get_cyles() <= 0){
+        current_process->set_status_finished();
+        this->finalized.push_back(*current_process);
+        current_process = NULL;
+        this->processes.pop_front();
+        *quantum = 1;  
+    }
+
+}
+
+void FIFO::check_process_in_pogress(Process* current_process){
+    if(current_process == NULL) return;
+    
+    if( current_process->get_status() == status_await ){
+        current_process->set_status_ready(); 
+        this->processes.push_back(*current_process);                
+        this->processes.pop_front();
+    }
 }
 
 void FIFO::update_timestamp(Process** current_process){
@@ -109,34 +135,35 @@ void FIFO::update_timestamp(Process** current_process){
 }
 
 //Funções de execução
-void FIFO::execute_processes(){
+int FIFO::execute_processes(){
     if(this->processes.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
-        return;
+        return 0;
     }
 
     Process* current_process = &(this->processes.front());
-    Process aux;
-    int size_list_process    = (int) this->processes.size();
-    int last_process         = (int) this->processes.back().get_id();
-    int quantum              = 0;
-    bool await               = false;
+    int      size_list_process    = (int) this->processes.size();
+    int      quantum              = 0;
+    bool     await                = false;
+    int      pc                   = 0;
 
     do{
 
-        //add_pc();
-         
-        if(quantum <= 0 && current_process != NULL ){
-            quantum = random_number( current_process->get_max_quantum());
-            current_process->sub_quantum(quantum);
-        }
-         
-        if(current_process != NULL && current_process->get_status() == status_ready && await == false){
-            await = true;
-            if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process);
-            else if(current_process->get_type() == "memory-bound") executing_process_memory (&current_process, &last_process);
-            else if(current_process->get_type() == "io-bound"    ) executing_process_storage(&current_process, &last_process);
-            
+        pc++;
+
+        if(current_process != NULL){ 
+            if(quantum <= 0){
+                quantum = random_number( current_process->get_max_quantum());
+                current_process->sub_quantum(quantum);
+            }
+
+            if(current_process->get_status() == status_ready && await == false){
+                await = true;
+                if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process);
+                else if(current_process->get_type() == "memory-bound") executing_process_memory (current_process);
+                else if(current_process->get_type() == "io-bound"    ) executing_process_storage(current_process);
+
+            }
         }
         this->memory_ref->add_time_memory();
         this->storage_ref->add_time_storage();
@@ -144,41 +171,20 @@ void FIFO::execute_processes(){
         this->update_timestamp(&current_process);
         this->check_block_list();
 
-
-        if(current_process != NULL)
-        if(check_finished()){
-            current_process->set_status_finished();
-            this->finalized.push_back(*current_process);
-            current_process = NULL;
-            this->processes.pop_front();
-            if(last_process == this->finalized.back().get_id() && processes.size()!=0){
-                last_process = this->processes.back().get_id();
-                //if((int)processes.size()>2) fifo();
-            }
-            quantum = 1;
-        }
+        this->check_finished(current_process, &quantum);
         
         quantum--;
+        
         if(quantum == 0){
             await = false;
-            if(current_process != NULL)
-                if( current_process->get_status() == status_await ){
-                    current_process->set_status_ready(); 
-                    this->processes.push_back(*current_process);                
-                    this->processes.pop_front();
-                    if(last_process == current_process->get_id() && (int)processes.size() > 2){
-                        //fifo();
-                        last_process = (*current_process).get_id();
-                    }
-                }
+            this->check_process_in_pogress(current_process);
             if(this->processes.empty()) current_process = NULL;
             else                        current_process = &this->processes.front();
-        
         }
         usleep( (quantum_time * 1000000) );
         
     }while( (int) this->finalized.size()  < size_list_process);
-
+    return pc;
 }
 
 void FIFO::executing_process_cpu(Process* current_process){
@@ -186,45 +192,38 @@ void FIFO::executing_process_cpu(Process* current_process){
     this->cpu_ref->set_process( current_process );
 }
 
-void FIFO::executing_process_memory(Process** current_process, int* last_process){
-    (*current_process)->set_status_block();
+void FIFO::executing_process_memory(Process* current_process){
+    current_process->set_status_block();
     this->memory_ref->insert_memory(
-        (*current_process)->get_id(),
-        (*current_process)->get_type(),
-        random_number(4)
-    );
-    this->block.push_back( *(*current_process) );
+        current_process->get_id(),
+        current_process->get_type(),
+        random_number(4));
 
-    *current_process = NULL;
+    this->block.push_back( (*current_process) );
+
+    current_process = NULL;
     this->processes.pop_front();
-    if(!this->processes.empty()) {
-        *current_process = &this->processes.front(); 
-        
-        if(this->block.back().get_id()== (*last_process))
-            *last_process = (*current_process)->get_id();
-    }
-
+    if(!this->processes.empty()) current_process = &this->processes.front(); 
+    
 }
 
-void FIFO::executing_process_storage(Process** current_process, int* last_process){
-    (*current_process)->set_status_block();
+void FIFO::executing_process_storage(Process* current_process){
+    current_process->set_status_block();
     this->storage_ref->insert_block_data(
-        (*current_process)->get_id(),
-        (*current_process)->get_type(),
-        random_number(4)
-        
-    );
-    this->block.push_back( *(*current_process) );
+        current_process->get_id(),
+        current_process->get_type(),
+        random_number(4));
+    
+    this->block.push_back( (*current_process) );
 
-    *current_process = NULL;
+    current_process = NULL;
     this->processes.pop_front();
-    if(!this->processes.empty()) {
-        *current_process = &this->processes.front(); 
-        if(this->block.back().get_id()== (*last_process))
-            *last_process = (*current_process)->get_id();
-    }
+    if(!this->processes.empty()) current_process = &this->processes.front(); 
+    
 }
 
+
+//Funções de exibição
 void FIFO::report(){
     system("clear");
     cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;

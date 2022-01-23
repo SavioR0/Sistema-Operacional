@@ -65,8 +65,8 @@ int main(){
                     shell->set_execute_status(false);
                 break; 
                 case 7:                                                                      // 7-> kill -9 
-                    //scheduler->restart_system();
-                    //shell->set_execute_status(false);   
+                    scheduler->restart();
+                    shell->set_execute_status(false);   
                 break; 
                 case 8:                                                                      // 8-> Exit 
                     cout<<"\n -Saindo...\n"; 

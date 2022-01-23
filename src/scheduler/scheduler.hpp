@@ -29,10 +29,9 @@ class Scheduler{
         string policie;
         int pc = 0;
         float quantum_time;
-        FIFO fifo_policie;
+        FIFO* fifo_policie = NULL;
 
         list<Process> read_processes();
-
     
     public:
         Scheduler();
@@ -40,6 +39,7 @@ class Scheduler{
 
         void load();
         void execute();
+        void restart();
         void report();
 
 };
