@@ -7,7 +7,7 @@
 #include "shell/shell.hpp"
 #include "scheduler/scheduler.hpp"
 
-#define quantum_time 1.1
+#define quantum_time 0.2
  
 
 void* execute(void* scheduler);
@@ -19,7 +19,7 @@ int main(){
     system("clear");
 
     Kernel*    kernel    = new Kernel;
-    Scheduler* scheduler = new Scheduler(kernel, quantum_time);
+    Scheduler* scheduler = new Scheduler(kernel, quantum_time, "fifo_policies");
     Shell*     shell     = new Shell;
 
     pthread_t thread_execute_process; 
@@ -52,7 +52,7 @@ int main(){
                     if(quantum_time <= 1) usleep(1000000);             
                 break; 
                 case 4:                                                                      // 4-> Load 
-                    scheduler->read_processes(); 
+                    scheduler->load(); 
                     shell->set_execute_status(false);  
                 break; 
                 case 5:                                                                      // 5-> queueschell 
@@ -65,8 +65,8 @@ int main(){
                     shell->set_execute_status(false);
                 break; 
                 case 7:                                                                      // 7-> kill -9 
-                    scheduler->restart_system();
-                    shell->set_execute_status(false);   
+                    //scheduler->restart_system();
+                    //shell->set_execute_status(false);   
                 break; 
                 case 8:                                                                      // 8-> Exit 
                     cout<<"\n -Saindo...\n"; 
@@ -83,7 +83,7 @@ int main(){
 
 void*  execute(void* scheduler){
     Scheduler* assist = (Scheduler*) scheduler;
-    assist->execute_processes();
+    assist->execute();
     pthread_exit(NULL);
 }
 void* thread_shell(void* shell){

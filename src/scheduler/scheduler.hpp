@@ -10,13 +10,14 @@
 #include "../process/process.hpp"
 #include "../kernel/kernel.hpp"
 #include "../../lib/json.hpp"
+#include "policies/fifo/fifo.hpp"
 
 #define process_file    "processos.json"
-//#define quantum_time    25000            // 0.25 segundos (1s = 1.000.000)
 
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
 #define status_running "Em execucao"
+#define json_list_name "all"
 
 using json = nlohmann::json;
 using namespace std;
@@ -24,41 +25,23 @@ using namespace std;
 
 class Scheduler{
     private:
-        list<Process> processes;
-        list<Process> block;
-        list<Process> finalized;
         Kernel* kernel_ref;
+        string policie;
         int pc = 0;
         float quantum_time;
+        FIFO fifo_policie;
 
+        list<Process> read_processes();
+
+    
     public:
         Scheduler();
-        Scheduler(Kernel* kernel, float quantum_time);
+        Scheduler(Kernel* kernel, float quantum_time, string policie);
 
-        //politicas
-        void fifo();
-        void lru();
-        void mfp();
-
-        void add_pc();
-        int  get_pc();
-
-        Memory*  get_memory_ref();
-        Storage* get_storage_ref();
-
-        void read_processes();
-        void restart_system();
-
-        void check_block_list();
-        bool check_finished();
-        void update_timestamp(Process** current_process);
-
-        void execute_processes();
-        void executing_process_cpu(Process* current_process);
-        void executing_process_memory(Process** current_process, int* last_process);
-        void executing_process_storage(Process** current_process, int* last_process);
-
+        void load();
+        void execute();
         void report();
+
 };
 
 #endif
