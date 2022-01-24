@@ -2,12 +2,14 @@
 #include <fstream>
 #include <string.h>
 #include <pthread.h>
+#include <iomanip>
 
 #include "kernel/kernel.hpp"
 #include "shell/shell.hpp"
 #include "scheduler/scheduler.hpp"
 
 #define quantum_time 0.2
+
  
 
 void* execute(void* scheduler);
@@ -17,6 +19,7 @@ void  create_thread(pthread_t *__restrict__ __newthread, const pthread_attr_t *_
 
 int main(){
     system("clear");
+    cout << fixed << setprecision(3);
 
     Kernel*    kernel    = new Kernel;
     Scheduler* scheduler = new Scheduler(kernel, quantum_time, mfp_policie_string);
