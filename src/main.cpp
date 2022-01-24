@@ -7,7 +7,7 @@
 #include "shell/shell.hpp"
 #include "scheduler/scheduler.hpp"
 
-#define quantum_time 0.2
+#define quantum_time 1.2
  
 
 void* execute(void* scheduler);
@@ -19,7 +19,7 @@ int main(){
     system("clear");
 
     Kernel*    kernel    = new Kernel;
-    Scheduler* scheduler = new Scheduler(kernel, quantum_time, "fifo_policies");
+    Scheduler* scheduler = new Scheduler(kernel, quantum_time, fifo_policie_string);
     Shell*     shell     = new Shell;
 
     pthread_t thread_execute_process; 

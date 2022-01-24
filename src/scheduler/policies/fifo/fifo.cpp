@@ -108,6 +108,7 @@ void FIFO::check_process_in_pogress(Process* current_process){
     if(current_process == NULL) return;
     
     if( current_process->get_status() == status_await ){
+        cpu_ref->remove_process();
         current_process->set_status_ready(); 
         this->processes.push_back(*current_process);                
         this->processes.pop_front();

@@ -1,4 +1,4 @@
-/* #include "lru.hpp"
+#include "lru.hpp"
 
 //contrutores
 LRU::LRU(){}
@@ -245,4 +245,4 @@ void LRU::report(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
-} */
+}

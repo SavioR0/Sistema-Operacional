@@ -16,6 +16,11 @@
 
 #define process_file    "processos.json"
 
+#define fifo_policie_string "fifo"
+#define lru_policie_string "lru"
+#define mfp_policie_string "mfp"
+
+
 #define status_ready   "Pronto"
 #define status_blocked "Bloqueado"
 #define status_running "Em execucao"
@@ -32,7 +37,7 @@ class Scheduler{
         int pc = 0;
         float quantum_time;
         FIFO* fifo_policie = NULL;
-        //LRU* lru_policie = NULL;
+        LRU* lru_policie = NULL;
         //MFP* mfp_policie = NULL;
 
         list<Process> read_processes();

@@ -42,7 +42,7 @@ list<Process> Scheduler::read_processes(){
 }
 
 void Scheduler::load(){
-    if(this->policie == "fifo_policies" )
+    if(this->policie == fifo_policie_string )
         this->fifo_policie = new FIFO( 
             this->read_processes(), 
             this->kernel_ref->cpu, 
@@ -50,13 +50,13 @@ void Scheduler::load(){
             this->kernel_ref->storage, 
             this->quantum_time);
 
-    /* if(this->policie == "lru_policies" )
+    if(this->policie == lru_policie_string )
         this->lru_policie = new LRU( 
             this->read_processes(), 
             this->kernel_ref->cpu, 
             this->kernel_ref->memory, 
             this->kernel_ref->storage, 
-            this->quantum_time); */
+            this->quantum_time);
 
     /* if(this->policie == "mfp_policies" )
         this->mfp_policie = new MFP( 
@@ -69,16 +69,21 @@ void Scheduler::load(){
 }
 
 void Scheduler::restart(){
-    if(this->policie == "fifo_policies" )
+    if(this->policie == fifo_policie_string )
         this->fifo_policie->restart();
-
+    if(this->policie == lru_policie_string )
+        this->lru_policie->restart();
 }
 
 void Scheduler::execute(){
-    if(this->policie == "fifo_policies" ) 
+    if(this->policie == fifo_policie_string ) 
         this->pc = this->fifo_policie->execute_processes();
+    if(this->policie == lru_policie_string ) 
+        this->pc = this->lru_policie->execute_processes();
 }
 void Scheduler::report(){
-    if(this->policie == "fifo_policies" ) 
+    if(this->policie == fifo_policie_string ) 
         this->fifo_policie->report();
+    if(this->policie == lru_policie_string ) 
+        this->pc = this->lru_policie->execute_processes();
 }

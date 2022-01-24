@@ -17,6 +17,7 @@ class Cpu{
 
         void    print();
         void    set_process(Process* cpu_process);
+        void    remove_process();
         Process get_process_previous();
         Process get_process();
 };
