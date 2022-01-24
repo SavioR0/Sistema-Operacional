@@ -38,7 +38,7 @@ class Scheduler{
         float quantum_time;
         FIFO* fifo_policie = NULL;
         LRU* lru_policie = NULL;
-        //MFP* mfp_policie = NULL;
+        MFP* mfp_policie = NULL;
 
         list<Process> read_processes();
     

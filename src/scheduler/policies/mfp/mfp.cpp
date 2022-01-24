@@ -1,4 +1,4 @@
-/* #include "mfp.hpp"
+#include "mfp.hpp"
 
 //contrutores
 MFP::MFP(){}
@@ -11,7 +11,7 @@ MFP::MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* 
 }
 
 // Funções auxiliares
-int random_number(int max){
+int random_number3(int max){
     srand(2);
     return rand()%max + 1;
 }
@@ -153,7 +153,7 @@ int MFP::execute_processes(){
 
         if(current_process != NULL){ 
             if(quantum <= 0){
-                quantum = random_number( current_process->get_max_quantum());
+                quantum = random_number3( current_process->get_max_quantum());
                 current_process->sub_quantum(quantum);
             }
 
@@ -197,7 +197,7 @@ void MFP::executing_process_memory(Process* current_process){
     this->memory_ref->insert_memory(
         current_process->get_id(),
         current_process->get_type(),
-        random_number(4));
+        random_number3(4));
 
     this->block.push_back( (*current_process) );
 
@@ -212,7 +212,7 @@ void MFP::executing_process_storage(Process* current_process){
     this->storage_ref->insert_block_data(
         current_process->get_id(),
         current_process->get_type(),
-        random_number(4));
+        random_number3(4));
     
     this->block.push_back( (*current_process) );
 
@@ -245,4 +245,4 @@ void MFP::report(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
-} */
+}

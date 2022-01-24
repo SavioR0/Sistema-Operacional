@@ -1,4 +1,4 @@
-/* #ifndef __MFP_POLICIES__HPP
+#ifndef __MFP_POLICIES__HPP
 #define __MFP_POLICIES__HPP
 
 #include <list>
@@ -39,4 +39,4 @@ class MFP{
         void report();
 };
 
-#endif */
+#endif
