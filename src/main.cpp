@@ -7,7 +7,7 @@
 #include "shell/shell.hpp"
 #include "scheduler/scheduler.hpp"
 
-#define quantum_time 1.2
+#define quantum_time 0.2
  
 
 void* execute(void* scheduler);
@@ -39,17 +39,14 @@ int main(){
                 case 1:                                                                      // 1-> meminfo 
                     kernel->memory->print();     
                     shell->message_exit();
-                    if(quantum_time <= 1) usleep(1000000);             
                 break; 
                 case 2:                                                                      // 2-> meminfo 
                     kernel->storage->print();    
                     shell->message_exit();             
-                    if(quantum_time <= 1) usleep(1000000);             
                 break; 
                 case 3:                                                                      // 3-> cpuinfo 
                     kernel->cpu->print();        
                     shell->message_exit();             
-                    if(quantum_time <= 1) usleep(1000000);             
                 break; 
                 case 4:                                                                      // 4-> Load 
                     scheduler->load(); 
@@ -58,7 +55,6 @@ int main(){
                 case 5:                                                                      // 5-> queueschell 
                     scheduler->report();
                     shell->message_exit();
-                    if(quantum_time <= 1) usleep(1000000);             
                 break; 
                 case 6:                                                                      // 6-> execute 
                     create_thread(&thread_execute_process, NULL, execute, scheduler); 

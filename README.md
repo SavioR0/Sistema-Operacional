@@ -32,7 +32,7 @@ Os processos "executados" pelo sistema Operacional são lidos de um arquivo json
     make run
     ~~~
 
-    Inicialmente o quantum - tempo respeitado pelo escalonador para a execução dos processos- é setado com um valor fixo de 250 000 microsegundos, ou seja, 0,25 segundos. Caso seja necessario alteração para melhor visualização dos resultados, faça a modificação no arquivo "/include/scheduler/scheduler.hpp" na linha 15.
+    Inicialmente o quantum - tempo respeitado pelo escalonador para a execução dos processos- é setado com um valor fixo de 1 segundo(s). Caso seja necessario alteração para melhor visualização dos resultados, faça a modificação no arquivo "main.cpp" na linha 10.
 - ### Comando para executar todos os passos acima:
     ~~~
     git clone https://github.com/SavioR0/Sistema-Operacional.git && cd Sistema-Operacional && make $$ make run
