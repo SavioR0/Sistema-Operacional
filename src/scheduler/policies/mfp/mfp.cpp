@@ -91,9 +91,7 @@ void MFP::check_block_list(){
     free(ids1);
 }
 
-void MFP::aplly_policie(){
-    cout<<"Aplicando politica"<<endl;
-}
+
 
 void MFP::check_finished(Process* current_process, int* quantum, int* last_process){
     if(current_process == NULL) return;
@@ -154,15 +152,16 @@ int MFP::execute_processes(){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return 0;
     }
+    int      size_list_process    = (int) this->processes.size();
+    initialize_policie();
 
     Process* current_process = &(this->processes.front());
-    int      size_list_process    = (int) this->processes.size();
+    
     int      last_process         = (int) this->processes.back().get_id();
     int      quantum              = 0;
     bool     await                = false;
     int      pc                   = 0;
-
-    aplly_policie();
+  
     do{
 
         pc++;

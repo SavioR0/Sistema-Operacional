@@ -16,10 +16,20 @@ class MFP{
         list<Process> processes;
         list<Process> block;
         list<Process> finalized;
+
+        list<Process> priority0;
+        list<Process> priority1;
+        list<Process> priority2;
+        list<Process> priority3;
+        list<Process> priority4;
+
+
         Cpu*          cpu_ref;
         Memory*       memory_ref;
         Storage*      storage_ref;
-        float quantum_time;
+        
+        float         quantum_time;
+        bool          empty_lists = false;
     
         void check_block_list();
         void check_finished(Process* current_process, int* quantum, int* last_process);
@@ -35,9 +45,15 @@ class MFP{
         MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* storage_ref, float quantum_time);
 
         void aplly_policie();
+        void initialize_policie();
+
         int  execute_processes(); 
         void restart();      
         void report();
+
+        void change_empty_lists();
+        void add_priority();
+
 };
 
 #endif
