@@ -8,11 +8,12 @@ MFP::MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* 
     this->memory_ref  = memory_ref;
     this->storage_ref = storage_ref;
     this->quantum_time = quantum_time;
+
 }
 
 // Funções auxiliares
 int random_number3(int max){
-    srand(2);
+    //srand(2);
     return rand()%max + 1;
 }
 
@@ -101,9 +102,11 @@ void MFP::check_finished(Process* current_process, int* quantum, int* last_proce
         this->finalized.push_back(*current_process);
         current_process = NULL;
         this->processes.pop_front();
+        cout<<"Last Process check finished: "<<*last_process<< " Finalized back: "<<this->finalized.back().get_id()<<endl;
+
         if(*last_process == this->finalized.back().get_id() && processes.size()!=0){
                 *last_process = this->processes.back().get_id();
-                if((int)processes.size()>2) aplly_policie();
+                if((int)processes.size()>=1) aplly_policie();
         }
         *quantum = 1;  
     }
@@ -118,7 +121,7 @@ void MFP::check_process_in_pogress(Process* current_process, int *last_process){
         current_process->set_status_ready(); 
         this->processes.push_back(*current_process);                
         this->processes.pop_front();
-        if(*last_process == current_process->get_id() && (int)processes.size() > 2){
+        if(*last_process == current_process->get_id() && (int)processes.size() >= 1){
             aplly_policie();
             *last_process = (*current_process).get_id();
         }
@@ -163,7 +166,7 @@ int MFP::execute_processes(){
     int      pc                   = 0;
   
     do{
-
+        
         pc++;
 
         if(current_process != NULL){ 
@@ -185,9 +188,9 @@ int MFP::execute_processes(){
 
         this->update_timestamp(&current_process);
         this->check_block_list();
-
+        cout<<"Numero de processos na fila de processos: "<< (int)this->processes.size()<<endl;
         this->check_finished(current_process, &quantum, &last_process);
-        
+        cout<<"Numero de processos na fila de processos1: "<< (int)this->processes.size()<<endl;
         quantum--;
         
         if(quantum == 0){
@@ -199,6 +202,7 @@ int MFP::execute_processes(){
         usleep( (quantum_time * 1000000) );
         
     }while( (int) this->finalized.size()  < size_list_process);
+    cout<<"Saiu"<<endl;
     return pc;
 }
 

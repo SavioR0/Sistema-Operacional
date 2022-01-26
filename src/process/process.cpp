@@ -17,13 +17,13 @@ Process::Process( int id, float cycles, int max_quantum, int timestamp, int prio
     this->status = status;
 }
 
-void Process::set_id                 (int value)     { this->id          = value; }
-void Process::set_cycles             (float value)   { this->cycles      = value; }
-void Process::set_max_quantum        (int value)     { this->max_quantum  = value; }
-void Process::set_timestamp          (int value)     { this->timestamp   = value; }
-void Process::set_priority           (int value)     { this->priority    = value; }
-void Process::set_status_addres      (string* value) { this->status      = value; }
-void Process::set_type_address       (string* value) { this->type        = value; }
+void Process::set_id                 (int value)     { this->id                     = value;}
+void Process::set_cycles             (float value)   { this->cycles                 = value;}
+void Process::set_max_quantum        (int value)     { this->max_quantum            = value;}
+void Process::set_timestamp          (int value)     { this->timestamp              = value;}
+void Process::set_priority           (int value)     { this->priority               = value;}
+void Process::set_status_addres      (string* value) { this->status                 = value;}
+void Process::set_type_address       (string* value) { this->type                   = value;}
 void Process::set_status_await(){
     free(this->status);
     string* assist = new string;

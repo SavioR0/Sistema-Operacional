@@ -8,6 +8,7 @@
 #include "../../../hardware/memory/memory.hpp"
 #include "../../../hardware/storage/storage.hpp"
 #include <unistd.h>
+#include <vector>
 
 
 
@@ -23,6 +24,8 @@ class MFP{
         list<Process> priority3;
         list<Process> priority4;
 
+        list<Process> stopped;
+
 
         Cpu*          cpu_ref;
         Memory*       memory_ref;
@@ -30,6 +33,9 @@ class MFP{
         
         float         quantum_time;
         bool          empty_lists = false;
+
+        vector<int>   tokens;
+        int           distribuited_tokens = 0;
     
         void check_block_list();
         void check_finished(Process* current_process, int* quantum, int* last_process);
@@ -53,6 +59,12 @@ class MFP{
 
         void change_empty_lists();
         void add_priority();
+
+        //funções da politica
+        void set_tokens_value(int value);
+
+        void raffle_initialize();
+        void raffle();
 
 };
 

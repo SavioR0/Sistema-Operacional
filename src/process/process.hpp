@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #define status_ready    "Pronto"
 #define status_await    "Em Execucao"
@@ -21,6 +22,8 @@ class Process{
         int      priority;
         string*  status;
         string*  type;
+
+        vector<int> tokensProcess;
     public:
         
         
@@ -37,7 +40,6 @@ class Process{
         void set_status_await();
         void set_status_block();
         void set_status_finished();
-
 
         void set_status_addres(string* value );
         void set_type(string value);
