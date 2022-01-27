@@ -43,7 +43,10 @@ void MFP::check_block_list(){
                             this->block.pop_front();    
                         }else{
                             this->block.front().set_status_ready();
-                            this->processes.push_back( this->block.front() );
+                            if(empty_lists)
+                                this->stopped.push_back( this->block.front() );
+                            else
+                                this->processes.push_back( this->block.front() );
                             this->block.pop_front();
                         }
 
@@ -73,7 +76,10 @@ void MFP::check_block_list(){
                             this->block.pop_front();    
                         }else{
                             this->block.front().set_status_ready();
-                            this->processes.push_back( this->block.front() );
+                            if(empty_lists)
+                                this->stopped.push_back( this->block.front() );
+                            else
+                                this->processes.push_back( this->block.front() );
                             this->block.pop_front();
                         }
 
@@ -94,7 +100,7 @@ void MFP::check_block_list(){
 
 
 
-void MFP::check_finished(Process* current_process, int* quantum, int* last_process){
+void MFP::check_finished(Process* current_process, int* quantum){
     if(current_process == NULL) return;
     
     if(current_process->get_cyles() <= 0){
@@ -102,10 +108,10 @@ void MFP::check_finished(Process* current_process, int* quantum, int* last_proce
         this->finalized.push_back(*current_process);
         current_process = NULL;
         this->processes.pop_front();
-        cout<<"Last Process check finished: "<<*last_process<< " Finalized back: "<<this->finalized.back().get_id()<<endl;
+        cout<<"Last Process check finished: "<<this->last_process<< " Finalized back: "<<this->finalized.back().get_id()<<endl;
 
-        if(*last_process == this->finalized.back().get_id() && processes.size()!=0){
-                *last_process = this->processes.back().get_id();
+        if(this->last_process == this->finalized.back().get_id() && processes.size()!=0){
+                this->last_process = this->processes.back().get_id();
                 if((int)processes.size()>=1) aplly_policie();
         }
         *quantum = 1;  
@@ -113,7 +119,7 @@ void MFP::check_finished(Process* current_process, int* quantum, int* last_proce
 
 }
 
-void MFP::check_process_in_pogress(Process* current_process, int *last_process){
+void MFP::check_process_in_pogress(Process* current_process){
     if(current_process == NULL) return;
     
     if( current_process->get_status() == status_await ){
@@ -121,10 +127,17 @@ void MFP::check_process_in_pogress(Process* current_process, int *last_process){
         current_process->set_status_ready(); 
         this->processes.push_back(*current_process);                
         this->processes.pop_front();
-        if(*last_process == current_process->get_id() && (int)processes.size() >= 1){
+        cout<<"Last process : "<<last_process<< " Current process:" << current_process->get_id()<<endl;
+        if(this->last_process == current_process->get_id() && (int)processes.size() > 1){
             aplly_policie();
-            *last_process = (*current_process).get_id();
-        }
+            this->last_process = (*current_process).get_id();
+        } else if((int)processes.size() == 1){
+            //stopped.push_back(processes.front());
+            //processes.pop_front();
+            cout<<"Entrou no else"<<endl;
+            aplly_policie();
+            this->last_process = processes.front().get_id();
+        } 
     }
 }
 
@@ -160,7 +173,7 @@ int MFP::execute_processes(){
 
     Process* current_process = &(this->processes.front());
     
-    int      last_process         = (int) this->processes.back().get_id();
+    this->last_process         = (int) this->processes.back().get_id();
     int      quantum              = 0;
     bool     await                = false;
     int      pc                   = 0;
@@ -178,8 +191,8 @@ int MFP::execute_processes(){
             if(current_process->get_status() == status_ready && await == false){
                 await = true;
                 if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process);
-                else if(current_process->get_type() == "memory-bound") executing_process_memory (current_process, &last_process);
-                else if(current_process->get_type() == "io-bound"    ) executing_process_storage(current_process, &last_process);
+                else if(current_process->get_type() == "memory-bound") executing_process_memory (current_process);
+                else if(current_process->get_type() == "io-bound"    ) executing_process_storage(current_process);
 
             }
         }
@@ -188,21 +201,18 @@ int MFP::execute_processes(){
 
         this->update_timestamp(&current_process);
         this->check_block_list();
-        cout<<"Numero de processos na fila de processos: "<< (int)this->processes.size()<<endl;
-        this->check_finished(current_process, &quantum, &last_process);
-        cout<<"Numero de processos na fila de processos1: "<< (int)this->processes.size()<<endl;
+        this->check_finished(current_process, &quantum);
         quantum--;
         
         if(quantum == 0){
             await = false;
-            this->check_process_in_pogress(current_process, &last_process);
+            this->check_process_in_pogress(current_process);
             if(this->processes.empty()) current_process = NULL;
             else                        current_process = &this->processes.front();
         }
         usleep( (quantum_time * 1000000) );
-        
     }while( (int) this->finalized.size()  < size_list_process);
-    cout<<"Saiu"<<endl;
+    
     return pc;
 }
 
@@ -211,7 +221,7 @@ void MFP::executing_process_cpu(Process* current_process){
     this->cpu_ref->set_process( current_process );
 }
 
-void MFP::executing_process_memory(Process* current_process, int* last_process){
+void MFP::executing_process_memory(Process* current_process){
     current_process->set_status_block();
     this->memory_ref->insert_memory(
         current_process->get_id(),
@@ -224,12 +234,12 @@ void MFP::executing_process_memory(Process* current_process, int* last_process){
     this->processes.pop_front();
     if(!this->processes.empty()) {
         current_process = &this->processes.front();
-        if(this->block.back().get_id()== (*last_process))
-            *last_process = current_process->get_id();
+        if(this->block.back().get_id()== this->last_process)
+            this->last_process = current_process->get_id();
     } 
 }
 
-void MFP::executing_process_storage(Process* current_process, int* last_process){
+void MFP::executing_process_storage(Process* current_process){
     current_process->set_status_block();
     this->storage_ref->insert_block_data(
         current_process->get_id(),
@@ -242,8 +252,8 @@ void MFP::executing_process_storage(Process* current_process, int* last_process)
     this->processes.pop_front();
     if(!this->processes.empty()){
         current_process = &this->processes.front(); 
-        if(this->block.back().get_id()== (*last_process))
-            *last_process = current_process->get_id();
+        if(this->block.back().get_id()== this->last_process)
+            this->last_process = current_process->get_id();
     } 
 }
 

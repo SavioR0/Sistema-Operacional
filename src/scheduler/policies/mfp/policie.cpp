@@ -107,24 +107,32 @@ void MFP::raffle(){
         }
     }
     //Procurar o processo sorteado na lista de stopped.
-    for(int i = 1; i < (int)stopped.size(); i++){
+    for(int i = 0; i < (int)stopped.size(); i++){
         if(stopped.front().get_id() == raffle_id){
             cout<<"Colocando o "<<stopped.front().get_id()<< " na fila de processos."<<endl;
-            processes.push_front(stopped.front());
+            this->processes.push_front(stopped.front());
+            this->last_process = this->processes.front().get_id();
             stopped.pop_front();
         }
-        stopped.push_back(stopped.front());
-        stopped.pop_front(); 
+        this->stopped.push_back(stopped.front());
+        this->stopped.pop_front(); 
     }
 
     cout<<"Tamanho da lista principal "<<(int)processes.size()<<endl;
 
-    /* for(Process item: (*stopped)){
+
+    //Tirar os bilhetes do processo sorteado.
+
+    //Sortear bilhetes para os demais.
+
+
+    /* for(Process item: this->stopped)){
         if(item.get_id()!= raffle_id){
             (*tokens).push_back(item.get_id());
             (*distribuited_tokens)++;
         }
     }  */
+
 }
 
 

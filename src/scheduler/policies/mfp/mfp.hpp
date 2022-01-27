@@ -33,18 +33,19 @@ class MFP{
         
         float         quantum_time;
         bool          empty_lists = false;
+        int last_process;
 
         vector<int>   tokens;
         int           distribuited_tokens = 0;
     
         void check_block_list();
-        void check_finished(Process* current_process, int* quantum, int* last_process);
-        void check_process_in_pogress(Process* current_process, int* last_process);
+        void check_finished(Process* current_process, int* quantum);
+        void check_process_in_pogress(Process* current_process);
         void update_timestamp(Process** current_process);
 
         void executing_process_cpu    (Process* current_process);
-        void executing_process_memory (Process* current_process, int* last_process);
-        void executing_process_storage(Process* current_process, int* last_process);
+        void executing_process_memory (Process* current_process);
+        void executing_process_storage(Process* current_process);
 
     public:
         MFP();
