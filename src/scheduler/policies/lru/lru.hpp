@@ -29,6 +29,7 @@ class LRU{
         void executing_process_cpu    (Process* current_process);
         void executing_process_memory (Process* current_process);
         void executing_process_storage(Process* current_process);
+        void sort_list(int* total_cycles);
 
     public:
         LRU();

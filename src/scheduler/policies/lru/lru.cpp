@@ -134,6 +134,14 @@ void LRU::update_timestamp(Process** current_process){
     else (*current_process) = NULL;
 }
 
+void LRU::sort_list(int* total_cycles){
+    if(!this->processes.empty())
+        this->processes.sort([](Process p1, Process p2) {
+            return p1.get_cyles() < p2.get_cyles();
+        });
+    *total_cycles = (int) this->processes.size() + (int) this->block.size();
+}
+
 //Funções de execução
 int LRU::execute_processes(){
     if(this->processes.empty()){
@@ -146,6 +154,7 @@ int LRU::execute_processes(){
     int      quantum              = 0;
     bool     await                = false;
     int      pc                   = 0;
+    int      total_cycles         = 0;
 
     do{
 
@@ -153,6 +162,7 @@ int LRU::execute_processes(){
 
         if(current_process != NULL){ 
             if(quantum <= 0){
+                if(total_cycles == 0) this->sort_list(&total_cycles);
                 quantum = random_number2( current_process->get_max_quantum());
                 current_process->sub_quantum(quantum);
             }
@@ -174,6 +184,7 @@ int LRU::execute_processes(){
         this->check_finished(current_process, &quantum);
         
         quantum--;
+        total_cycles--;
         
         if(quantum == 0){
             await = false;
@@ -245,4 +256,6 @@ void LRU::report(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<"   ------------------------------------------------------------------------------------------------------"<<endl;
+
+    
 }
