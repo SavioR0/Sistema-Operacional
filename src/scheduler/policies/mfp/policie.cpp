@@ -1,5 +1,10 @@
 #include "mfp.hpp"
 
+//O sistema de bilhete funciona da seguinte forma: temos um vetor, e as casas do vetor são os endereços- EX: tokens[0] significa o bilhete 0
+// O conteudo (que incialmente é -1) é preenchido com o id do processo que sortear o bilhete - EX: Processo 15 ganhou o bilhete 0, então tokens[0]=15
+//Quando o bilhete é sorteado, o processo dono do bilhete terá todos os seus cancelados. EX = processo 15 tem tokens[0] = 15 e tokens[20] = 15, ambos serão anulados, tokens[0] = -1 e tokens[20] = -1, ou seja , o 15 não tem mais bilhetes.
+
+
 //Funções que inicializam a aplicação da politica
 void MFP::change_empty_lists(){
     this->empty_lists = true;
@@ -122,6 +127,9 @@ void MFP::raffle(){
 
 
     //Tirar os bilhetes do processo sorteado.
+    //Percorrer o vetor e colocar -1 no valor do bilhete
+
+
 
     //Sortear bilhetes para os demais.
 
