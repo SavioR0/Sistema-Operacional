@@ -3,18 +3,18 @@
 Process::Process(){}
 
 Process::Process( int id, float cycles, int max_quantum, int timestamp, int priority,  string type){
-    string* status = new string;
+    string* status   = new string;
     string* type_ptr = new string;
-    *status   = status_ready;
-    *type_ptr = type;
+    *status          = status_ready;
+    *type_ptr        = type;
 
-    this->id =  id;
-    this->cycles = cycles;
+    this->id          = id;
+    this->cycles      = cycles;
     this->max_quantum = max_quantum;
-    this->timestamp = timestamp;
-    this->priority = priority;
-    this->type = type_ptr;
-    this->status = status;
+    this->timestamp   = timestamp;
+    this->priority    = priority;
+    this->type        = type_ptr;
+    this->status      = status;
 }
 
 void Process::set_id                 (int value)     { this->id                     = value;}

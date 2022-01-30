@@ -22,7 +22,7 @@ int main(){
     cout << fixed << setprecision(3);
 
     Kernel*    kernel    = new Kernel;
-    Scheduler* scheduler = new Scheduler(kernel, quantum_time, fifo_policie_string);
+    Scheduler* scheduler = new Scheduler(kernel, quantum_time, mfp_policie_string);
     Shell*     shell     = new Shell;
 
     pthread_t thread_execute_process; 

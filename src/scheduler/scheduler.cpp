@@ -73,8 +73,8 @@ void Scheduler::restart(){
         this->fifo_policie->restart();
     if(this->policie == lru_policie_string )
         this->lru_policie->restart();
-    if(this->policie == mfp_policie_string )
-        this->mfp_policie->restart();
+    /*if(this->policie == mfp_policie_string )
+        this->mfp_policie->restart();*/
 }
 
 void Scheduler::execute(){
@@ -82,8 +82,8 @@ void Scheduler::execute(){
         this->pc = this->fifo_policie->execute_processes();
     if(this->policie == lru_policie_string ) 
         this->pc = this->lru_policie->execute_processes();
-    if(this->policie == mfp_policie_string )
-        this->pc = this->mfp_policie->execute_processes();
+    /*if(this->policie == mfp_policie_string )
+        this->mfp_policie->execute();*/
 }
 void Scheduler::report(){
     if(this->policie == fifo_policie_string ) 

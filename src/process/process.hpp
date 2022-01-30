@@ -23,7 +23,6 @@ class Process{
         string*  status;
         string*  type;
 
-        vector<int> tokensProcess;
     public:
         
         
