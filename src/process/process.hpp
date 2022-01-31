@@ -25,6 +25,7 @@ class Process{
 
     public:
         
+        int assist;
         
         Process();
         Process( int id, float cycles, int max_quantum, int timesamp, int priority, string type);

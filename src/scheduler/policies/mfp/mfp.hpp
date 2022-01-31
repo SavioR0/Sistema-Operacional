@@ -26,18 +26,21 @@ class MFP{
         Cpu*          cpu_ref;
         Memory*       memory_ref;
         Storage*      storage_ref;
-                
+
         float         quantum_time;
 
         void distribution_list(list<Process> processes);
+        void execute_high_priority();
+        void after_fifo(list<Process>* current_list, list<Process>* next_list);
+        void update_timestamp_after_fifo(int time);
     
     public:
         MFP();
         MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* storage_ref, float quantum_time);
 
+
+        void execute();
         void report();
-
-
 };
 
 #endif

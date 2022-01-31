@@ -10,8 +10,6 @@ MFP::MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* 
 }
 MFP::MFP(){}
 
-
-
 void MFP::distribution_list(list<Process> processes){
     if(processes.empty()){
         cout << "\n\nNão foi possível concluir a operação, lista de processos vazia, retornando." << endl;
@@ -21,7 +19,7 @@ void MFP::distribution_list(list<Process> processes){
 
     while(!processes.empty()){
         current_process = &processes.front();
-            if(current_process->get_priority() == 1) this->priority1.push_back( *current_process );
+             if(current_process->get_priority() == 1) this->priority1.push_back( *current_process );
         else if(current_process->get_priority() == 2) this->priority2.push_back( *current_process );
         else if(current_process->get_priority() == 3) this->priority3.push_back( *current_process );
         else if(current_process->get_priority() == 4) this->priority4.push_back( *current_process );
@@ -30,6 +28,13 @@ void MFP::distribution_list(list<Process> processes){
     }
     free(current_process);
 }
+
+
+void MFP::execute(){
+    this->execute_high_priority();
+}
+
+
 
 void MFP::report(){
     system("clear");
@@ -62,6 +67,6 @@ void MFP::report(){
     }
     cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
 
-    cout<<"\n\n\n"<<endl;
-    //this->fifo_policie->report();
+    cout<<"\n"<<endl;
+    if(this->fifo_policie != NULL ) this->fifo_policie->report_fifo();
 }
