@@ -12,7 +12,6 @@ LRU::LRU(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* 
 
 // Funções auxiliares
 int random_number2(int max){
-    //srand(2);
     return rand()%max + 1;
 }
 

@@ -28,11 +28,25 @@ class MFP{
         Storage*      storage_ref;
 
         float         quantum_time;
+        vector<int>   tokens_available;
+        int           range_tokens = 0;
 
         void distribution_list(list<Process> processes);
         void execute_high_priority();
         void after_fifo(list<Process>* current_list, list<Process>* next_list);
         void update_timestamp_after_fifo(int time);
+        void execute_processes();
+        void generate_token();
+        void distribute_tokens();
+        void draw_token();
+        void recover_tokens(list<Process>::iterator list_iterator);
+        void executing_process_cpu(list<Process>::iterator list_iterator);
+        void executing_process_memory(list<Process>::iterator list_iterator);
+        void executing_process_storage(list<Process>::iterator list_iterator);
+        void update_timestamp();
+        void check_block_list();
+        void check_finished(list<Process>::iterator list_iterator, int* quantum);
+        void check_process_in_pogress(list<Process>::iterator list_iterator);
     
     public:
         MFP();

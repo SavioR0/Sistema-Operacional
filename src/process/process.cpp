@@ -60,6 +60,10 @@ void Process::set_type(string value){
     this->type = assist;
 }
 
+void Process::add_token(int value)    { this->tokens.push_back(value); }
+bool Process::winning_token(int value){ return count(this->tokens.begin(), this->tokens.end(), value); }
+vector<int> Process::get_tokens(){return this->tokens;}
+void Process::remove_tokens(){this->tokens.clear();}
 
 
 int Process::get_id                  (){return this->id;         }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #define status_ready    "Pronto"
 #define status_await    "Em Execucao"
@@ -15,13 +16,14 @@ using namespace std;
 
 class Process{
     private:
-        int      id;
-        float    cycles;
-        int      max_quantum;
-        int      timestamp;
-        int      priority;
-        string*  status;
-        string*  type;
+        int         id;
+        float       cycles;
+        int         max_quantum;
+        int         timestamp;
+        int         priority;
+        string*     status;
+        string*     type;
+        vector<int> tokens;
 
     public:
         
@@ -44,6 +46,11 @@ class Process{
         void set_status_addres(string* value );
         void set_type(string value);
         void set_type_address(string* value );
+
+        void add_token(int value);
+        bool winning_token(int value);
+        vector<int> get_tokens();
+        void remove_tokens();
 
         void sub_quantum(int current_quantum);
         void add_timestamp();

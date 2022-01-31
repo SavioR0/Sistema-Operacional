@@ -32,6 +32,7 @@ void MFP::distribution_list(list<Process> processes){
 
 void MFP::execute(){
     this->execute_high_priority();
+    this->execute_processes();
 }
 
 
@@ -66,6 +67,14 @@ void MFP::report(){
         cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
     }
     cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"\n\nRANGE: " << this->range_tokens<<endl;
+    int soma = 0;
+    for(Process item : this->priority1){
+        soma += (int) item.get_tokens().size();
+        cout<<"\tProcesso: "<<item.get_id()<<"\tTamanho: "<< (int) item.get_tokens().size()<<endl;
+    
+    }
+    cout<<"\n\nSoma: " <<soma;
 
     cout<<"\n"<<endl;
     if(this->fifo_policie != NULL ) this->fifo_policie->report_fifo();

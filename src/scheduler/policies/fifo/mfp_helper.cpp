@@ -1,7 +1,6 @@
 #include "fifo.hpp"
 
 int random_number_mfp_helper(int max){
-    srand(2);
     return rand()%max + 1;
 }
 void add_assist_maxquantum_value(list<Process>* list){
