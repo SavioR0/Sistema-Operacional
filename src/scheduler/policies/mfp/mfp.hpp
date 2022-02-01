@@ -29,6 +29,7 @@ class MFP{
 
         float         quantum_time;
         vector<int>   tokens_available;
+        vector<int>   tokens_surplus;
         int           range_tokens = 0;
 
         void distribution_list(list<Process> processes);
@@ -40,13 +41,14 @@ class MFP{
         void distribute_tokens();
         void draw_token();
         void recover_tokens(list<Process>::iterator list_iterator);
-        void executing_process_cpu(list<Process>::iterator list_iterator);
-        void executing_process_memory(list<Process>::iterator list_iterator);
-        void executing_process_storage(list<Process>::iterator list_iterator);
-        void update_timestamp();
+        void executing_process_cpu(Process* current_process);
+        void executing_process_memory(Process* current_process);
+        void executing_process_storage(Process* current_process);
+        void update_timestamp(Process** current_process);
         void check_block_list();
-        void check_finished(list<Process>::iterator list_iterator, int* quantum);
-        void check_process_in_pogress(list<Process>::iterator list_iterator);
+        void check_finished(Process* current_process, int* quantum);
+        void check_process_in_pogress(Process* current_process);
+        list<Process>::iterator raffle();
     
     public:
         MFP();

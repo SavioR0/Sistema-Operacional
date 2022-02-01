@@ -2,7 +2,8 @@
 
 // Funções auxiliares
 int random_number_mfp(int max){
-    return rand()%max + 1;
+    int x = rand()%max + 1;
+    return x;
 }
 
 void MFP::check_block_list(){
@@ -71,99 +72,148 @@ void MFP::check_block_list(){
     free(ids1);
 }
 
-void MFP::check_finished(list<Process>::iterator list_iterator, int* quantum){
-    if(list_iterator == this->priority1.end()) return;
+void MFP::check_finished(Process* current_process, int* quantum){
+    if(current_process == NULL) return;
     
-    if(list_iterator->get_cyles() <= 0){
-        list_iterator->set_status_finished();
-        this->finalized.push_back(*(&*list_iterator));
-        this->priority1.erase(list_iterator);
-        list_iterator = this->priority1.begin();
+    if(current_process->get_cyles() <= 0){
+        current_process->set_status_finished();
+        this->finalized.push_back(*current_process);
+        current_process = NULL;
+        this->priority1.pop_front();
         *quantum = 1;  
-
     }
 
 }
 
-void MFP::check_process_in_pogress(list<Process>::iterator list_iterator){
-    if(list_iterator == this->priority1.end()) return;
-
+void MFP::check_process_in_pogress(Process* current_process){
+    if(current_process == NULL) return;
     
-    if( list_iterator->get_status() == status_await ){
+    if( current_process->get_status() == status_await ){
         cpu_ref->remove_process();
-        list_iterator->set_status_ready(); 
+        current_process->set_status_ready(); 
+        this->priority1.push_back(*current_process);                
+        this->priority1.pop_front();
     }
 }
 
+void MFP::update_timestamp(Process** current_process){
 
-
-
-
-
-
-void MFP::update_timestamp(){
-    list<Process>::iterator assist;
-
-    if(!this->priority1.empty())
-        for(assist = this->priority1.begin(); assist != this->priority1.end(); assist++)
-            assist->add_timestamp();
-    
+    if(!this->priority1.empty()) 
+    for(int i = 0; i < (int) this->priority1.size(); i++){
+        this->priority1.front().add_timestamp();
+        this->priority1.push_back(  this->priority1.front()  );
+        this->priority1.pop_front();
+    }
 
     if(!this->block.empty())
-        for(assist = this->block.begin(); assist != this->block.end(); assist++)
-            assist->add_timestamp();
+    for(int i = 0; i < (int) this->block.size(); i++){
+        this->block.front().add_timestamp();
+        this->block.push_back(  this->block.front()  );
+        this->block.pop_front();
+    }
+
+    if(!this->priority1.empty())(*current_process) = &this->priority1.front();
+    else (*current_process) = NULL;
 }
 
+
+
+
+
+
+
+
+
 void MFP::generate_token(){
-    int size_new_tokens = (int) this->priority1.size() - (int) this->tokens_available.size();
-    
-    if(size_new_tokens == 0) return;
-    else if(size_new_tokens > 0)
-        for(int i = 0; i < size_new_tokens; i++) this->tokens_available.push_back( this->range_tokens + i);
-    else{
-        cout<<"Cái no -1"<<endl;
-        size_new_tokens = size_new_tokens + (int) this->priority1.size();
-        for(int i = 0; i < size_new_tokens; i++) this->tokens_available.push_back( this->range_tokens + i);
+    int tokens_generate = ((int) this->priority1.size()) - ((int) this->tokens_available.size());
+
+    if(tokens_generate == 0) return; //Já tenho o número de fichas suficientes para todo mundo.
+   
+    else if(tokens_generate < 0 ){   //Tenho mais fichas que o necessário.
+        for(int i = 0; i < (tokens_generate * -1); i++){  //Guardei todos os Tokens excedentes 
+            this->tokens_surplus.push_back( this->tokens_available.back() );
+            this->tokens_available.pop_back();
+        }
+
+
+    }else if(tokens_generate > 0){ // Preciso de novos Tokens
+        if(this->tokens_surplus.empty()){ //Existem tokens excedentes?
+            for(int i = 0; i < tokens_generate; i++) this->tokens_available.push_back( this->range_tokens + i);
+            this->range_tokens += tokens_generate;
+        }
+        else if( (int) this->tokens_surplus.size() > tokens_generate  ){ // A quantidade execendetes é maior do que a quantidade que preciso 
+            for(int i = 0; i < tokens_generate; i++){
+                this->tokens_available.push_back( this->tokens_surplus.back() );
+                this->tokens_surplus.pop_back();
+            }
+        }
+        else if((int) this->tokens_surplus.size() <= tokens_generate){ // A quantidade execendetes é menor do que a quantidade que preciso 
+            int new_tokens =  tokens_generate - (int) this->tokens_surplus.size(); //Quantos tokens preciso gerar
+             for(int i = 0; i < (int) this->tokens_surplus.size(); i++){ //Peguei os tokens existentes
+                this->tokens_available.push_back( this->tokens_surplus.back() );
+                this->tokens_surplus.pop_back();
+            }
+            for(int i = 0; i < new_tokens; i++) this->tokens_available.push_back( this->range_tokens + i); //gerei novos tokens
+            this->range_tokens += new_tokens;
+        }
     }
-    this->range_tokens += size_new_tokens;
 
 }
 void MFP::distribute_tokens(){
-    if((int)this->tokens_available.size() == 0) return;
+    if(this->tokens_available.empty()) return; // Tenho Tokens para distribuir?
+    list<Process>::iterator list_iterator= this->priority1.begin();
 
-    list<Process>::iterator list_iterator = this->priority1.begin();
-    while(this->tokens_available.size() > 0){
-        cout<<"Check 1" <<endl;
-        if(!this->priority1.empty()){
-            list_iterator = this->priority1.begin();
-            cout<<"Check 2" <<endl;
-            for(int i=0; i < (int) this->priority1.size(); i++){
-                list_iterator->add_token(this->tokens_available.front());
-                this->tokens_available.erase(this->tokens_available.begin());
-                list_iterator++;
-            }
-        }
-        else if(!this->block.empty()){
-            list_iterator = this->block.begin();
-            cout<<"Check 3" <<endl;
-            for(int i=0; i < (int) this->block.size(); i++){
-                list_iterator->add_token(this->tokens_available.front());
-                this->tokens_available.erase(this->tokens_available.begin());
-                list_iterator++;
-            }
-        }
+    for(int i = 0; i < (int) this->priority1.size(); i++){
+        list_iterator->add_token(this->tokens_available.back());
+        this->tokens_available.pop_back();
+        list_iterator++;
     }
+
 }
 void MFP::recover_tokens(list<Process>::iterator list_iterator){
-
-    if(list_iterator == this->priority1.end()) return;
-    cout<<"\n\nEnterei em recover_tokens"<<endl;
-    cout<<"Tamanho da lista de Tokens: " << (int) this->tokens_available.size() <<endl;
-    cout<<"Tamanho da lista de Tokens no processo: " << (int) list_iterator->get_tokens().size() <<endl; 
-
+    if(list_iterator == this->priority1.end()) return; //Verificando que o processo recebido é válido 
+    
     this->tokens_available = list_iterator->get_tokens();
     list_iterator->remove_tokens();
+
+
 }
+list<Process>::iterator MFP::raffle(){
+    list<Process>::iterator list_iterator = this->priority1.begin();
+    int luck_number = 0;
+    bool valid = false;
+
+    if(this->range_tokens == (int)this->tokens_surplus.size()){ 
+
+  
+
+        this->generate_token();
+        this->distribute_tokens();
+    }
+    if(this->range_tokens == (int)this->tokens_surplus.size()) cout<<"Deu ruim"<< endl;
+
+    
+    
+    
+  do{
+    valid = false;
+    while(valid == false){
+        luck_number = rand()%(this->range_tokens - 1) + 1 ;  
+        if(this->tokens_surplus.empty()) valid = true;
+        else 
+            valid = !count(this->tokens_surplus.begin(), this->tokens_surplus.end(), luck_number);  
+    }
+
+        for(int i = 0; i <(int) this->priority1.size(); i++){
+            if(list_iterator->winning_token(luck_number)) break;
+            list_iterator++;
+        }
+    }while(list_iterator == priority1.end());
+    
+
+    return list_iterator;
+}
+
 
 
 //Funções de execução
@@ -172,66 +222,121 @@ void MFP::execute_processes(){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return;
     }
-    int luck;
     int quantum = 0;
     bool await  = false;
     list<Process>::iterator list_iterator = this->priority1.begin();
     int      size_list_process    = (int) this->priority1.size();
+    Process* current_process;
 
 
 
      do{
-
-        if(!this->priority1.empty()){ 
+         if(current_process != NULL){ 
             if(quantum <= 0){
-                cout<<"\n\nEntrei em sortear"<<endl;  
-                cout<<"Verificação 1."<<endl;
                 this->generate_token();
-                cout<<"Verificação 2."<<endl;
                 this->distribute_tokens();
-                cout<<"Verificação 3."<<endl;
-                do{
-                luck = random_number_mfp(this->range_tokens - 1);
-                for(list_iterator = this->priority1.begin(); list_iterator != this->priority1.end(); list_iterator++)
-                    if(list_iterator->winning_token(luck)) break;               
-                }while(list_iterator == this->priority1.end());
-                cout<<"Verificação 5."<<endl;
+                list_iterator = this->raffle();
                 this->recover_tokens(list_iterator);
-                cout<<"Verificação 6."<<endl;
-                quantum = random_number_mfp( list_iterator->get_max_quantum());
-                cout<<"Verificação 7."<<endl;
-                list_iterator->sub_quantum(quantum);
-                cout<<"\n\nSaí em sortear"<<endl;  
 
+                while(this->priority1.front().get_id() != list_iterator->get_id()){
+                    this->priority1.push_back(this->priority1.front());
+                    this->priority1.pop_front();
+                }
+                current_process = &this->priority1.front();
+
+                quantum = random_number_mfp( current_process->get_max_quantum());
+                current_process->sub_quantum(quantum);
             }
-            
 
-            if(list_iterator->get_status() == status_ready && await == false){
+            if(current_process->get_status() == status_ready && await == false){
                 await = true;
-                if     (list_iterator->get_type() == "cpu-bound"   ) executing_process_cpu    (list_iterator);
-                else if(list_iterator->get_type() == "memory-bound") executing_process_memory (list_iterator);
-                else if(list_iterator->get_type() == "io-bound"    ) executing_process_storage(list_iterator);
+                if     (current_process->get_type() == "cpu-bound"   ) executing_process_cpu    (current_process);
+                else if(current_process->get_type() == "memory-bound") executing_process_memory (current_process);
+                else if(current_process->get_type() == "io-bound"    ) executing_process_storage(current_process);
 
             }
         }
         this->memory_ref->add_time_memory();
         this->storage_ref->add_time_storage();
 
-        this->update_timestamp();
+        this->update_timestamp(&current_process);
         this->check_block_list();
 
-        this->check_finished(list_iterator, &quantum);
+        this->check_finished(current_process, &quantum);
         
         quantum--;
         
         if(quantum == 0){
             await = false;
-            this->check_process_in_pogress(list_iterator);
-
+            this->check_process_in_pogress(current_process);
+            if(this->priority1.empty()) current_process = NULL;
+            else                        current_process = &this->priority1.front();
         }
-        usleep( (quantum_time * 1000000) );
+
+
+
+
+
+
+         /*if(current_process != NULL){ 
+            if(quantum <= 0){
+                
+                cout<<"\n\n\n\n\n\n\nQuantum = 0"<<endl;
+                cout<<"Lisa de prioridade 1"<<endl;
+                for(int i = 0; i < (int) this->priority1.size(); i++){
+                    cout<<"\tprocesso: " << this->priority1.front().get_id()<<endl;
+                    this->priority1.push_back(this->priority1.front());
+                    this->priority1.pop_front();
+                }
+
+                cout<<"\nLisa de Bloqueados"<<endl;
+
+                for(int i = 0; i < (int) this->block.size(); i++){
+                    cout<<"\tprocesso: " << this->block.front().get_id()<<endl;
+                    this->block.push_back(this->block.front());
+                    this->block.pop_front();
+                }
+
+                this->generate_token();
+                this->distribute_tokens();
+                list_iterator = this->raffle();
+                this->recover_tokens(list_iterator);
+                quantum = random_number_mfp( list_iterator->get_max_quantum());
+                list_iterator->sub_quantum(quantum);
+            }
+            
+
+            if(list_iterator->get_status() == status_ready && await == false){
+                await = true;
+                if     (list_iterator->get_type() == "cpu-bound"   ) executing_process_cpu    (&*list_iterator);
+                else if(list_iterator->get_type() == "memory-bound") executing_process_memory (&*list_iterator);
+                else if(list_iterator->get_type() == "io-bound"    ) executing_process_storage(&*list_iterator);
+
+            }
+         }
+
+
+
+
+        this->memory_ref->add_time_memory();
+        this->storage_ref->add_time_storage();
+        this->update_timestamp();
+        this->check_block_list();
+        this->check_finished(list_iterator, &quantum);
         
-    }while( (int) this->finalized.size() < size_list_process );
+        
+        quantum--;
+        
+        if(quantum <= 0){
+            await = false;
+            this->check_process_in_pogress(list_iterator);
+        }
+
+        */
+        usleep( (quantum_time * 1000000) );
+
+    }while( (int) this->finalized.size() < size_list_process  );
+    cout<<"Saí";
 
 
 
@@ -240,36 +345,38 @@ void MFP::execute_processes(){
 
 
 
-void MFP::executing_process_cpu(list<Process>::iterator list_iterator){
-    list_iterator->set_status_await();
-    this->cpu_ref->set_process( &*list_iterator );
+void MFP::executing_process_cpu(Process* current_process){
+    current_process->set_status_await();
+    this->cpu_ref->set_process( current_process );
 }
 
-void MFP::executing_process_memory(list<Process>::iterator list_iterator){
-    list_iterator->set_status_block();
+void MFP::executing_process_memory(Process* current_process){
+    current_process->set_status_block();
     this->memory_ref->insert_memory(
-        list_iterator->get_id(),
-        list_iterator->get_type(),
+        current_process->get_id(),
+        current_process->get_type(),
         random_number_mfp(4));
 
-    this->block.push_back( *(&*list_iterator) );
+    this->block.push_back( (*current_process) );
 
-    if(!this->priority1.empty()) this->priority1.erase(list_iterator);
-
+    current_process = NULL;
+    this->priority1.pop_front();
+    if(!this->priority1.empty()) current_process = &this->priority1.front(); 
+    
 }
 
-
-void MFP::executing_process_storage(list<Process>::iterator list_iterator){
-    list_iterator->set_status_block();
+void MFP::executing_process_storage(Process* current_process){
+    current_process->set_status_block();
     this->storage_ref->insert_block_data(
-        list_iterator->get_id(),
-        list_iterator->get_type(),
+        current_process->get_id(),
+        current_process->get_type(),
         random_number_mfp(4));
     
-    this->block.push_back( *(&*list_iterator) );
+    this->block.push_back( (*current_process) );
 
-    if(!this->priority1.empty()) this->priority1.erase(list_iterator);
-    
+    current_process = NULL;
+    this->priority1.pop_front();
+    if(!this->priority1.empty()) current_process = &this->priority1.front(); 
     
 }
 

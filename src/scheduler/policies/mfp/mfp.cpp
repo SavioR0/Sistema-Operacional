@@ -71,10 +71,12 @@ void MFP::report(){
     int soma = 0;
     for(Process item : this->priority1){
         soma += (int) item.get_tokens().size();
-        cout<<"\tProcesso: "<<item.get_id()<<"\tTamanho: "<< (int) item.get_tokens().size()<<endl;
     
     }
-    cout<<"\n\nSoma: " <<soma;
+    cout<<"\nEm campo: " <<soma;
+    cout<<"\nExcedente: " <<this->tokens_surplus.size();
+    cout<<"\nSoma: " << soma + (int) this->tokens_surplus.size();
+
 
     cout<<"\n"<<endl;
     if(this->fifo_policie != NULL ) this->fifo_policie->report_fifo();
