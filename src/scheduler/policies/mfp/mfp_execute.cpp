@@ -272,67 +272,6 @@ void MFP::execute_processes(){
             if(this->priority1.empty()) current_process = NULL;
             else                        current_process = &this->priority1.front();
         }
-
-
-
-
-
-
-         /*if(current_process != NULL){ 
-            if(quantum <= 0){
-                
-                cout<<"\n\n\n\n\n\n\nQuantum = 0"<<endl;
-                cout<<"Lisa de prioridade 1"<<endl;
-                for(int i = 0; i < (int) this->priority1.size(); i++){
-                    cout<<"\tprocesso: " << this->priority1.front().get_id()<<endl;
-                    this->priority1.push_back(this->priority1.front());
-                    this->priority1.pop_front();
-                }
-
-                cout<<"\nLisa de Bloqueados"<<endl;
-
-                for(int i = 0; i < (int) this->block.size(); i++){
-                    cout<<"\tprocesso: " << this->block.front().get_id()<<endl;
-                    this->block.push_back(this->block.front());
-                    this->block.pop_front();
-                }
-
-                this->generate_token();
-                this->distribute_tokens();
-                list_iterator = this->raffle();
-                this->recover_tokens(list_iterator);
-                quantum = random_number_mfp( list_iterator->get_max_quantum());
-                list_iterator->sub_quantum(quantum);
-            }
-            
-
-            if(list_iterator->get_status() == status_ready && await == false){
-                await = true;
-                if     (list_iterator->get_type() == "cpu-bound"   ) executing_process_cpu    (&*list_iterator);
-                else if(list_iterator->get_type() == "memory-bound") executing_process_memory (&*list_iterator);
-                else if(list_iterator->get_type() == "io-bound"    ) executing_process_storage(&*list_iterator);
-
-            }
-         }
-
-
-
-
-        this->memory_ref->add_time_memory();
-        this->storage_ref->add_time_storage();
-        this->update_timestamp();
-        this->check_block_list();
-        this->check_finished(list_iterator, &quantum);
-        
-        
-        quantum--;
-        
-        if(quantum <= 0){
-            await = false;
-            this->check_process_in_pogress(list_iterator);
-        }
-
-        */
         usleep( (quantum_time * 1000000) );
 
     }while( (int) this->finalized.size() < size_list_process  );
