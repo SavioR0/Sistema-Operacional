@@ -2,7 +2,7 @@
 
 Process::Process(){}
 
-Process::Process( int id, float cycles, int max_quantum, int timestamp, int priority,  string type){
+Process::Process( int id, float cycles, int max_quantum, int timestamp, int priority, int size, string type){
     string* status   = new string;
     string* type_ptr = new string;
     *status          = status_ready;
@@ -12,6 +12,7 @@ Process::Process( int id, float cycles, int max_quantum, int timestamp, int prio
     this->cycles      = cycles;
     this->max_quantum = max_quantum;
     this->timestamp   = timestamp;
+    this->size        = size;
     this->priority    = priority;
     this->type        = type_ptr;
     this->status      = status;
@@ -21,6 +22,7 @@ void Process::set_id                 (int value)     { this->id                 
 void Process::set_cycles             (float value)   { this->cycles                 = value;}
 void Process::set_max_quantum        (int value)     { this->max_quantum            = value;}
 void Process::set_timestamp          (int value)     { this->timestamp              = value;}
+void Process::set_size               (int value)     { this->size                   = value;}
 void Process::set_priority           (int value)     { this->priority               = value;}
 void Process::set_status_addres      (string* value) { this->status                 = value;}
 void Process::set_type_address       (string* value) { this->type                   = value;}

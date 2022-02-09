@@ -27,6 +27,7 @@ list<Process> Scheduler::read_processes(){
             (float)  process_json[json_list_name][i]["ciclos"],
             (int)    process_json[json_list_name][i]["max_quantum"],
             (int)    process_json[json_list_name][i]["timestamp"],
+            (int)    process_json[json_list_name][i]["size"],
             (int)    process_json[json_list_name][i]["prioridade"],
             (string) process_json[json_list_name][i]["init_type"]
         );

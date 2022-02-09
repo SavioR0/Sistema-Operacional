@@ -31,7 +31,7 @@ public:
     int  hashing_function(int key, int size);
 
     int  insert_memory(int value, string description, int time);
-    int  add_hash(MemoryContent memory_content);
+    int  add(MemoryContent memory_content);
     int  search_memory(int value, MemoryContent* mc); 
     int  remove_memory(int value); 
 

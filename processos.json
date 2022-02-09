@@ -6,6 +6,7 @@
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 15,
             "prioridade": 4
         },
         {
@@ -14,6 +15,7 @@
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 12,
             "prioridade": 2
         },
         {
@@ -22,6 +24,7 @@
             "max_quantum": 1,
             "init_type": "io-bound",
             "timestamp": 0,
+            "size" : 13,
             "prioridade": 1
         },
         {
@@ -30,6 +33,7 @@
             "max_quantum": 3,
             "init_type": "memory-bound",
             "timestamp": 0,
+            "size" : 12,
             "prioridade": 1
         },
         {
@@ -38,6 +42,7 @@
             "max_quantum": 3,
             "init_type": "memory-bound",
             "timestamp": 0,
+            "size" : 10,
             "prioridade": 2
         },
         {
@@ -46,6 +51,7 @@
             "max_quantum": 1,
             "init_type": "memory-bound",
             "timestamp": 0,
+            "size" : 9,
             "prioridade": 2
         },
         {
@@ -54,6 +60,7 @@
             "max_quantum": 1,
             "init_type": "io-bound",
             "timestamp": 0,
+            "size" : 19,
             "prioridade": 3
         },
         {
@@ -62,6 +69,7 @@
             "max_quantum": 3,
             "init_type": "io-bound",
             "timestamp": 0,
+            "size" : 10,
             "prioridade": 4
         },
         {
@@ -70,6 +78,7 @@
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 16,
             "prioridade": 4
         },
         {
@@ -78,6 +87,7 @@
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 20,
             "prioridade": 3
         },
         {
@@ -86,6 +96,7 @@
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 8,
             "prioridade": 1
         },
         {
@@ -94,6 +105,7 @@
             "max_quantum": 3,
             "init_type": "memory-bound",
             "timestamp": 0,
+            "size" : 11,
             "prioridade": 2
         },
         {
@@ -102,6 +114,7 @@
             "max_quantum": 4,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "size" : 10,
             "prioridade": 3
         },
         {
@@ -110,6 +123,7 @@
             "max_quantum": 2,
             "init_type": "io-bound",
             "timestamp": 0,
+            "size" : 14,
             "prioridade": 1
         },
         {
@@ -118,222 +132,7 @@
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,
-            "prioridade": 2
-        }
-    ],
-    "cpu_processes": [
-        {
-            "id": 1,
-            "ciclos": 10,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 4
-        },
-        {
-            "id": 2,
-            "ciclos": 4,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 9,
-            "ciclos": 10,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 4
-        },
-        {
-            "id": 10,
-            "ciclos": 14,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 3
-        },
-        {
-            "id": 11,
-            "ciclos": 18,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 1
-        },
-        {
-            "id": 13,
-            "ciclos": 19,
-            "max_quantum": 4,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 3
-        },
-        {
-            "id": 15,
-            "ciclos": 3,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        }
-    ],
-    "storage_processes":[
-        {
-            "id": 3,
-            "ciclos": 8,
-            "max_quantum": 1,
-            "init_type": "io-bound",
-            "timestamp": 0,
-            "prioridade": 0
-        },
-        {
-            "id": 7,
-            "ciclos": 5,
-            "max_quantum": 1,
-            "init_type": "io-bound",
-            "timestamp": 0,
-            "prioridade": 3
-        },
-        {
-            "id": 8,
-            "ciclos": 17,
-            "max_quantum": 3,
-            "init_type": "io-bound",
-            "timestamp": 0,
-            "prioridade": 4
-        },
-        {
-            "id": 14,
-            "ciclos": 9,
-            "max_quantum": 2,
-            "init_type": "io-bound",
-            "timestamp": 0,
-            "prioridade": 1
-        }
-    ],
-    "memory_processes":[
-        {
-            "id": 4,
-            "ciclos": 13,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 1
-        },
-        {
-            "id": 5,
-            "ciclos": 22,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 6,
-            "ciclos": 2,
-            "max_quantum": 1,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 12,
-            "ciclos": 11,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        }
-    ],
-    "memory_cpu_processes":[
-        {
-            "id": 1,
-            "ciclos": 10,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 4
-        },
-        {
-            "id": 2,
-            "ciclos": 4,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 4,
-            "ciclos": 13,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 1
-        },
-        {
-            "id": 9,
-            "ciclos": 10,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 4
-        },
-        {
-            "id": 5,
-            "ciclos": 22,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 6,
-            "ciclos": 2,
-            "max_quantum": 1,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 10,
-            "ciclos": 14,
-            "max_quantum": 2,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 3
-        },
-        {
-            "id": 11,
-            "ciclos": 18,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 1
-        },
-        {
-            "id": 13,
-            "ciclos": 19,
-            "max_quantum": 4,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
-            "prioridade": 3
-        },
-        {
-            "id": 12,
-            "ciclos": 11,
-            "max_quantum": 3,
-            "init_type": "memory-bound",
-            "timestamp": 0,
-            "prioridade": 2
-        },
-        {
-            "id": 15,
-            "ciclos": 3,
-            "max_quantum": 1,
-            "init_type": "cpu-bound",
-            "timestamp": 0,
+            "size" : 12,
             "prioridade": 2
         }
     ]

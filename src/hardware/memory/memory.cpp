@@ -55,10 +55,10 @@ int Memory::insert_memory(int value, string description, int time){
     assist.time        = time;
     assist.current_time = 0;
     assist.alocated    = true;
-    return this->add_hash(assist);
+    return this->add(assist);
 }
 
-int Memory::add_hash(MemoryContent memory_content){    
+int Memory::add(MemoryContent memory_content){    
     int key      = memory_content.value;
     int position = hashing_function(key, this->segments);
 

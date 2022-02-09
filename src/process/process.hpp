@@ -20,6 +20,7 @@ class Process{
         float       cycles;
         int         max_quantum;
         int         timestamp;
+        int         size;
         int         priority;
         string*     status;
         string*     type;
@@ -30,12 +31,13 @@ class Process{
         int assist;
         
         Process();
-        Process( int id, float cycles, int max_quantum, int timesamp, int priority, string type);
+        Process( int id, float cycles, int max_quantum, int timesamp, int priority, int size, string type);
         
         void set_id    (int value);
         void set_cycles(float value);
         void set_max_quantum(int value);
         void set_timestamp(int value);
+        void set_size(int value);
         void set_priority(int value);
         void set_status(string value);
         void set_status_ready();
@@ -60,6 +62,7 @@ class Process{
         float get_cyles();
         int get_max_quantum();
         int get_timestamp();
+        int get_size();
         int get_priority();
         
         string get_status();
