@@ -72,6 +72,7 @@ int Process::get_id                  (){return this->id;         }
 float Process::get_cyles             (){return this->cycles;     }
 int Process::get_max_quantum         (){return this->max_quantum;}
 int Process::get_timestamp           (){return this->timestamp;  }
+int Process::get_size                (){return this->size;       }
 int Process::get_priority            (){return this->priority;   }
         
 string  Process::get_status          (){return *(this->status);  }

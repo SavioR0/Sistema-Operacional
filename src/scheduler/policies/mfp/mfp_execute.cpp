@@ -294,6 +294,7 @@ void MFP::executing_process_memory(Process* current_process){
     this->memory_ref->insert_memory(
         current_process->get_id(),
         current_process->get_type(),
+        current_process->get_size(),
         random_number_mfp(4));
 
     this->block.push_back( (*current_process) );

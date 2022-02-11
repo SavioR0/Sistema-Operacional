@@ -30,9 +30,10 @@ public:
     int  check_time(int** ids);
     int  hashing_function(int key, int size);
 
-    int  insert_memory(int value, string description, int time);
-    int  add(MemoryContent memory_content);
-    int  search_memory(int value, MemoryContent* mc); 
+    int  insert_memory(int value, string description, int size, int time);
+    int  search_position_memory(int size);
+    int  add(MemoryContent memory_content, int position, int size);
+    int  search_memory(int value); 
     int  remove_memory(int value); 
 
 
