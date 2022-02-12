@@ -59,7 +59,7 @@ int main(){
                     scheduler->report();
                     shell->message_exit();
                 break; 
-                case 6:                                                                      // 6-> execute 
+                case 6:                                                                     // 6-> execute 
                     create_thread(&thread_execute_process, NULL, execute, scheduler); 
                     shell->set_execute_status(false);
                 break; 

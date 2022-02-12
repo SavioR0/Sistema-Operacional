@@ -11,7 +11,7 @@ void MFP::check_block_list(){
 
     int* ids;
     int size_ids;
-    size_ids = this->memory_ref->check_time(&ids);
+    size_ids = this->memory_ref->check_time(&ids, false);
     if(size_ids > 0 )
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
@@ -37,7 +37,7 @@ void MFP::check_block_list(){
             }
             
         }
-        this->memory_ref->remove_memory(ids[i]);
+        this->memory_ref->remove_memory(ids[i], false);
     }
     free(ids);      
     
@@ -295,6 +295,7 @@ void MFP::executing_process_memory(Process* current_process){
         current_process->get_id(),
         current_process->get_type(),
         current_process->get_size(),
+        current_process->get_max_quantum(),
         random_number_mfp(4));
 
     this->block.push_back( (*current_process) );
