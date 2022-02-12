@@ -15,6 +15,7 @@ class FIFO{
     private:
         list<Process> processes;
         list<Process> block;
+        list<Process> block_memory;
         list<Process> finalized;
         Cpu*          cpu_ref;
         Memory*       memory_ref;

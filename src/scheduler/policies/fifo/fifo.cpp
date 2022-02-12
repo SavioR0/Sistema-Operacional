@@ -25,23 +25,28 @@ void FIFO::restart(){
 }
 
 void FIFO::check_block_list(){
+
     if(this->block.empty()) return;
 
     int* ids;
-    int size_ids;
-    size_ids = this->memory_ref->check_time(&ids);
-    if(size_ids > 0 )
-    for(int i = 0; i < size_ids; i++){ 
+    int size;
+    
+    size = this->memory_ref->check_time(&ids, false);
+
+    if(size > 0 )
+    for(int i = 0; i < size; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
             if(!block.empty()){
                 if(ids[i] == this->block.front().get_id()){
                         if(this->block.front().get_cyles() <= 0){
                             this->block.front().set_status_finished();
+                            this->block_memory.push_back( this->block.front() );
                             this->finalized.push_back( this->block.front() );
                             this->block.pop_front();    
                         }else{
                             this->block.front().set_status_ready();
                             this->processes.push_back( this->block.front() );
+                            this->block_memory.push_back( this->block.front() );
                             this->block.pop_front();
                         }
 
@@ -55,11 +60,35 @@ void FIFO::check_block_list(){
             }
             
         }
-        this->memory_ref->remove_memory(ids[i]);
+
+        this->memory_ref->remove_memory(ids[i], false);
     }
-    free(ids);      
+    free(ids);
+
+    int* ids2;
+
+    size = this->memory_ref->check_time(&ids2, true);
+    cout<<"SIZE : "<<size<<endl;
+    for(int i = 0; i < size; i++){ 
+        for(int j = 0; j < (int)this->block_memory.size(); j++){
+            if(!block_memory.empty()){
+                if(ids2[i] == this->block_memory.front().get_id()){
+                        this->block_memory.pop_front();
+                }else{
+                        Process* assist = new Process;
+                        *assist = this->block_memory.front();
+                        this->block_memory.push_back(*assist);
+                        this->block_memory.pop_front();
+                        free(assist);
+                }
+            }
+        }
+        this->memory_ref->remove_memory(ids2[i], true);
+    }  
+    free(ids2);    
     
     int* ids1;
+    int size_ids;
     size_ids = this->storage_ref->check_time(&ids1);
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
@@ -136,6 +165,7 @@ void FIFO::update_timestamp(Process** current_process){
 
 //Funções de execução
 int FIFO::execute_processes(){
+
     if(this->processes.empty()){
         cout << "\n\n Nao ha processos para serem executados.\n Tente o comando 'load' para carregar processos para a lista de execucao." << endl;
         return 0;
@@ -198,7 +228,8 @@ void FIFO::executing_process_memory(Process* current_process){
         current_process->get_id(),
         current_process->get_type(),
         current_process->get_size(),
-        random_number(4));
+        current_process->get_max_quantum(),
+        random_number(4) );
 
     this->block.push_back( (*current_process) );
 

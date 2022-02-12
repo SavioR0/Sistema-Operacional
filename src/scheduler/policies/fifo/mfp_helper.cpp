@@ -16,7 +16,7 @@ void FIFO::check_block_list_mfp(){
 
     int* ids;
     int size_ids;
-    size_ids = this->memory_ref->check_time(&ids);
+    size_ids = this->memory_ref->check_time(&ids,false);
     if(size_ids > 0 )
     for(int i = 0; i < size_ids; i++){ 
         for(int j = 0; j < (int)this->block.size(); j++){
@@ -43,7 +43,7 @@ void FIFO::check_block_list_mfp(){
             }
             
         }
-        this->memory_ref->remove_memory(ids[i]);
+        this->memory_ref->remove_memory(ids[i], false);
     }
     free(ids);      
     
