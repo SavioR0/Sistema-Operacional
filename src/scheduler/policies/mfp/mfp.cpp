@@ -39,6 +39,7 @@ void Mfp::execute_based_on_fifo(std::list<Process>& current_list, std::list<Proc
             this->check_remove_cpu(current_process);
             current_process->set_status_ready();
             if(current_process->assist == 0){
+                current_process->change_type();
                 current_process->sub_priority();
                 next_list.push_back(*current_process);
                 current_list.erase(current_process--);

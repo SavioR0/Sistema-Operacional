@@ -63,6 +63,7 @@ class Process{
     public:
         void add_timestamp();
         void sub_cycles(int quantum_drawn);
+        void change_type();
     
     //token management
     private:

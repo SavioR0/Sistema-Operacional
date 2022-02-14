@@ -13,7 +13,7 @@ void Mfp::raffle(std::list<Process>::iterator& iterator){
     }
     bool number_valid = false;
     int luck_number;
-    int attempts = 15;
+    int attempts = 3;
     while(attempts > 0){
 
         do{

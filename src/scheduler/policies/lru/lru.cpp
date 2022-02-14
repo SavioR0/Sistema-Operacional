@@ -52,6 +52,8 @@ void Lru::execute_list_processes(){
        if(current_quantum <= 0 && current_process != this->super_low_priority_process.end()){
             this->check_remove_cpu(current_process);
             current_process->set_status_ready();
+            current_process->change_type();
+
         }
     }while((int) this->finalized.size() < initial_size_list_process);
 

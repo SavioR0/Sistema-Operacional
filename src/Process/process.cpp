@@ -15,3 +15,16 @@ void Process::sub_cycles(int quantum_drawn){
     float sub = (float) quantum_drawn / (float) this->max_quantum;
     this->cycles = (this->cycles - sub) >= 0 ? (this->cycles - sub) : 0;
 }
+
+void Process::change_type(){
+    int new_type = rand() % 3;
+    if(new_type == 0){
+        this->type = PROCESS_CPU;
+        return;
+    }
+    if(new_type == 1){
+        this->type = PROCESS_MEM;
+        return;
+    }
+    this->type = PROCESS_STG;
+}

@@ -17,7 +17,7 @@ using namespace std;
 int main(){
     system("clear");
     Kernel* kernel = new Kernel();
-    Scheduler* scheduler = new Mfp(kernel); 
+    Scheduler* scheduler = new Fifo(kernel); 
     Shell*  shell  = new Shell(kernel, scheduler);
 
     shell->start_os();
