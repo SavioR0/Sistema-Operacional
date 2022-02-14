@@ -1,12 +1,13 @@
 #include "process.hpp"
 
-Process::Process(int id,float cycles,const short int max_quantum, int timestamp, int priority, std::string type):
+Process::Process(int id,float cycles,const short int max_quantum, int timestamp, int priority, std::string type, int segments):
     id(id),
     cycles(cycles), 
     max_quantum(max_quantum),
     timestamp(timestamp),
     priority(priority),
-    type(type){
+    type(type),
+    segments(segments){
         this->status = STATUS_READY;
     }
 

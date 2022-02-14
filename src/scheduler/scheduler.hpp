@@ -15,7 +15,7 @@
 #include "../hardware/storage/storage.hpp"
 
 #define PROCESSES_FILE "processos.json"
-#define LIST_NAME "all"
+#define LIST_NAME "segments"
 
 
 class Scheduler{

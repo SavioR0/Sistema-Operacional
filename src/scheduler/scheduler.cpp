@@ -25,7 +25,8 @@ void add_process_in_list(std::list<Process>& list, nlohmann::json json_file, int
             (int)         json_file[LIST_NAME][position]["max_quantum"],
             (int)         json_file[LIST_NAME][position]["timestamp"],
             (int)         json_file[LIST_NAME][position]["prioridade"],
-            (std::string) json_file[LIST_NAME][position]["init_type"] 
+            (std::string) json_file[LIST_NAME][position]["init_type"],
+            (int)         json_file[LIST_NAME][position]["segments"]
         ) 
     );
 }

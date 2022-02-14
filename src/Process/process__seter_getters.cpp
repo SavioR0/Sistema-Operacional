@@ -24,5 +24,6 @@ int         Process::get_penalty_time()const{ return this->penalty_time;}
 short int   Process::get_max_quantum() const{ return this->max_quantum; }
 int         Process::get_timestamp()   const{ return this->timestamp;   }
 int         Process::get_priority()    const{ return this->priority;    }
+int         Process::get_segments()    const{ return this->segments;    }
 std::string Process::get_status()      const{ return this->status;      }
 std::string Process::get_type()        const{ return this->type;        }

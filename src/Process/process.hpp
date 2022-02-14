@@ -28,6 +28,7 @@ class Process{
         std::string  status;
         std::string  type;
         int          penalty_time;
+        int          segments;
 
     public:
         Process(){}
@@ -38,7 +39,8 @@ class Process{
             const short int max_quantum, 
             int timestamp, 
             int priority, 
-            std::string type);
+            std::string type,
+            int segments);
 
     public:
         void set_penalty_time(int penalty_time);
@@ -57,8 +59,10 @@ class Process{
         short int   get_max_quantum()  const;
         int         get_timestamp()    const;
         int         get_priority()     const;
+        int         get_segments()     const;
         std::string get_status()       const;
-        std::string get_type()         const;        
+        std::string get_type()         const; 
+       
 
     public:
         void add_timestamp();
