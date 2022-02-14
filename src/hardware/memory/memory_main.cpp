@@ -10,15 +10,13 @@ int Memory::hashing_function(int key, int size){
 }
 
 void Memory::insert_process (std::list<Process>::iterator iterator){
-    if(allocated_segments == segments){ 
-        std::cout<<"Erro[151] -> Não foi possível adicionar itens a Memória. Memória encontra-se lotada" << std::endl;
-        return;
-    }
-    ContentData memory_data = Hadware::convert_iterator_to_contentData(iterator);
+    
+    ContentData memory_data = Hadware::convert_iterator_to_contentData_memory(iterator);
 
-    int position_alocated = hashing_function(memory_data.id,  this->segments);
-    ram[position_alocated] = memory_data;
-    this->allocated_segments++;
+    for(int i = this->position_to_alloc; i < iterator->get_segments(); i++){
+        ram[i] = memory_data;
+        this->allocated_segments++;    
+    }
 }
 
 void Memory::remove_process (int id){

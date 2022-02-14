@@ -13,6 +13,7 @@
 #include "../hardware/cpu/cpu.hpp"
 #include "../hardware/memory/memory.hpp"
 #include "../hardware/storage/storage.hpp"
+#include "../memory_manager/memory_manager.hpp"
 
 #define PROCESSES_FILE "processos.json"
 #define LIST_NAME "segments"
@@ -20,10 +21,10 @@
 
 class Scheduler{
     protected:
-        Kernel*  kernel_ref;
-        Cpu*     cpu_ref;
-        Memory*  memory_ref;
-        Storage* storage_ref;
+        Kernel*        kernel_ref;
+        Cpu*           cpu_ref;
+        Memory*        memory_ref;
+        Storage*       storage_ref;
 
         std::list<Process> high_priority_process;
         std::list<Process> medium_priority_process;
@@ -32,9 +33,11 @@ class Scheduler{
 
         std::list<Process> finalized;
         bool single_list;
+        MemoryManager* memory_manager_ref;
+
 
     public:
-        Scheduler(Kernel* kernel_ref, bool single_list);
+        Scheduler(Kernel* kernel_ref, bool single_list, MemoryManager* memory_manager_ref);
         void load_list_processes();
         virtual void execute_list_processes() = 0;
         bool report_processes() const;

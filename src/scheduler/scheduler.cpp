@@ -1,10 +1,12 @@
 #include "scheduler.hpp"
 
-Scheduler::Scheduler(Kernel* kernel_ref, bool single_list):kernel_ref(kernel_ref), single_list(single_list){
-    this->cpu_ref     = kernel_ref->get_cpu_ref();
-    this->memory_ref  = kernel_ref->get_memory_ref();
-    this->storage_ref = kernel_ref->get_storage_ref();
-
+Scheduler::Scheduler(Kernel* kernel_ref, bool single_list, MemoryManager* memory_manager_ref):
+    kernel_ref(kernel_ref), 
+    single_list(single_list), 
+    memory_manager_ref(memory_manager_ref){
+        this->cpu_ref     = kernel_ref->get_cpu_ref();
+        this->memory_ref  = kernel_ref->get_memory_ref();
+        this->storage_ref = kernel_ref->get_storage_ref();
 }
 
 bool Scheduler::continuity_test(std::list<Process>::iterator& iterator, int& current_quantum, std::list<Process>& list) {

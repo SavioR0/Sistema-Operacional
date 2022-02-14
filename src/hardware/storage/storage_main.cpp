@@ -11,7 +11,7 @@ void Storage::insert_process (std::list<Process>::iterator iterator){
         std::cout<<"Erro [012] -> Não foi possível adicionar pois não há espaço suficiente" << std::endl;
         return;
     }
-    ContentData data = Hadware::convert_iterator_to_contentData(iterator);
+    ContentData data = Hadware::convert_iterator_to_contentData_disk(iterator);
     for(std::list<Hadware::ContentData>::iterator iter = this->blocks.begin(); iter != this->blocks.end(); iter++){
         if(iter->alocated) continue;
         *iter = data;

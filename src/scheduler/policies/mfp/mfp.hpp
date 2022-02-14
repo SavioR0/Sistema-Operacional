@@ -11,7 +11,7 @@ class Mfp : public Scheduler{
 
 
     public:
-        Mfp(Kernel* kernel_ref):Scheduler(kernel_ref, false){this->range_tokens_avaliables = 1;}
+        Mfp(Kernel* kernel_ref, MemoryManager* memory_manager_ref):Scheduler(kernel_ref, false, memory_manager_ref){this->range_tokens_avaliables = 1;}
         void execute_list_processes() override;
     private:
         void execute_based_on_fifo(std::list<Process>& current_list, std::list<Process>& next_list);

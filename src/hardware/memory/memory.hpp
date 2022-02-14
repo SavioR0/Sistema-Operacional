@@ -4,6 +4,8 @@
 #include <list>
 
 class Memory :public Hadware{
+    public:
+        int position_to_alloc;
     private:
         int segments;            // Segmentos
         int allocated_segments;  // Segmentos alocados
@@ -17,8 +19,9 @@ class Memory :public Hadware{
         void generate_report()          const override;   
         void remove_ready_process()           override;
         void add_current_time_memory();
+        int check_avaliable_size(int size)const;
 
-   
+    
     private:
         int  hashing_function(int key, int size);
         void print_list() const;

@@ -15,7 +15,7 @@ void Scheduler::execute_process(std::list<Process>::iterator iterator){
     iterator->set_penalty_time(penalty_time); 
     iterator->set_status_block();
     
-    if(iterator->get_type() == PROCESS_MEM) this->memory_ref->insert_process(iterator);
+    if(iterator->get_type() == PROCESS_MEM) this->memory_manager_ref->insert_process_in_memory(iterator);
     else this->storage_ref->insert_process(iterator);
     
 
