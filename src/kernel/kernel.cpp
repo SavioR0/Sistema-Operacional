@@ -1,27 +1,23 @@
 #include "kernel.hpp"
 
-using json = nlohmann::json;
-
-Kernel::Kernel(){}
-
-void Kernel::initialize(){
-    json hardware_info;
-    ifstream(FileName) >> hardware_info;
-    this->set_core              ( hardware_info["cores"]    );
-    this->set_blocks_storage    ( hardware_info["storage"]  );
-    this->set_segments          ( hardware_info["segments"] );    
-    this->storage = new Storage ( this->get_blocks_storage());
-    this->memory  = new Memory  ( this->get_segments()      );
-    this->cpu     = new Cpu     ( this->get_core()          );
+Kernel::Kernel(){
+    nlohmann::json hardware_info;
+    std::ifstream file;
+    file.open(FILENAME);
+    if(file.fail()){
+        std::cout<<"Erro [00] -> Não iniciar o sistema devido a falta do arquivo: " << FILENAME << ". \n \tVerifique se ele existe e se está correto." << std::endl;
+        exit(1);
+    } 
+    file >> hardware_info;
+    this->cpu    = Cpu     ( hardware_info["cores"]    );
+    this->memory = Memory  ( hardware_info["segments"] );
+    this->storage = Storage( hardware_info["storage"]);
+    this->quantum_time = (unsigned int)  hardware_info["quantum_time"] * 1000000; 
 }
 
+Cpu*      Kernel::get_cpu_ref()         { return &this->cpu;        }
+Memory*   Kernel::get_memory_ref()      { return &this->memory;     }
+Storage*  Kernel::get_storage_ref()     { return &this->storage;    }
+unsigned int Kernel::get_quantum_time() { return this->quantum_time;}
 
-void Kernel::set_core           (int number){this->cores         = number;  }
-void Kernel::set_blocks_storage (int number){this->blocks_storage = number; }
-void Kernel::set_segments       (int number){this->segments      = number;  }
-void Kernel::set_process        (int number){this->num_process    = number; }
-
-int  Kernel::get_core           (){return this->cores;          }
-int  Kernel::get_blocks_storage (){return this->blocks_storage; }
-int  Kernel::get_segments       (){return this->segments;       }
-int  Kernel::get_process        (){return this->num_process;    }
+void Kernel::report_component(const Hadware& component)const{ component.generate_report();  }

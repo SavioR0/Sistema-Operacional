@@ -1,45 +1,28 @@
-#ifndef __KERNEL_HPP__
-#define __KERNEL_HPP__
-
+#pragma once
 #include <iostream>
 #include <fstream>
 
 #include "../hardware/cpu/cpu.hpp"
-#include "../hardware/memory/memory.hpp"
 #include "../hardware/storage/storage.hpp"
+#include "../hardware/memory/memory.hpp"
 #include "../../lib/json.hpp"
 
-
-#define FileName "hardware.json"
-
-
-using namespace std;
+#define FILENAME "hardware.json"
 
 class Kernel{
     private:
-        int cores;
-        int blocks_storage;
-        int segments;
-        int num_process;
+        Cpu     cpu;
+        Memory  memory;
+        Storage storage;
+        unsigned int quantum_time;
     public:
+        Kernel();
 
-    Cpu*     cpu;
-    Storage* storage;
-    Memory*  memory;
+        Cpu*     get_cpu_ref();
+        Memory*  get_memory_ref();
+        Storage* get_storage_ref();
 
-    Kernel();
-    void initialize();
-    
-    void set_core(int number);
-    void set_blocks_storage(int number);
-    void set_segments(int number);
-    void set_process(int number);
-
-    int get_core();
-    int get_blocks_storage();
-    int get_segments();
-    int get_process();
+        void report_component( const Hadware& component) const;
+        unsigned int get_quantum_time();
 
 };
-
-#endif

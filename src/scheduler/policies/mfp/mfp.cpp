@@ -1,83 +1,57 @@
 #include "mfp.hpp"
 
-//Constutores
-MFP::MFP(list<Process> list_process, Cpu* cpu_ref, Memory* memory_ref, Storage* storage_ref, float quantum_time){
-    this->cpu_ref = cpu_ref;
-    this->memory_ref = memory_ref;
-    this->storage_ref = storage_ref;
-    this->quantum_time = quantum_time;
-    this->distribution_list(list_process);
-}
-MFP::MFP(){}
-
-void MFP::distribution_list(list<Process> processes){
-    if(processes.empty()){
-        cout << "\n\nNão foi possível concluir a operação, lista de processos vazia, retornando." << endl;
-        return;
-    }
-    Process* current_process = new Process();
-
-    while(!processes.empty()){
-        current_process = &processes.front();
-             if(current_process->get_priority() == 1) this->priority1.push_back( *current_process );
-        else if(current_process->get_priority() == 2) this->priority2.push_back( *current_process );
-        else if(current_process->get_priority() == 3) this->priority3.push_back( *current_process );
-        else if(current_process->get_priority() == 4) this->priority4.push_back( *current_process );
-        current_process = NULL;
-        processes.pop_front();
-    }
-    free(current_process);
-}
-
-
-void MFP::execute(){
-    this->execute_high_priority();
-    this->execute_processes();
-}
-
-
-
-void MFP::report(){
-    system("clear");
-    cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
-    cout<<"   |\t\t\t\t\t    LISTA DE PROCESSOS    \t\t\t\t\t\t\t\t|"<<endl;
-    cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
-    if(!this->priority1.empty() || !this->priority2.empty() || !this->priority3.empty() || !this->priority4.empty() || !this->block.empty() || !this->finalized.empty()){
-        cout<<"   |\tID\t|\tEstado\t\t|\t  Tipo     \t|\tTimestamp\t|\tCiclos    |\tPrioridade\t|"<<endl;
-        cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
-        for(Process item : this->priority4){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t  |\t    " << item.get_priority()<<"\t\t|" << endl;
-        }
-        for(Process item : this->priority3){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t  |\t    " << item.get_priority()<<"\t\t|" << endl;
-        }
-        for(Process item : this->priority2){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t  |\t    " << item.get_priority()<<"\t\t|" << endl;
-        }
-        for(Process item : this->priority1){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t  |\t    " << item.get_priority()<<"\t\t|" << endl;
-        }
-        for(Process item : this->block){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << item.get_cyles() << "\t|" << endl;
-        }
-        for(Process item : this->finalized){
-            cout<<"   |\t" << item.get_id() << "\t|\t" << item.get_status() << "    \t|\t"<< item.get_type() <<"\t|\t    " << item.get_timestamp() << "    \t|\t" << "--" << "\t|" << endl;
-        }
-    }else {
-        cout<< " +\t\t\tEMPTY\t\t\t+"<<endl;
-    }
-    cout<<"   ------------------------------------------------------------------------------------------------------------------------------"<<endl;
-    cout<<"\n\nRANGE: " << this->range_tokens<<endl;
-    int soma = 0;
-    for(Process item : this->priority1){
-        soma += (int) item.get_tokens().size();
+void Mfp::execute_based_on_fifo(std::list<Process>& current_list, std::list<Process>& next_list){
+    if(current_list.empty()) return;
     
-    }
-    cout<<"\nEm campo: " <<soma;
-    cout<<"\nExcedente: " <<this->tokens_surplus.size();
-    cout<<"\nSoma: " << soma + (int) this->tokens_surplus.size();
+    std::list<Process>::iterator current_process = current_list.end();
+    int current_quantum = 0;
+    int size_list = (int) current_list.size();
+    for(std::list<Process>::iterator iter = current_list.begin(); iter != current_list.end(); iter++)
+        iter->assist = iter->get_max_quantum();
+
+    do{
+        if(current_quantum <= 0){
+            current_process++;
+            if(!this->continuity_test(current_process, current_quantum, current_list)){
+                usleep(100000);
+                continue;
+            }
+            if(current_process == current_list.end()) {std::cout<<"Erro crítico, iterator final lista."<<std::endl; exit(50);}
+            current_quantum = this->radom_number(current_process->assist);
+            if(current_quantum < 0) {std::cout<<"Erro crítico, quntum menor que 0."<<std::endl; exit(30);}
+            current_process->assist -= current_quantum;
+            current_process->sub_cycles(current_quantum);
+        }
 
 
-    cout<<"\n"<<endl;
-    if(this->fifo_policie != NULL ) this->fifo_policie->report_fifo();
+
+        if(current_process->get_status() == STATUS_READY)
+            this->execute_process(current_process);
+        
+        this->add_time();
+        this->check_remove_memory_storage();
+        this->check_finished_process(current_process);
+        usleep(100000);
+        current_quantum--;
+
+
+       if(current_quantum <= 0 && current_process != current_list.end()){
+            this->check_remove_cpu(current_process);
+            current_process->set_status_ready();
+            if(current_process->assist == 0){
+                current_process->sub_priority();
+                next_list.push_back(*current_process);
+                current_list.erase(current_process--);
+                size_list--;
+            }
+            
+        }
+    }while(size_list > 0);
+}
+
+void Mfp::execute_list_processes(){
+    execute_based_on_fifo(this->high_priority_process, this->medium_priority_process);    
+    execute_based_on_fifo(this->medium_priority_process, this->low_priority_process);    
+    execute_based_on_fifo(this->low_priority_process, this->super_low_priority_process); 
+    execute_based_on_mfp();   
 }

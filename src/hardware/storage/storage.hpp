@@ -1,40 +1,25 @@
-#ifndef __STORAGE_HPP__
-#define __STORAGE_HPP__
-
+#pragma once
 #include <iostream>
+#include "../hardware.hpp"
 #include <list>
 
-using namespace std;
-
-typedef struct BlockData BlockData;
-struct BlockData{
-    int    key;
-    string type;
-
-    int  time;
-    int  current_time;
-    bool alocated = false;
-};
-
-class Storage{
+class Storage :public Hadware{
     private:
-        int             size_blocks;      // Número de Blocos totais
-        int             allocated_blocks; // Blocos alocados
-        list<BlockData> blocks;           // Conteúdo e gerência de blocos  
-
+        int size_blocks;               // Segmentos
+        int allocated_blocks;          // Segmentos alocados
+        std::list<ContentData> blocks; // Representação dos segmentos
+    
     public:
+        Storage(){}
+        Storage(int blocks_size);
+        void insert_process (std::list<Process>::iterator iterator) override;
+        void remove_process (int id)          override;
+        void generate_report()          const override; 
+        void remove_ready_process() override;    
+        void add_current_time_storage();
+   
+    private:
+        void print_list() const;
+        void header_report() const;
 
-        Storage(int size);
-
-        int check_time(int** ids);
-        void add_time_storage();
-
-        void insert_block_data(int key, string type, int random_number);
-        int  insert_storage(BlockData* block_data);
-        int  remove_storage(int id);
-        
-        void print();
 };
-
-
-#endif

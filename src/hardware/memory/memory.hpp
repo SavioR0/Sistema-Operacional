@@ -1,45 +1,27 @@
-#ifndef __MEMORY_HPP__
-#define __MEMORY_HPP__
-
+#pragma once
 #include <iostream>
-#include <string>
+#include "../hardware.hpp"
+#include <list>
 
-using namespace std;
+class Memory :public Hadware{
+    private:
+        int segments;            // Segmentos
+        int allocated_segments;  // Segmentos alocados
+        ContentData* ram;        // Representação dos segmentos
+    
+    public:
+        Memory(){}
+        Memory(int segments);
+        void insert_process (std::list<Process>::iterator iterator) override;
+        void remove_process (int id)          override;
+        void generate_report()          const override;   
+        void remove_ready_process()           override;
+        void add_current_time_memory();
 
-typedef struct MemoryContent MemoryContent; 
-struct MemoryContent{
-    int    id_constant;
-    int    value;             // ID do processo
-    int    time;              // Tempo máximo de castigo
-    int    current_time;       // Tempo que ele está na memoria
-    bool   alocated = false;  // variável que define se está alocado ou não 
-    string description;       // Tipo do processo
+   
+    private:
+        int  hashing_function(int key, int size);
+        void print_list() const;
+        void header_report() const;
+
 };
-
-
-class Memory{
-private:
-    int            segments;            // Segmentos
-    int            allocated_segments;  // Segmentos alocados
-    MemoryContent* ram;
-public:
-    Memory(int segments);
-
-    void add_time_memory();
-    void reset_memory();
-    int  check_time(int** ids);
-    int  hashing_function(int key, int size);
-
-    int  insert_memory(int value, string description, int time);
-    int  add_hash(MemoryContent memory_content);
-    int  search_memory(int value, MemoryContent* mc); 
-    int  remove_memory(int value); 
-
-
-    int  get_segments();
-
-    void print();
-};
-
-
-#endif

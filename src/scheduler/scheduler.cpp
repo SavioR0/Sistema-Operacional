@@ -1,95 +1,75 @@
 #include "scheduler.hpp"
 
-// Construtores
-Scheduler::Scheduler(Kernel* kernel, float quantum_time, string policie){
-    this->kernel_ref    = kernel; 
-    this->quantum_time  = quantum_time;
-    this->policie       = policie;
+Scheduler::Scheduler(Kernel* kernel_ref, bool single_list):kernel_ref(kernel_ref), single_list(single_list){
+    this->cpu_ref     = kernel_ref->get_cpu_ref();
+    this->memory_ref  = kernel_ref->get_memory_ref();
+    this->storage_ref = kernel_ref->get_storage_ref();
+
 }
-Scheduler::Scheduler(){}
 
-// Setters
-
-// Getters
-
-//Função de leitura
-list<Process> Scheduler::read_processes(){
-    json process_json;
-    ifstream(process_file) >> process_json;
-    
-    list<Process> list_process;
-    Process* assist = NULL;
-    
-    for (int i = 0; i < (int) process_json[json_list_name].size(); i++){
-        
-        assist = new Process(
-            (int)    process_json[json_list_name][i]["id"],
-            (float)  process_json[json_list_name][i]["ciclos"],
-            (int)    process_json[json_list_name][i]["max_quantum"],
-            (int)    process_json[json_list_name][i]["timestamp"],
-            (int)    process_json[json_list_name][i]["prioridade"],
-            (string) process_json[json_list_name][i]["init_type"]
-        );
-
-        list_process.push_back(*assist);
-        free(assist);
+bool Scheduler::continuity_test(std::list<Process>::iterator& iterator, int& current_quantum, std::list<Process>& list) {
+    if( list.empty() ){ current_quantum--; return false;}
+    if(iterator != list.end()) return true;
+    else{
+        iterator++;
+        return true;
     }
-    cout<<"\n\n\t Todos os processos foram carregados e estão prontos para serem executados."<<endl;
-    cout<<"\t Para ver a lista de processos digite o comando: queueschell."<<endl;
-    cout<<"\t Para executar a lista de processos digite o comando: execute."<<endl;
-    
-    return list_process;
+    return false;
 }
 
-void Scheduler::load(){
-    if(this->policie == fifo_policie_string )
-        this->fifo_policie = new FIFO( 
-            this->read_processes(), 
-            this->kernel_ref->cpu, 
-            this->kernel_ref->memory, 
-            this->kernel_ref->storage, 
-            this->quantum_time);
-
-    if(this->policie == lru_policie_string )
-        this->lru_policie = new LRU( 
-            this->read_processes(), 
-            this->kernel_ref->cpu, 
-            this->kernel_ref->memory, 
-            this->kernel_ref->storage, 
-            this->quantum_time);
-
-    if(this->policie == mfp_policie_string )
-        this->mfp_policie = new MFP( 
-            this->read_processes(), 
-            this->kernel_ref->cpu, 
-            this->kernel_ref->memory, 
-            this->kernel_ref->storage, 
-            this->quantum_time);
-    
+void add_process_in_list(std::list<Process>& list, nlohmann::json json_file, int position){
+    list.push_back(
+        Process(
+            (int)         json_file[LIST_NAME][position]["id"],
+            (float)       json_file[LIST_NAME][position]["ciclos"],
+            (int)         json_file[LIST_NAME][position]["max_quantum"],
+            (int)         json_file[LIST_NAME][position]["timestamp"],
+            (int)         json_file[LIST_NAME][position]["prioridade"],
+            (std::string) json_file[LIST_NAME][position]["init_type"] 
+        ) 
+    );
 }
 
-void Scheduler::restart(){
-    if(this->policie == fifo_policie_string )
-        this->fifo_policie->restart();
-    if(this->policie == lru_policie_string )
-        this->lru_policie->restart();
-    /*if(this->policie == mfp_policie_string )
-        this->mfp_policie->restart();*/
-}
+void Scheduler::load_list_processes(){
+    nlohmann::json json_file;
+    std::ifstream file;
+    file.open(PROCESSES_FILE);
+    if(file.fail()){
+        std::cout<<"Erro [404] -> Não foi possível abrir o arquivo: " << PROCESSES_FILE << ". \n \tVerifique se ele existe e se está correto." << std::endl;
+        return;
+    }
 
-void Scheduler::execute(){
-    if(this->policie == fifo_policie_string ) 
-        this->pc = this->fifo_policie->execute_processes();
-    if(this->policie == lru_policie_string ) 
-        this->pc = this->lru_policie->execute_processes();
-    if(this->policie == mfp_policie_string )
-        this->mfp_policie->execute();
-}
-void Scheduler::report(){
-    if(this->policie == fifo_policie_string ) 
-        this->fifo_policie->report();
-    if(this->policie == lru_policie_string ) 
-        this->lru_policie->report();
-    if(this->policie == mfp_policie_string )
-        this->mfp_policie->report();
+    file >> json_file;
+
+    bool empty_list = json_file[LIST_NAME].size() <= 0; 
+    if(empty_list){
+        std::cout<<"Erro[33] -> Não foi possível carregar a lista. A lista pode não existir no arquivo: " << PROCESSES_FILE << " ou pode estar vazia." << std::endl;
+        return;
+    } 
+
+    for(int i = 0; i < (int) json_file[LIST_NAME].size(); i++ ){
+        if(this->single_list){
+            add_process_in_list(this->super_low_priority_process, json_file, i); 
+            continue;
+        }        
+        if(json_file[LIST_NAME][i]["prioridade"] == 4){
+            add_process_in_list(this->high_priority_process, json_file, i); 
+            continue;
+        }
+        if(json_file[LIST_NAME][i]["prioridade"] == 3){
+            add_process_in_list(this->medium_priority_process, json_file, i); 
+            continue;
+        }
+        if(json_file[LIST_NAME][i]["prioridade"] == 2){
+            add_process_in_list(this->low_priority_process, json_file, i); 
+            continue;
+        }
+        if(json_file[LIST_NAME][i]["prioridade"] == 1){
+            add_process_in_list(this->super_low_priority_process, json_file, i); 
+            continue;
+        }
+    }
+    std::cout<<"\n\n\t Todos os processos foram carregados e estão prontos para serem executados."<<std::endl;
+    std::cout<<    "\t Para ver a lista de processos digite o comando: queueschell."              <<std::endl;
+    std::cout<<    "\t Para executar a lista de processos digite o comando: execute."             <<std::endl; 
 }

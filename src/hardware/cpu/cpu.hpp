@@ -1,26 +1,24 @@
-#ifndef __CPU_HPP__
-#define __CPU_HPP__
-
+#pragma once
 #include <iostream>
-#include "../../process/process.hpp" 
+#include <vector>
+#include "../hardware.hpp"
+#include "../../Process/process.hpp"
+#include <list>
 
-using namespace std; 
-
-class Cpu{
+class Cpu: public Hadware{
     private:
-        int cores;
-        Process* cpu_process      = NULL;
-        Process* process_previous = NULL; 
+        int size_cores;
+        std::vector<Process> cores;
+        Process history_process;
     public:
-        Cpu();
+        Cpu(){}
         Cpu(int cores);
-
-        void    print();
-        void    set_process(Process* cpu_process);
-        void    remove_process();
-        Process get_process_previous();
-        Process get_process();
+        void insert_process (std::list<Process>::iterator iterator)   override;
+        void remove_process (int id)            override;
+        void generate_report()          const   override;
+        void remove_ready_process() override;
+    private:
+        void print_list() const;
+        void header_report() const;
+        
 };
-
-
-#endif
