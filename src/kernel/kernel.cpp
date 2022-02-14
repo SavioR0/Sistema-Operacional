@@ -12,7 +12,11 @@ Kernel::Kernel(){
     this->cpu    = Cpu     ( hardware_info["cores"]    );
     this->memory = Memory  ( hardware_info["segments"] );
     this->storage = Storage( hardware_info["storage"]);
-    this->quantum_time = (unsigned int)  hardware_info["quantum_time"] * 1000000; 
+    this->quantum_time = (unsigned int) ( (float) hardware_info["quantum_time"] * 1000000); 
+    if( (int) this->quantum_time < 0){
+        std::cout<<"Erro crítico: Quantum time negativo!\n\tAltere o arquivo:" << FILENAME<< " para valores válidos." << std::endl;
+        exit(100);
+    }
 }
 
 Cpu*      Kernel::get_cpu_ref()         { return &this->cpu;        }

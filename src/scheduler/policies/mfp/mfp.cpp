@@ -13,7 +13,7 @@ void Mfp::execute_based_on_fifo(std::list<Process>& current_list, std::list<Proc
         if(current_quantum <= 0){
             current_process++;
             if(!this->continuity_test(current_process, current_quantum, current_list)){
-                usleep(100000);
+                usleep(this->kernel_ref->get_quantum_time());
                 continue;
             }
             if(current_process == current_list.end()) {std::cout<<"Erro crítico, iterator final lista."<<std::endl; exit(50);}
@@ -31,7 +31,7 @@ void Mfp::execute_based_on_fifo(std::list<Process>& current_list, std::list<Proc
         this->add_time();
         this->check_remove_memory_storage();
         this->check_finished_process(current_process);
-        usleep(100000);
+        usleep(this->kernel_ref->get_quantum_time());
         current_quantum--;
 
 
