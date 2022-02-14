@@ -30,6 +30,8 @@ void Mfp::execute_based_on_fifo(std::list<Process>& current_list, std::list<Proc
         
         this->add_time();
         this->check_remove_memory_storage();
+        this->memory_manager_ref->check_pending_processes();
+        this->check_invalid_process(current_list, current_process);
         this->check_finished_process(current_process);
         usleep(this->kernel_ref->get_quantum_time());
         current_quantum--;

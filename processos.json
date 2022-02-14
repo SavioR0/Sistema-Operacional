@@ -6,6 +6,7 @@
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "segments": 12,
             "prioridade": 4
         },
         {
@@ -14,6 +15,7 @@
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,
+            "segments": 13,
             "prioridade": 2
         },
         {
@@ -22,12 +24,14 @@
             "max_quantum": 1,
             "init_type": "io-bound",
             "timestamp": 0,
+            "segments": 20,
             "prioridade": 1
         },
         {
             "id": 4,
             "ciclos": 13,
             "max_quantum": 3,
+            "segments": 20,
             "init_type": "memory-bound",
             "timestamp": 0,
             "prioridade": 1
@@ -36,6 +40,7 @@
             "id": 5,
             "ciclos": 22,
             "max_quantum": 3,
+            "segments": 30,
             "init_type": "memory-bound",
             "timestamp": 0,
             "prioridade": 2
@@ -44,6 +49,7 @@
             "id": 6,
             "ciclos": 2,
             "max_quantum": 1,
+            "segments": 15,
             "init_type": "memory-bound",
             "timestamp": 0,
             "prioridade": 2
@@ -51,6 +57,7 @@
         {
             "id": 7,
             "ciclos": 5,
+            "segments": 17,
             "max_quantum": 1,
             "init_type": "io-bound",
             "timestamp": 0,
@@ -60,6 +67,7 @@
             "id": 8,
             "ciclos": 17,
             "max_quantum": 3,
+            "segments": 19,
             "init_type": "io-bound",
             "timestamp": 0,
             "prioridade": 4
@@ -67,6 +75,7 @@
         {
             "id": 9,
             "ciclos": 10,
+            "segments": 16,
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
@@ -75,6 +84,7 @@
         {
             "id": 10,
             "ciclos": 14,
+            "segments": 18,
             "max_quantum": 2,
             "init_type": "cpu-bound",
             "timestamp": 0,
@@ -83,6 +93,7 @@
         {
             "id": 11,
             "ciclos": 18,
+            "segments": 14,
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,
@@ -90,6 +101,7 @@
         },
         {
             "id": 12,
+            "segments": 10,
             "ciclos": 11,
             "max_quantum": 3,
             "init_type": "memory-bound",
@@ -98,6 +110,7 @@
         },
         {
             "id": 13,
+            "segments": 16,
             "ciclos": 19,
             "max_quantum": 4,
             "init_type": "cpu-bound",
@@ -106,6 +119,7 @@
         },
         {
             "id": 14,
+            "segments": 8,
             "ciclos": 9,
             "max_quantum": 2,
             "init_type": "io-bound",
@@ -115,6 +129,7 @@
         {
             "id": 15,
             "ciclos": 3,
+            "segments": 16,
             "max_quantum": 1,
             "init_type": "cpu-bound",
             "timestamp": 0,

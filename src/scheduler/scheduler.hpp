@@ -16,7 +16,7 @@
 #include "../memory_manager/memory_manager.hpp"
 
 #define PROCESSES_FILE "processos.json"
-#define LIST_NAME "segments"
+#define LIST_NAME "all"
 
 
 class Scheduler{
@@ -41,6 +41,8 @@ class Scheduler{
         void load_list_processes();
         virtual void execute_list_processes() = 0;
         bool report_processes() const;
+        void check_invalid_process(std::list<Process>& list, std::list<Process>::iterator& current_process );
+
     
     protected:
         bool continuity_test(std::list<Process>::iterator& iterator, int& current_quantum, std::list<Process>& list) ;

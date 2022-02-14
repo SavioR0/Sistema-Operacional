@@ -8,16 +8,7 @@ void Lru::sort_list(int& total_cycles){
     });
     total_cycles = (int) this->super_low_priority_process.size();
 }
-void check_invalid_process(std::list<Process>& list, std::list<Process>::iterator& current_process ){
-    if(list.empty()) return;
-    for(std::list<Process>::iterator iter = list.begin(); iter != list.end(); iter++){
-        if(iter->get_id() != -1) continue;
-        if(iter == current_process) current_process++;
-        list.erase(iter++);
-    }
 
-
-}
 
 void Lru::execute_list_processes(){
     if(this->super_low_priority_process.empty()){

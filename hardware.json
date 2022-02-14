@@ -1,6 +1,6 @@
 {
     "cores"    : 1,
     "storage"  : 5,
-    "segments" : 10,
+    "segments" : 40,
     "quantum_time" : 0
 }

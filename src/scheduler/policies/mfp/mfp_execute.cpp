@@ -28,6 +28,8 @@ void Mfp::execute_based_on_mfp(){
         
         this->add_time();
         this->check_remove_memory_storage();
+        this->memory_manager_ref->check_pending_processes();
+        check_invalid_process(this->super_low_priority_process, current_process);
         this->check_finished_process(current_process);
 
         usleep(this->kernel_ref->get_quantum_time());

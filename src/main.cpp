@@ -16,7 +16,7 @@ int main(){
     system("clear");
     Kernel* kernel                = new Kernel();
     MemoryManager* memory_manager = new MemoryManager(kernel->get_memory_ref());
-    Scheduler* scheduler          = new Lru(kernel, memory_manager); 
+    Scheduler* scheduler          = new Mfp(kernel, memory_manager); 
     Shell*  shell                 = new Shell(kernel, scheduler);
 
     shell->start_os();
